@@ -1,0 +1,74 @@
+:root {
+  --vp-font-family-base: "Comic Sans MS", "Kaiti SC", STKaiti, system-ui, sans-serif;
+  --vp-c-brand: #2563eb;
+  --vp-c-brand-light: #3b82f6;
+  --vp-c-brand-lighter: #60a5fa;
+  --vp-c-brand-dark: #1d4ed8;
+  --vp-c-bg: #fffdf5;
+  --vp-c-bg-soft: #f8f3e4;
+  --vp-c-divider: #292524;
+}
+
+body {
+  background-color: var(--vp-c-bg);
+  background-image: radial-gradient(#d6d3d1 0.65px, transparent 0.65px);
+  background-size: 16px 16px;
+}
+
+.VPNavBar,
+.VPNavBar.has-sidebar .content-body {
+  background: var(--vp-c-bg) !important;
+}
+
+.VPHero .name,
+.VPHero .text {
+  letter-spacing: 0.02em;
+  transform: rotate(-0.3deg);
+}
+
+.VPHero .tagline {
+  max-width: 42rem;
+}
+
+.VPButton,
+.VPFeature,
+.component-preview {
+  border: 2px solid #292524 !important;
+  border-radius: 8px 12px 7px 10px !important;
+  box-shadow: 4px 4px 0 #292524;
+}
+
+.VPButton:hover,
+.VPFeature:hover {
+  transform: translate(-1px, -1px) rotate(-0.25deg);
+  box-shadow: 6px 6px 0 #292524;
+}
+
+.VPFeature:nth-child(even) {
+  transform: rotate(0.35deg);
+}
+
+.component-preview {
+  margin: 1.5rem 0;
+  padding: 2rem;
+  background: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --vp-c-bg: #1c1917;
+    --vp-c-bg-soft: #292524;
+    --vp-c-divider: #e7e5e4;
+  }
+
+  .VPButton,
+  .VPFeature,
+  .component-preview {
+    border-color: #e7e5e4 !important;
+    box-shadow: 4px 4px 0 #e7e5e4;
+  }
+
+  .component-preview {
+    background: #292524;
+  }
+}

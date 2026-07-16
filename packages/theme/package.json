@@ -1,12 +1,18 @@
 {
   "name": "@yxzq-element/theme",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.css",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Optional global theme styles for yxzq-element",
+  "style": "./index.css",
+  "exports": {
+    ".": "./index.css",
+    "./reset.css": "./reset.css"
   },
-  "keywords": [],
-  "author": "",
+  "files": [
+    "index.css",
+    "reset.css"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
   "license": "ISC"
 }

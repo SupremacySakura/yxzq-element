@@ -1,6 +1,9 @@
-// components.ts
+import { defineSuperButton } from "@yxzq-element/components";
 
-import { ErButton } from "@yxzq-element/components"
-import type { Plugin } from "vue"
+export const componentDefinitions = [defineSuperButton] as const;
 
-export default [ErButton] as Plugin[]
+export function registerAll(registry?: CustomElementRegistry): void {
+  componentDefinitions.forEach((defineComponent) => {
+    defineComponent(registry);
+  });
+}

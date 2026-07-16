@@ -1,0 +1,21 @@
+{
+  "name": "@yxzq-element/example-vue",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "vue": "3.4.19",
+    "yxzq-element": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "5.0.4",
+    "typescript": "5.2.2",
+    "vite": "5.1.4",
+    "vue-tsc": "1.8.27"
+  }
+}

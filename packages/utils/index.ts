@@ -1,1 +1,1 @@
-export * from './install'
+export * from "./custom-element.js";

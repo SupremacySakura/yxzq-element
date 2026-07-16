@@ -1,14 +1,11 @@
 :root {
   font-family: Inter, system-ui, sans-serif;
-  line-height: 1.5;
   color: #1f2937;
   background: #f8fafc;
 }
 
 body {
   margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
 main {
@@ -17,8 +14,4 @@ main {
   max-width: 42rem;
   margin: 4rem auto;
   padding: 2rem;
-}
-
-output {
-  color: #475569;
 }

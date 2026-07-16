@@ -1,23 +1,30 @@
 {
   "name": "@yxzq-element/workspace",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Framework-agnostic Web Components built with Lit",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.22.0",
   "scripts": {
-    "dev": "pnpm --filter @yxzq-element/play dev",
-    "docs:dev": "pnpm --filter @yxzq-element/docs dev",
-    "docs:build": "pnpm --filter @yxzq-element/docs build",
-    "test": "echo \"todo\""
+    "dev": "pnpm run build:library && pnpm --filter @yxzq-element/play dev",
+    "dev:react": "pnpm run build:library && pnpm --filter @yxzq-element/example-react dev",
+    "dev:vue": "pnpm run build:library && pnpm --filter @yxzq-element/example-vue dev",
+    "build": "pnpm run build:library && pnpm run build:examples",
+    "build:library": "pnpm --filter yxzq-element... --if-present build",
+    "build:examples": "pnpm --filter @yxzq-element/play build && pnpm --filter \"./examples/*\" --if-present build",
+    "typecheck": "tsc -p tsconfig.json && pnpm --filter \"./examples/*\" --if-present typecheck",
+    "docs:dev": "pnpm run build:library && pnpm --filter @yxzq-element/docs dev",
+    "docs:build": "pnpm run build:library && pnpm --filter @yxzq-element/docs build",
+    "test": "vitest run"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "web-components",
+    "lit"
+  ],
   "license": "ISC",
   "devDependencies": {
-    "@types/lodash-es": "4.17.12",
     "@types/node": "20.11.20",
-    "@vitejs/plugin-vue": "5.0.4",
-    "@vitejs/plugin-vue-jsx": "3.1.0",
-    "@vue/tsconfig": "0.5.1",
+    "jsdom": "24.0.0",
     "postcss-color-mix": "1.1.0",
     "postcss-each": "1.1.0",
     "postcss-each-variables": "0.3.0",
@@ -25,15 +32,6 @@
     "postcss-nested": "6.0.1",
     "typescript": "5.2.2",
     "vite": "5.1.4",
-    "vitest": "1.4.0",
-    "vue-tsc": "1.8.27"
-  },
-  "dependencies": {
-    "lodash-es": "4.17.21",
-    "vue": "3.4.19",
-    "yxzq-element": "workspace:*",
-    "@yxzq-element/hooks": "workspace:*",
-    "@yxzq-element/utils": "workspace:*",
-    "@yxzq-element/theme": "workspace:*"
+    "vitest": "1.4.0"
   }
 }

@@ -1,21 +1,32 @@
 {
   "name": "@yxzq-element/components",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Lit components for yxzq-element",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./button": {
+      "types": "./dist/Button/index.d.ts",
+      "import": "./dist/Button/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@vitest/coverage-v8": "1.4.0",
-    "@vue/test-utils": "2.4.5",
-    "jsdom": "24.0.0"
-  },
   "dependencies": {
-    "@popperjs/core": "2.11.8",
-    "async-validator": "4.2.5"
+    "@yxzq-element/utils": "workspace:*",
+    "lit": "^3.3.1"
   }
 }
