@@ -170,7 +170,7 @@
 | `variant` | `primary \| secondary \| success \| warning \| danger \| outline \| ghost \| text` | `primary` | 视觉与语义类型 |
 | `size` | `large \| medium \| small` | `medium` | 按钮尺寸 |
 | `shape` | `default \| pill \| square` | `default` | 默认、胶囊或等宽方形 |
-| `disabled` | `boolean` | `false` | 禁止聚焦后的操作及点击 |
+| `disabled` | `boolean` | `false` | 禁用后不可点击且不可聚焦 |
 | `loading` | `boolean` | `false` | 显示加载状态并禁止点击 |
 | `loading-text` | `string` | 空字符串 | 加载时替换默认内容；为空则保留原内容 |
 | `aria-label` | `string` | 空字符串 | 图标按钮的可访问名称，会转发到内部按钮 |

@@ -107,13 +107,43 @@ describe("SuperButton", () => {
     expect(label?.textContent).toBe("提交中...");
   });
 
-  it("forwards an accessible label to the internal button", async () => {
+  it("blocks disabled or loading clicks before the first render", async () => {
+    defineSuperButton();
+
+    for (const state of ["disabled", "loading"] as const) {
+      const element = document.createElement(SUPER_BUTTON_TAG);
+      const onClick = vi.fn();
+      element[state] = true;
+      element.addEventListener("click", onClick);
+      document.body.append(element);
+
+      element.click();
+
+      expect(onClick).not.toHaveBeenCalled();
+      await element.updateComplete;
+      element.remove();
+    }
+  });
+
+  it("maps the aria-label attribute to the internal button", async () => {
     const element = await mountButton("");
-    element.accessibleLabel = "收藏";
+    element.setAttribute("aria-label", "收藏");
     element.shape = "square";
     await element.updateComplete;
 
     const button = element.shadowRoot?.querySelector("button");
+    expect(element.accessibleLabel).toBe("收藏");
     expect(button?.getAttribute("aria-label")).toBe("收藏");
+  });
+
+  it("forwards focus and blur to the internal button", async () => {
+    const element = await mountButton();
+    const button = element.shadowRoot?.querySelector("button");
+
+    element.focus({ preventScroll: true });
+    expect(element.shadowRoot?.activeElement).toBe(button);
+
+    element.blur();
+    expect(element.shadowRoot?.activeElement).toBeNull();
   });
 });

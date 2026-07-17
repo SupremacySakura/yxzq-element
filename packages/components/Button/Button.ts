@@ -365,6 +365,10 @@ export class SuperButton extends LitElement {
   }
 
   override click(): void {
+    if (this.disabled || this.loading) {
+      return;
+    }
+
     const button = this.buttonElement;
     if (button) {
       button.click();

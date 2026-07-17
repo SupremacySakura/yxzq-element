@@ -39,7 +39,7 @@ The documentation and Button now implement the project's original hand-drawn dir
 - Added framework-neutral prefix and suffix icon Slots without introducing an icon dependency.
 - Added loading, custom loading text, disabled behavior, focus indication, reduced-motion handling, and accessible labels for icon-only buttons.
 - Exposed `button`, `label`, and `spinner` Parts plus `--super-button-*` visual tokens.
-- Expanded the component test suite from two to six focused tests.
+- Expanded the Button test suite from two to eight focused tests.
 - Rebuilt the Button documentation around the supplied type, size, state, icon, loading, and segmented-action design matrix.
 
 ## Documentation changes
@@ -83,7 +83,7 @@ pnpm build
 pnpm docs:build
 ```
 
-Vitest currently contains 17 focused checks across Button and Input, including registration, slots, state reflection, value synchronization, composed event contracts, localized action labels, clearing, password visibility, number stepping, validation semantics, and disabled/readonly forwarding.
+Vitest currently contains 19 focused checks across Button and Input, including registration, slots, state reflection, pre-render click guards, focus forwarding, attribute mapping, value synchronization, composed event contracts, localized action labels, clearing, password visibility, number stepping, validation semantics, and disabled/readonly forwarding.
 
 The test command was additionally verified with `packages/utils/dist` temporarily unavailable, matching the CI test job's fresh-checkout behavior.
 
@@ -104,3 +104,4 @@ Future agents must follow the durable repository rules in `AGENTS.md`.
 - Upgraded official checkout/setup-node actions to v4, adopted `pnpm/action-setup@v4`, pinned Node 22 and pnpm 10.22.0, and made the downloaded deployment directory explicit.
 - Kept hidden documentation output upload enabled because the build lives under `.vitepress/dist`.
 - Replaced the media-query-only dark theme with VitePress `html.dark` selectors and explicit high-contrast text, surface, divider, navigation, and code colors.
+- Added a brighter dark-theme brand scale whose lowest contrast ratio is 5.02:1 against the primary dark background.
