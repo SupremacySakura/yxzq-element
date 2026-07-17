@@ -40,6 +40,10 @@ export default defineConfig({
         items: [
           { text: "Button 按钮", link: "/components/button" },
           { text: "Input 输入框", link: "/components/input" },
+          {
+            text: "Selector 选择器套装",
+            link: "/components/selectors",
+          },
         ],
       },
     ],

@@ -15,9 +15,21 @@
       "types": "./dist/Button/index.d.ts",
       "import": "./dist/Button/index.js"
     },
+    "./checkbox": {
+      "types": "./dist/Checkbox/index.d.ts",
+      "import": "./dist/Checkbox/index.js"
+    },
     "./input": {
       "types": "./dist/Input/index.d.ts",
       "import": "./dist/Input/index.js"
+    },
+    "./radio": {
+      "types": "./dist/Radio/index.d.ts",
+      "import": "./dist/Radio/index.js"
+    },
+    "./switch": {
+      "types": "./dist/Switch/index.d.ts",
+      "import": "./dist/Switch/index.js"
     }
   },
   "files": [

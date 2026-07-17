@@ -46,6 +46,28 @@ type SuperInputAttributes = {
   "password-hide-label"?: string;
 };
 
+type SuperSelectorAttributes = {
+  checked?: boolean;
+  disabled?: boolean;
+  required?: boolean;
+  name?: string;
+  value?: string;
+  size?: "large" | "medium" | "small";
+  validation?: "none" | "success" | "warning" | "error" | "info";
+  "helper-text"?: string;
+};
+
+type SuperCheckboxAttributes = SuperSelectorAttributes & {
+  indeterminate?: boolean;
+  variant?: "default" | "card";
+};
+
+type SuperRadioAttributes = SuperSelectorAttributes & {
+  variant?: "default" | "button" | "card";
+};
+
+type SuperSwitchAttributes = SuperSelectorAttributes;
+
 declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
@@ -53,10 +75,22 @@ declare module "react" {
         HTMLAttributes<HTMLElement>,
         HTMLElement
       > & SuperButtonAttributes;
+      "super-checkbox": DetailedHTMLProps<
+        HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & SuperCheckboxAttributes;
       "super-input": DetailedHTMLProps<
         HTMLAttributes<HTMLElement>,
         HTMLElement
       > & SuperInputAttributes;
+      "super-radio": DetailedHTMLProps<
+        HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & SuperRadioAttributes;
+      "super-switch": DetailedHTMLProps<
+        HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & SuperSwitchAttributes;
     }
   }
 }

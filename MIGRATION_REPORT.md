@@ -6,11 +6,13 @@ Button design implementation: 2026-07-17
 
 Input design implementation: 2026-07-17
 
+Selector suite design implementation: 2026-07-17
+
 CI and dark-theme maintenance: 2026-07-17
 
 ## Result
 
-The library runtime has been migrated from Vue components and Vue plugins to framework-agnostic Custom Elements implemented with Lit. Button is implemented as `SuperButton`/`super-button`, and the explicitly requested Input is implemented as `SuperInput`/`super-input`. No Element Plus-style API was added.
+The library runtime has been migrated from Vue components and Vue plugins to framework-agnostic Custom Elements implemented with Lit. Button, Input, Checkbox, Radio, and Switch are now implemented as original `Super*` / `super-*` Web Components. No Element Plus-style API was added.
 
 The documentation and Button now implement the project's original hand-drawn direction: paper-like colors, ink borders, irregular corners, offset shadows, clear semantic colors, and friendly motion.
 
@@ -21,7 +23,10 @@ The documentation and Button now implement the project's original hand-drawn dir
 - Added public entry modes:
   - `yxzq-element`: register every component.
   - `yxzq-element/button`: register only `super-button`.
+  - `yxzq-element/checkbox`: register only `super-checkbox`.
   - `yxzq-element/input`: register only `super-input`.
+  - `yxzq-element/radio`: register only `super-radio`.
+  - `yxzq-element/switch`: register only `super-switch`.
   - `yxzq-element/define`: export definitions and explicit registration without automatic registration.
 - Added ESM builds and TypeScript declarations for utils, components, and core packages.
 - Removed Vue dependencies from the root workspace and all runtime library packages.
@@ -63,6 +68,18 @@ The documentation and Button now implement the project's original hand-drawn dir
 - Added a design-matrix documentation page covering types, sizes, states, validation, attachments, combinations, API, responsive behavior, and dark mode.
 - Kept form association out of the current contract: native form submission, reset, `name`, and external validity APIs require a separately designed ElementInternals implementation.
 
+## Selector suite design implementation
+
+- Added `SuperCheckbox`, `SuperRadio`, and `SuperSwitch` with native Checkbox/Radio semantics inside Shadow DOM and an internal native Checkbox with `role="switch"` for Switch.
+- Added large, medium, and small sizes; default, checked, hover/focus, disabled, and validation states; hand-drawn borders, irregular geometry, paper colors, and reduced-motion handling.
+- Added Checkbox `indeterminate` behavior and `default` / `card` variants, plus Radio `default` / `button` / `card` variants matching the supplied selector design matrix.
+- Added consumer-provided icon, description, state-label, and state-icon Slots without introducing an icon dependency. Stable Parts and `--super-checkbox-*`, `--super-radio-*`, and `--super-switch-*` tokens expose intentional styling boundaries.
+- Added composed `super-checkbox-change`, `super-radio-change`, and `super-switch-change` events with typed detail payloads for cross-framework consumers. Programmatic property changes remain silent.
+- Implemented same-root, same-nearest-form, same-name Radio mutual exclusion across separate Shadow Roots, including a single roving Tab stop, disabled-item skipping, looping arrow-key navigation, and dynamic removal/reconnection recovery when the group boundary changes.
+- Added root and selective registration entries, package exports, React JSX declarations, Vue/React/native examples, and 27 focused selector tests (7 Checkbox, 12 Radio, and 8 Switch).
+- Added a selector-suite documentation page covering types, sizes, states, validation, grouping, card/list layouts, API, accessibility, dark mode, and responsive behavior.
+- Kept the three selector hosts out of native form association. Their internal `required`, `name`, and `value` improve semantics and event payloads but do not add `FormData`, reset, or external validity behavior.
+
 ## Compatibility verification
 
 - Native HTML playground production build: passed.
@@ -71,6 +88,7 @@ The documentation and Button now implement the project's original hand-drawn dir
 - SSR/Node import of `yxzq-element` and `yxzq-element/define`: passed.
 - VitePress client/server build and page rendering: passed.
 - Real-browser inspection confirmed the hand-drawn Button documentation renders the registered `super-button` and exposes it as an accessible button.
+- Real-browser inspection confirmed the selector documentation renders the hand-drawn default, indeterminate, button, card, size, validation, and combination matrices; the accessibility tree exposes native checkbox, mixed checkbox, radio, and switch roles with checked state.
 
 ## Automated verification
 
@@ -83,13 +101,14 @@ pnpm build
 pnpm docs:build
 ```
 
-Vitest currently contains 19 focused checks across Button and Input, including registration, slots, state reflection, pre-render click guards, focus forwarding, attribute mapping, value synchronization, composed event contracts, localized action labels, clearing, password visibility, number stepping, validation semantics, and disabled/readonly forwarding.
+Vitest currently contains 46 focused checks across Button, Input, Checkbox, Radio, and Switch, including registration, slots, state reflection, pre-render click guards, focus forwarding, attribute mapping, value synchronization, composed event contracts, localized action labels, selector variants, indeterminate state, Radio coordination/reconnection and roving tabindex, validation semantics, and disabled/readonly forwarding.
 
 The test command was additionally verified with `packages/utils/dist` temporarily unavailable, matching the CI test job's fresh-checkout behavior.
 
 ## Intentional constraints and follow-up work
 
 - `SuperButton` intentionally uses an internal `type="button"`. Native form submit/reset behavior is deferred until a form-associated Custom Element contract is designed and tested.
+- Checkbox, Radio, and Switch also intentionally remain non-form-associated. Their host `name`, `value`, and `required` APIs must not be documented as native form-submission support.
 - Package names remain `yxzq-element` and `@yxzq-element/*`; only Custom Element, class, event, and CSS namespaces use `super`.
 - Vue appears only in the Vue consumer example and inside VitePress. It is not a runtime dependency of the library packages.
 - React TypeScript consumers need JSX declarations for `super-*` elements. Future complex custom events may justify a thin React adapter, especially for older React versions.

@@ -19,6 +19,36 @@ main {
   padding: 2rem;
 }
 
+.selector-suite {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.25rem;
+  border: 2px solid #5bbca8;
+  border-radius: 18px 14px 20px 13px;
+  background: #fffef9;
+  box-shadow: 3px 4px 0 rgb(51 65 85 / 10%);
+}
+
+.selector-suite h2 {
+  margin: 0;
+  font-family: "Comic Sans MS", "Kaiti SC", STKaiti, system-ui, sans-serif;
+}
+
+.radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.radio-options legend {
+  inline-size: 100%;
+  margin-block-end: 0.5rem;
+  font-weight: 700;
+}
+
 output {
   color: #475569;
 }

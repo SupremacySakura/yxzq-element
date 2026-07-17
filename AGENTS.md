@@ -30,8 +30,11 @@ The intended product direction is an original hand-drawn component system. The p
 
 - `import "yxzq-element"` registers every component.
 - `import "yxzq-element/button"` registers only `super-button`.
+- `import "yxzq-element/checkbox"` registers only `super-checkbox`.
 - `import "yxzq-element/input"` registers only `super-input`.
-- `import { registerAll, defineSuperButton } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
+- `import "yxzq-element/radio"` registers only `super-radio`.
+- `import "yxzq-element/switch"` registers only `super-switch`.
+- `import { registerAll, defineSuperButton, defineSuperCheckbox, defineSuperInput, defineSuperRadio, defineSuperSwitch } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
 - Registration must remain idempotent and safe when `customElements` is unavailable.
 
 When an explicitly authorized component is added, update its component export, `packages/components/index.ts`, `packages/core/components.ts`, core subpath exports, `HTMLElementTagNameMap`, tests, docs, and React example JSX declarations as applicable.
@@ -53,6 +56,12 @@ When an explicitly authorized component is added, update its component export, `
 - Input value changes expose composed `super-input` and `super-change` events. Clear and password visibility actions expose `super-clear` and `super-password-visibility`. Keep event detail types exported and do not replace these cross-framework events with Vue-specific model events.
 - Built-in Input action labels have Chinese defaults but are localizable through `clear-label`, `decrement-label`, `increment-label`, `password-show-label`, and `password-hide-label`. Do not reintroduce fixed, non-overridable accessible names.
 - `SuperInput` is not currently a form-associated Custom Element. Its internal `required`, min/max, and length constraints improve native control semantics, but native form submission, `name`, reset, and external validity APIs are not part of the public contract until ElementInternals behavior is designed and tested.
+- `SuperCheckbox`, `SuperRadio`, and `SuperSwitch` form the selector suite. All three support `large`, `medium`, and `small` sizes plus `none`, `success`, `warning`, `error`, and `info` validation states.
+- Checkbox supports `default` and `card` variants plus an independent `indeterminate` state. Radio supports `default`, `button`, and `card` variants. Do not add selector Group components unless the project owner explicitly requests them; consumers should use native `fieldset`/`legend` and layout CSS.
+- Checkbox and Radio accept consumer content through the default, `icon`, and `description` Slots. Switch accepts the default and `description` Slots plus `checked-icon`, `unchecked-icon`, `checked-label`, and `unchecked-label`. Keep all icons consumer-provided and do not add an icon-library dependency.
+- Selector user changes expose composed `super-checkbox-change`, `super-radio-change`, and `super-switch-change` events. Event details include `checked`, `name`, `value`, and `originalEvent`; Checkbox also includes `indeterminate`. Programmatic property changes do not emit user-change events.
+- Same-name Radio hosts need explicit coordination because their native inputs live in separate Shadow Roots. The current group boundary is the same consumer tree root, the same nearest `form`, and an identical non-empty `name`. Preserve mutual exclusion, one roving Tab stop, disabled-item skipping, looping arrow-key navigation, and re-coordination when a checked Radio reconnects after its root or nearest form changes.
+- The selector suite is not form-associated. `required`, `name`, and `value` improve internal semantics and event payloads, but the hosts do not participate in `FormData`, reset, or external constraint-validation APIs until an ElementInternals contract is explicitly designed and tested.
 
 ## Verification commands
 

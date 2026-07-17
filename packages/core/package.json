@@ -15,9 +15,21 @@
       "types": "./dist/button.d.ts",
       "import": "./dist/button.js"
     },
+    "./checkbox": {
+      "types": "./dist/checkbox.d.ts",
+      "import": "./dist/checkbox.js"
+    },
     "./input": {
       "types": "./dist/input.d.ts",
       "import": "./dist/input.js"
+    },
+    "./radio": {
+      "types": "./dist/radio.d.ts",
+      "import": "./dist/radio.js"
+    },
+    "./switch": {
+      "types": "./dist/switch.d.ts",
+      "import": "./dist/switch.js"
     },
     "./define": {
       "types": "./dist/define.d.ts",
@@ -30,7 +42,10 @@
   "sideEffects": [
     "./dist/index.js",
     "./dist/button.js",
-    "./dist/input.js"
+    "./dist/checkbox.js",
+    "./dist/input.js",
+    "./dist/radio.js",
+    "./dist/switch.js"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

@@ -12,7 +12,10 @@
   "include": [
     "index.ts",
     "Button/**/*.ts",
-    "Input/**/*.ts"
+    "Checkbox/**/*.ts",
+    "Input/**/*.ts",
+    "Radio/**/*.ts",
+    "Switch/**/*.ts"
   ],
   "exclude": [
     "**/*.test.ts",

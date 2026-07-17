@@ -12,7 +12,10 @@
   "include": [
     "index.ts",
     "button.ts",
+    "checkbox.ts",
     "input.ts",
+    "radio.ts",
+    "switch.ts",
     "components.ts",
     "define.ts"
   ]

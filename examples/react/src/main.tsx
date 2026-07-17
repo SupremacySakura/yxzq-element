@@ -23,6 +23,22 @@ function App() {
       >
         <span slot="suffix" aria-hidden="true">⌕</span>
       </super-input>
+      <section aria-labelledby="selector-title">
+        <h2 id="selector-title">选择器套装</h2>
+        <super-checkbox checked>接收更新通知</super-checkbox>
+        <fieldset>
+          <legend>版本</legend>
+          <super-radio name="plan" value="standard" checked>
+            标准版
+          </super-radio>
+          <super-radio name="plan" value="advanced">
+            高级版
+          </super-radio>
+        </fieldset>
+        <super-switch checked aria-label="自动同步">
+          自动同步
+        </super-switch>
+      </section>
     </main>
   );
 }
