@@ -43,7 +43,10 @@ When an explicitly authorized component is added, update its component export, `
 - Prefer native HTML semantics, keyboard behavior, focus behavior, and events.
 - Reflect primitive public state to attributes when it improves HTML usage. Keep objects and arrays as JavaScript properties.
 - Do not add a framework-specific install API such as Vue `app.use()`, `withInstall()`, or `makeInstaller()`.
-- `SuperButton` is intentionally an architecture-only minimal component. Its final hand-drawn design and product API have not been specified.
+- `SuperButton` is the established hand-drawn design baseline. Its supported variants are `primary`, `secondary`, `success`, `warning`, `danger`, `outline`, `ghost`, and `text`; sizes are `large`, `medium`, and `small`; shapes are `default`, `pill`, and `square`.
+- Button icons are consumer content supplied through the `prefix`, `suffix`, or default Slot. Do not add an icon-library dependency to the component package.
+- Button loading state disables interaction, exposes `aria-busy`, and may replace the label through `loading-text`. Icon-only square buttons require an `aria-label`.
+- The current internal native button intentionally uses `type="button"`. Form submission/reset behavior is not part of the public contract yet; do not claim it until a form-associated Custom Element design is implemented and tested.
 
 ## Verification commands
 
@@ -66,3 +69,5 @@ Unit tests must run directly against workspace source and must pass in a fresh c
 - React TypeScript consumers need `JSX.IntrinsicElements` declarations for `super-*` tags. For future custom events or React versions with limited Custom Element event support, add a thin React adapter rather than adding React to the component implementation.
 - Plain browsers cannot resolve npm bare module names by themselves. Native HTML usage needs a bundler, import map, or an ESM-transforming CDN.
 - Generated `dist`, VitePress cache, and VitePress output directories must not be committed.
+- VitePress's theme toggle is driven by the `html.dark` class. Dark-theme overrides must target that class and maintain readable text/background contrast; do not rely only on `prefers-color-scheme`.
+- GitHub Actions artifact upload/download must remain on v4 or newer. Documentation output lives under the hidden `.vitepress` directory, so artifact upload must keep `include-hidden-files: true` and `if-no-files-found: error`.

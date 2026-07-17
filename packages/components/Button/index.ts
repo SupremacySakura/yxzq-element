@@ -8,4 +8,4 @@ export const defineSuperButton = (
 ): typeof SuperButton =>
   defineCustomElement(SUPER_BUTTON_TAG, SuperButton, registry);
 
-export { SuperButton } from "./Button.js";
+export * from "./Button.js";

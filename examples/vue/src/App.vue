@@ -7,6 +7,9 @@ const handleClick = () => {
 <template>
   <main>
     <h1>Vue 消费示例</h1>
-    <super-button @click="handleClick">自定义按钮内容</super-button>
+    <super-button variant="warning" size="large" @click="handleClick">
+      <span slot="prefix" aria-hidden="true">☆</span>
+      自定义按钮内容
+    </super-button>
   </main>
 </template>

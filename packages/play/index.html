@@ -8,7 +8,10 @@
   <body>
     <main>
       <h1>原生 HTML 消费示例</h1>
-      <super-button>自定义按钮内容</super-button>
+      <super-button variant="primary" shape="pill">
+        <span slot="prefix" aria-hidden="true">☆</span>
+        自定义按钮内容
+      </super-button>
       <output>等待点击</output>
     </main>
     <script type="module" src="/src/main.ts"></script>

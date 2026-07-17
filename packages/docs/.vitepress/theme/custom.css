@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   --vp-font-family-base: "Comic Sans MS", "Kaiti SC", STKaiti, system-ui, sans-serif;
   --vp-c-brand: #2563eb;
   --vp-c-brand-light: #3b82f6;
@@ -9,10 +10,27 @@
   --vp-c-divider: #292524;
 }
 
+html.dark {
+  color-scheme: dark;
+  --vp-c-bg: #1c1917;
+  --vp-c-bg-alt: #151312;
+  --vp-c-bg-soft: #292524;
+  --vp-c-bg-mute: #34302d;
+  --vp-c-divider: #78716c;
+  --vp-c-text-1: #fafaf9;
+  --vp-c-text-2: #d6d3d1;
+  --vp-c-text-3: #a8a29e;
+  --vp-code-block-bg: #12100f;
+}
+
 body {
   background-color: var(--vp-c-bg);
   background-image: radial-gradient(#d6d3d1 0.65px, transparent 0.65px);
   background-size: 16px 16px;
+}
+
+html.dark body {
+  background-image: radial-gradient(#44403c 0.65px, transparent 0.65px);
 }
 
 .VPNavBar,
@@ -54,21 +72,19 @@ body {
   background: #fff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --vp-c-bg: #1c1917;
-    --vp-c-bg-soft: #292524;
-    --vp-c-divider: #e7e5e4;
-  }
+html.dark .VPButton,
+html.dark .VPFeature,
+html.dark .component-preview {
+  border-color: #d6d3d1 !important;
+  box-shadow: 4px 4px 0 #d6d3d1;
+}
 
-  .VPButton,
-  .VPFeature,
-  .component-preview {
-    border-color: #e7e5e4 !important;
-    box-shadow: 4px 4px 0 #e7e5e4;
-  }
+html.dark .VPButton:hover,
+html.dark .VPFeature:hover {
+  box-shadow: 6px 6px 0 #d6d3d1;
+}
 
-  .component-preview {
-    background: #292524;
-  }
+html.dark .component-preview {
+  color: #fafaf9;
+  background: #292524;
 }
