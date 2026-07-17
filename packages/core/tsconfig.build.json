@@ -15,6 +15,7 @@
     "checkbox.ts",
     "input.ts",
     "radio.ts",
+    "select.ts",
     "switch.ts",
     "components.ts",
     "define.ts"

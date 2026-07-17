@@ -6,6 +6,7 @@ const input = document.querySelector("super-input");
 const checkbox = document.querySelector("super-checkbox");
 const radios = document.querySelectorAll("super-radio");
 const switchElement = document.querySelector("super-switch");
+const select = document.querySelector("super-select");
 
 const writeOutput = (message: string): void => {
   const output = document.querySelector("output");
@@ -34,4 +35,8 @@ radios.forEach((radio) => {
 
 switchElement?.addEventListener("super-switch-change", (event) => {
   writeOutput(`super-switch：${event.detail.checked ? "开启" : "关闭"}`);
+});
+
+select?.addEventListener("super-select-change", (event) => {
+  writeOutput(`super-select 当前值：${event.detail.values.join("、") || "未选择"}`);
 });

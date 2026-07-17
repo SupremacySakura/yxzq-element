@@ -27,6 +27,10 @@
       "types": "./dist/Radio/index.d.ts",
       "import": "./dist/Radio/index.js"
     },
+    "./select": {
+      "types": "./dist/Select/index.d.ts",
+      "import": "./dist/Select/index.js"
+    },
     "./switch": {
       "types": "./dist/Switch/index.d.ts",
       "import": "./dist/Switch/index.js"

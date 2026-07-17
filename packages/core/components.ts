@@ -3,6 +3,7 @@ import {
   defineSuperCheckbox,
   defineSuperInput,
   defineSuperRadio,
+  defineSuperSelect,
   defineSuperSwitch,
 } from "@yxzq-element/components";
 
@@ -11,6 +12,7 @@ export const componentDefinitions = [
   defineSuperCheckbox,
   defineSuperInput,
   defineSuperRadio,
+  defineSuperSelect,
   defineSuperSwitch,
 ] as const;
 

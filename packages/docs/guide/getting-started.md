@@ -2,7 +2,7 @@
 
 Super Components 是一套基于 Lit 的手绘风格 Web Component 组件库。组件实现不依赖 Vue 或 React。
 
-当前提供 Button、Input、Checkbox、Radio 与 Switch 组件。每个组件都保留原生语义，并通过手绘视觉、Shadow DOM 和跨框架事件组成一致的消费体验。
+当前提供 Button、Input、Checkbox、Radio、Switch 与 Select 组件。每个组件都保留原生语义，并通过手绘视觉、Shadow DOM 和跨框架事件组成一致的消费体验。
 
 ## 安装
 
@@ -30,6 +30,12 @@ import "yxzq-element/button";
 import "yxzq-element/input";
 ```
 
+仅注册 Select：
+
+```ts
+import "yxzq-element/select";
+```
+
 选择器组件也支持分别注册：
 
 ```ts
@@ -52,11 +58,13 @@ registerAll();
 import {
   defineSuperCheckbox,
   defineSuperRadio,
+  defineSuperSelect,
   defineSuperSwitch,
 } from "yxzq-element/define";
 
 defineSuperCheckbox();
 defineSuperRadio();
+defineSuperSelect();
 defineSuperSwitch();
 ```
 
@@ -71,6 +79,10 @@ defineSuperSwitch();
 <super-radio name="plan" value="standard" checked>标准版</super-radio>
 <super-radio name="plan" value="advanced">高级版</super-radio>
 <super-switch checked aria-label="自动同步">自动同步</super-switch>
+<super-select aria-label="选择城市">
+  <option value="shanghai">上海</option>
+  <option value="hangzhou">杭州</option>
+</super-select>
 
 <script type="module">
   import "yxzq-element";
@@ -98,6 +110,10 @@ import "yxzq-element";
 <super-switch checked @super-switch-change="handleSwitchChange">
   自动同步
 </super-switch>
+<super-select value="hangzhou" @super-select-change="handleSelectChange">
+  <option value="shanghai">上海</option>
+  <option value="hangzhou">杭州</option>
+</super-select>
 ```
 
 Vue 构建配置需要把 `super-` 标签识别为 Custom Element：
@@ -132,6 +148,10 @@ export function App() {
       <super-switch checked aria-label="自动同步">
         自动同步
       </super-switch>
+      <super-select value="hangzhou" aria-label="选择城市">
+        <option value="shanghai">上海</option>
+        <option value="hangzhou">杭州</option>
+      </super-select>
     </>
   );
 }

@@ -19,6 +19,33 @@ main {
   padding: 2rem;
 }
 
+.select-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 2px solid #f2b84b;
+  border-radius: 16px 20px 14px 19px;
+  background: #fffef9;
+  box-shadow: 3px 4px 0 rgb(51 65 85 / 10%);
+}
+
+.select-demo h2,
+.select-demo p {
+  margin: 0;
+}
+
+.select-demo p {
+  margin-top: 0.3rem;
+  color: #64748b;
+}
+
+.select-demo super-select {
+  --super-select-width: 19rem;
+}
+
 .selector-suite {
   display: grid;
   gap: 0.9rem;

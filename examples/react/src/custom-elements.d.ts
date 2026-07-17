@@ -68,6 +68,54 @@ type SuperRadioAttributes = SuperSelectorAttributes & {
 
 type SuperSwitchAttributes = SuperSelectorAttributes;
 
+type SuperSelectValue = string | string[];
+
+type SuperSelectChangeEvent = CustomEvent<{
+  value: SuperSelectValue;
+  values: string[];
+  name: string;
+  selectedOptions: HTMLOptionElement[];
+  originalEvent: Event;
+}>;
+
+type SuperSelectAttributes = {
+  value?: SuperSelectValue;
+  multiple?: boolean;
+  searchable?: boolean;
+  clearable?: boolean;
+  disabled?: boolean;
+  readonly?: boolean;
+  required?: boolean;
+  loading?: boolean;
+  open?: boolean;
+  name?: string;
+  size?: "large" | "medium" | "small";
+  variant?: "default" | "pill" | "filled" | "ghost";
+  validation?: "none" | "success" | "warning" | "error" | "info";
+  placeholder?: string;
+  "helper-text"?: string;
+  "clear-label"?: string;
+  "remove-label"?: string;
+  "search-label"?: string;
+  "search-placeholder"?: string;
+  "empty-text"?: string;
+  "loading-text"?: string;
+  "onsuper-select-change"?: (event: SuperSelectChangeEvent) => void;
+  "onsuper-select-clear"?: (
+    event: CustomEvent<{ previousValue: SuperSelectValue; originalEvent: Event }>,
+  ) => void;
+  "onsuper-select-open-change"?: (
+    event: CustomEvent<{
+      open: boolean;
+      reason: "trigger" | "keyboard" | "search" | "selection" | "escape" | "outside";
+      originalEvent: Event;
+    }>,
+  ) => void;
+  "onsuper-select-search"?: (
+    event: CustomEvent<{ query: string; originalEvent: InputEvent }>,
+  ) => void;
+};
+
 declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
@@ -87,6 +135,10 @@ declare module "react" {
         HTMLAttributes<HTMLElement>,
         HTMLElement
       > & SuperRadioAttributes;
+      "super-select": DetailedHTMLProps<
+        HTMLAttributes<HTMLElement>,
+        HTMLElement
+      > & SuperSelectAttributes;
       "super-switch": DetailedHTMLProps<
         HTMLAttributes<HTMLElement>,
         HTMLElement

@@ -44,6 +44,7 @@ export default defineConfig({
             text: "Selector 选择器套装",
             link: "/components/selectors",
           },
+          { text: "Select 下拉选择器", link: "/components/select" },
         ],
       },
     ],

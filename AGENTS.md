@@ -33,8 +33,9 @@ The intended product direction is an original hand-drawn component system. The p
 - `import "yxzq-element/checkbox"` registers only `super-checkbox`.
 - `import "yxzq-element/input"` registers only `super-input`.
 - `import "yxzq-element/radio"` registers only `super-radio`.
+- `import "yxzq-element/select"` registers only `super-select`.
 - `import "yxzq-element/switch"` registers only `super-switch`.
-- `import { registerAll, defineSuperButton, defineSuperCheckbox, defineSuperInput, defineSuperRadio, defineSuperSwitch } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
+- `import { registerAll, defineSuperButton, defineSuperCheckbox, defineSuperInput, defineSuperRadio, defineSuperSelect, defineSuperSwitch } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
 - Registration must remain idempotent and safe when `customElements` is unavailable.
 
 When an explicitly authorized component is added, update its component export, `packages/components/index.ts`, `packages/core/components.ts`, core subpath exports, `HTMLElementTagNameMap`, tests, docs, and React example JSX declarations as applicable.
@@ -62,6 +63,13 @@ When an explicitly authorized component is added, update its component export, `
 - Selector user changes expose composed `super-checkbox-change`, `super-radio-change`, and `super-switch-change` events. Event details include `checked`, `name`, `value`, and `originalEvent`; Checkbox also includes `indeterminate`. Programmatic property changes do not emit user-change events.
 - Same-name Radio hosts need explicit coordination because their native inputs live in separate Shadow Roots. The current group boundary is the same consumer tree root, the same nearest `form`, and an identical non-empty `name`. Preserve mutual exclusion, one roving Tab stop, disabled-item skipping, looping arrow-key navigation, and re-coordination when a checked Radio reconnects after its root or nearest form changes.
 - The selector suite is not form-associated. `required`, `name`, and `value` improve internal semantics and event payloads, but the hosts do not participate in `FormData`, reset, or external constraint-validation APIs until an ElementInternals contract is explicitly designed and tested.
+- `SuperSelect` consumes native `option` and `optgroup` elements from its default Slot. Do not introduce Select Option, Select Group, Cascader, or Date components unless the project owner explicitly requests them; cascading and date-range interfaces are application-level compositions of the available primitives.
+- Select supports `large`, `medium`, and `small` sizes; `default`, `pill`, `filled`, and `ghost` variants; and `none`, `success`, `warning`, `error`, and `info` validation states. Prefix, trigger, indicator, empty, and loading content remain consumer-provided Slots with no icon-library dependency.
+- Select values are strings in single mode and JavaScript `string[]` properties in multiple mode. Native option values must be non-empty and unique within one Select. Multiple initial selections may use native `selected` attributes, but array values cannot be represented by the host HTML `value` attribute.
+- Preserve a controlled Select `value` when options are opened, relabeled, reordered, or rebuilt. Adopt native selection only during initial uncontrolled setup, an explicit `selected` attribute change, or `refreshOptions()`; selected disabled options remain locked during tag removal and clear actions. Track option identity and its last `selected` attribute state across removal and reconnection so an unchanged old node is a reorder rather than fresh selection intent, and clear typeahead state when disconnecting.
+- Select user changes expose composed `super-select-change`, `super-select-clear`, `super-select-open-change`, and `super-select-search` events. Programmatic property changes do not emit user events. Keep the built-in clear, tag-remove, search, empty, and loading labels localizable through public attributes.
+- The Select `trigger` Slot is display-only content inside the managed combobox trigger. Do not document or place nested buttons or other interactive controls in it. Preserve combobox/listbox semantics, disabled-option skipping, looping arrow navigation, Home/End, Escape, typeahead, and search behavior.
+- `SuperSelect` is not form-associated. Its `required` and `name` properties only improve internal ARIA and event payloads; it does not participate in `FormData`, form reset, or external constraint-validation APIs. Use `refreshOptions()` after property-only changes to native option selection that are invisible to the option MutationObserver.
 
 ## Verification commands
 

@@ -21,6 +21,7 @@
       "@yxzq-element/components/checkbox": ["packages/components/Checkbox/index.ts"],
       "@yxzq-element/components/input": ["packages/components/Input/index.ts"],
       "@yxzq-element/components/radio": ["packages/components/Radio/index.ts"],
+      "@yxzq-element/components/select": ["packages/components/Select/index.ts"],
       "@yxzq-element/components/switch": ["packages/components/Switch/index.ts"],
       "@yxzq-element/components/*": ["packages/components/*/index.ts"],
       "yxzq-element": ["packages/core/index.ts"],

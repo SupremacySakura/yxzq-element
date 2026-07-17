@@ -8,11 +8,13 @@ Input design implementation: 2026-07-17
 
 Selector suite design implementation: 2026-07-17
 
+Select design implementation: 2026-07-17
+
 CI and dark-theme maintenance: 2026-07-17
 
 ## Result
 
-The library runtime has been migrated from Vue components and Vue plugins to framework-agnostic Custom Elements implemented with Lit. Button, Input, Checkbox, Radio, and Switch are now implemented as original `Super*` / `super-*` Web Components. No Element Plus-style API was added.
+The library runtime has been migrated from Vue components and Vue plugins to framework-agnostic Custom Elements implemented with Lit. Button, Input, Checkbox, Radio, Switch, and Select are now implemented as original `Super*` / `super-*` Web Components. No Element Plus-style API was added.
 
 The documentation and Button now implement the project's original hand-drawn direction: paper-like colors, ink borders, irregular corners, offset shadows, clear semantic colors, and friendly motion.
 
@@ -26,6 +28,7 @@ The documentation and Button now implement the project's original hand-drawn dir
   - `yxzq-element/checkbox`: register only `super-checkbox`.
   - `yxzq-element/input`: register only `super-input`.
   - `yxzq-element/radio`: register only `super-radio`.
+  - `yxzq-element/select`: register only `super-select`.
   - `yxzq-element/switch`: register only `super-switch`.
   - `yxzq-element/define`: export definitions and explicit registration without automatic registration.
 - Added ESM builds and TypeScript declarations for utils, components, and core packages.
@@ -80,6 +83,18 @@ The documentation and Button now implement the project's original hand-drawn dir
 - Added a selector-suite documentation page covering types, sizes, states, validation, grouping, card/list layouts, API, accessibility, dark mode, and responsive behavior.
 - Kept the three selector hosts out of native form association. Their internal `required`, `name`, and `value` improve semantics and event payloads but do not add `FormData`, reset, or external validity behavior.
 
+## Select design implementation
+
+- Added `SuperSelect` as a single Lit component backed by native `option` and `optgroup` elements; the implementation does not introduce proprietary Option, Group, Cascader, or Date components.
+- Added single and multiple values, removable tags, local filtering, grouped options, clear, empty, loading, readonly, disabled, required, and success/warning/error/info validation states.
+- Added large, medium, and small sizes plus default, pill, filled, and ghost hand-drawn variants matching the supplied design direction.
+- Implemented combobox/listbox semantics, looping Arrow navigation, disabled-option skipping, Home/End, Escape, prefix typeahead, searchable input behavior, focus forwarding, active-option scrolling, and localized built-in labels.
+- Added dynamic native-option synchronization for label, value, selected, disabled, hidden, child, and group changes. Controlled host values remain authoritative across ordinary option rebuilds and same-node reinsertions, option identity and `selected` attribute state are tracked across removal/reconnection, and `refreshOptions()` intentionally imports property-only native selection changes.
+- Added composed `super-select-change`, `super-select-clear`, `super-select-open-change`, and `super-select-search` events with typed details. Programmatic value and open changes remain silent.
+- Exposed consumer content through prefix, trigger, indicator, empty, and loading Slots, plus stable Parts and `--super-select-*` tokens without adding an icon dependency.
+- Added root and selective registration, package exports, React JSX declarations, Vue/React/native examples, a full design-matrix documentation page, and 24 focused Select tests.
+- Kept Select out of native form association. Its `required` and `name` fields provide ARIA and event metadata only; `FormData`, reset, and external validity APIs remain deferred to a separately designed ElementInternals contract.
+
 ## Compatibility verification
 
 - Native HTML playground production build: passed.
@@ -89,6 +104,7 @@ The documentation and Button now implement the project's original hand-drawn dir
 - VitePress client/server build and page rendering: passed.
 - Real-browser inspection confirmed the hand-drawn Button documentation renders the registered `super-button` and exposes it as an accessible button.
 - Real-browser inspection confirmed the selector documentation renders the hand-drawn default, indeterminate, button, card, size, validation, and combination matrices; the accessibility tree exposes native checkbox, mixed checkbox, radio, and switch roles with checked state.
+- Real-browser inspection confirmed Select single choice, searchable keyboard selection, multiple clear behavior, combobox/listbox semantics, zero console errors, readable dark mode, and no page-level overflow at a 390px viewport.
 
 ## Automated verification
 
@@ -101,7 +117,7 @@ pnpm build
 pnpm docs:build
 ```
 
-Vitest currently contains 46 focused checks across Button, Input, Checkbox, Radio, and Switch, including registration, slots, state reflection, pre-render click guards, focus forwarding, attribute mapping, value synchronization, composed event contracts, localized action labels, selector variants, indeterminate state, Radio coordination/reconnection and roving tabindex, validation semantics, and disabled/readonly forwarding.
+Vitest currently contains 70 focused checks across Button, Input, Checkbox, Radio, Switch, and Select, including registration, slots, state reflection, pre-render click guards, focus forwarding, attribute mapping, value synchronization, composed event contracts, localized action labels, selector variants, indeterminate state, Radio coordination/reconnection and roving tabindex, Select controlled-option rebuilding, reorder/reconnection synchronization, keyboard navigation, validation semantics, and disabled/readonly/loading forwarding.
 
 The test command was additionally verified with `packages/utils/dist` temporarily unavailable, matching the CI test job's fresh-checkout behavior.
 
@@ -109,6 +125,7 @@ The test command was additionally verified with `packages/utils/dist` temporaril
 
 - `SuperButton` intentionally uses an internal `type="button"`. Native form submit/reset behavior is deferred until a form-associated Custom Element contract is designed and tested.
 - Checkbox, Radio, and Switch also intentionally remain non-form-associated. Their host `name`, `value`, and `required` APIs must not be documented as native form-submission support.
+- Select intentionally remains non-form-associated as well. Multiple values must be assigned as a JavaScript `string[]` property, and native option values must stay unique and non-empty.
 - Package names remain `yxzq-element` and `@yxzq-element/*`; only Custom Element, class, event, and CSS namespaces use `super`.
 - Vue appears only in the Vue consumer example and inside VitePress. It is not a runtime dependency of the library packages.
 - React TypeScript consumers need JSX declarations for `super-*` elements. Future complex custom events may justify a thin React adapter, especially for older React versions.

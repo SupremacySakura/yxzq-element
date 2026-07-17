@@ -15,6 +15,7 @@
     "Checkbox/**/*.ts",
     "Input/**/*.ts",
     "Radio/**/*.ts",
+    "Select/**/*.ts",
     "Switch/**/*.ts"
   ],
   "exclude": [
