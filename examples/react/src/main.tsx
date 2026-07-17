@@ -15,6 +15,14 @@ function App() {
         <span slot="prefix" aria-hidden="true">✓</span>
         自定义按钮内容
       </super-button>
+      <super-input
+        type="search"
+        placeholder="搜索关键词"
+        clearable
+        aria-label="搜索关键词"
+      >
+        <span slot="suffix" aria-hidden="true">⌕</span>
+      </super-input>
     </main>
   );
 }

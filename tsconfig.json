@@ -18,6 +18,7 @@
       "@yxzq-element/utils": ["packages/utils/index.ts"],
       "@yxzq-element/components": ["packages/components/index.ts"],
       "@yxzq-element/components/button": ["packages/components/Button/index.ts"],
+      "@yxzq-element/components/input": ["packages/components/Input/index.ts"],
       "@yxzq-element/components/*": ["packages/components/*/index.ts"],
       "yxzq-element": ["packages/core/index.ts"],
       "yxzq-element/*": ["packages/core/*.ts"]

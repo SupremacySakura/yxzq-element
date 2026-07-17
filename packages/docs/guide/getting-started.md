@@ -24,6 +24,12 @@ import "yxzq-element";
 import "yxzq-element/button";
 ```
 
+仅注册 Input：
+
+```ts
+import "yxzq-element/input";
+```
+
 需要控制注册时机时：
 
 ```ts
@@ -38,6 +44,7 @@ registerAll();
 
 ```html
 <super-button>自定义按钮内容</super-button>
+<super-input placeholder="请输入内容"></super-input>
 
 <script type="module">
   import "yxzq-element";
@@ -56,6 +63,7 @@ import "yxzq-element";
 
 ```vue
 <super-button @click="handleClick">自定义按钮内容</super-button>
+<super-input :value="keyword" @super-input="handleInput"></super-input>
 ```
 
 Vue 构建配置需要把 `super-` 标签识别为 Custom Element：
@@ -80,6 +88,7 @@ export function App() {
     <super-button onClick={handleClick}>
       自定义按钮内容
     </super-button>
+    <super-input placeholder="请输入内容" aria-label="内容" />
   );
 }
 ```

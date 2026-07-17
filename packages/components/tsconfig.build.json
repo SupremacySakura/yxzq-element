@@ -11,7 +11,8 @@
   },
   "include": [
     "index.ts",
-    "Button/**/*.ts"
+    "Button/**/*.ts",
+    "Input/**/*.ts"
   ],
   "exclude": [
     "**/*.test.ts",

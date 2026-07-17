@@ -14,6 +14,10 @@
     "./button": {
       "types": "./dist/Button/index.d.ts",
       "import": "./dist/Button/index.js"
+    },
+    "./input": {
+      "types": "./dist/Input/index.d.ts",
+      "import": "./dist/Input/index.js"
     }
   },
   "files": [

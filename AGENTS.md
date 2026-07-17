@@ -30,6 +30,7 @@ The intended product direction is an original hand-drawn component system. The p
 
 - `import "yxzq-element"` registers every component.
 - `import "yxzq-element/button"` registers only `super-button`.
+- `import "yxzq-element/input"` registers only `super-input`.
 - `import { registerAll, defineSuperButton } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
 - Registration must remain idempotent and safe when `customElements` is unavailable.
 
@@ -47,6 +48,11 @@ When an explicitly authorized component is added, update its component export, `
 - Button icons are consumer content supplied through the `prefix`, `suffix`, or default Slot. Do not add an icon-library dependency to the component package.
 - Button loading state disables interaction, exposes `aria-busy`, and may replace the label through `loading-text`. Icon-only square buttons require an `aria-label`.
 - The current internal native button intentionally uses `type="button"`. Form submission/reset behavior is not part of the public contract yet; do not claim it until a form-associated Custom Element design is implemented and tested.
+- `SuperInput` supports native-style `text`, `search`, `password`, `number`, `email`, `tel`, `url`, and `date` types; multiline input is enabled with the separate `multiline` boolean instead of inventing a non-native input type.
+- Input sizes are `large`, `medium`, and `small`; validation states are `none`, `success`, `warning`, `error`, and `info`. Prefix, suffix, and action content must remain consumer-provided Slots so the component does not depend on an icon library.
+- Input value changes expose composed `super-input` and `super-change` events. Clear and password visibility actions expose `super-clear` and `super-password-visibility`. Keep event detail types exported and do not replace these cross-framework events with Vue-specific model events.
+- Built-in Input action labels have Chinese defaults but are localizable through `clear-label`, `decrement-label`, `increment-label`, `password-show-label`, and `password-hide-label`. Do not reintroduce fixed, non-overridable accessible names.
+- `SuperInput` is not currently a form-associated Custom Element. Its internal `required`, min/max, and length constraints improve native control semantics, but native form submission, `name`, reset, and external validity APIs are not part of the public contract until ElementInternals behavior is designed and tested.
 
 ## Verification commands
 

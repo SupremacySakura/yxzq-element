@@ -12,6 +12,7 @@
   "include": [
     "index.ts",
     "button.ts",
+    "input.ts",
     "components.ts",
     "define.ts"
   ]

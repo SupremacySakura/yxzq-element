@@ -4,11 +4,13 @@ Initial migration: 2026-07-16
 
 Button design implementation: 2026-07-17
 
+Input design implementation: 2026-07-17
+
 CI and dark-theme maintenance: 2026-07-17
 
 ## Result
 
-The library runtime has been migrated from Vue components and Vue plugins to framework-agnostic Custom Elements implemented with Lit. The existing Button is now `SuperButton`, registered as `super-button`. No additional business component or Element Plus-style API was added.
+The library runtime has been migrated from Vue components and Vue plugins to framework-agnostic Custom Elements implemented with Lit. Button is implemented as `SuperButton`/`super-button`, and the explicitly requested Input is implemented as `SuperInput`/`super-input`. No Element Plus-style API was added.
 
 The documentation and Button now implement the project's original hand-drawn direction: paper-like colors, ink borders, irregular corners, offset shadows, clear semantic colors, and friendly motion.
 
@@ -16,9 +18,10 @@ The documentation and Button now implement the project's original hand-drawn dir
 
 - Replaced `Button.vue` with a `LitElement` class using Shadow DOM, a default Slot, and `part="button"`.
 - Replaced Vue `app.use()`, `withInstall()`, and `makeInstaller()` with SSR-safe, idempotent Custom Element registration.
-- Added three public entry modes:
+- Added public entry modes:
   - `yxzq-element`: register every component.
   - `yxzq-element/button`: register only `super-button`.
+  - `yxzq-element/input`: register only `super-input`.
   - `yxzq-element/define`: export definitions and explicit registration without automatic registration.
 - Added ESM builds and TypeScript declarations for utils, components, and core packages.
 - Removed Vue dependencies from the root workspace and all runtime library packages.
@@ -47,6 +50,19 @@ The documentation and Button now implement the project's original hand-drawn dir
 - Added a Button page that clearly separates consumer demo styling from component defaults.
 - Added a project favicon and Chinese navigation.
 
+## Input design implementation
+
+- Added native-style text, search, password, number, email, telephone, URL, and date input types plus a separate multiline mode backed by `textarea`.
+- Added large, medium, and small sizes, disabled and readonly states, success/warning/error/info validation states, helper text, required indication, character count, and accessible labels.
+- Added clear, password visibility, and number step controls while preserving native keyboard/focus behavior on the underlying input.
+- Kept Chinese defaults for built-in action accessible names while exposing five `*-label` attributes for consumer localization.
+- Added framework-neutral prefix, suffix, and action Slots for labels, icons, units, and Button combinations without introducing an icon dependency.
+- Added composed `super-input`, `super-change`, `super-clear`, and `super-password-visibility` events for cross-framework consumers.
+- Exposed stable CSS Parts and `--super-input-*` tokens for intentional customization boundaries.
+- Added the `yxzq-element/input` registration entry, root registration, React JSX declarations, Vue/React/native examples, and eleven focused unit tests.
+- Added a design-matrix documentation page covering types, sizes, states, validation, attachments, combinations, API, responsive behavior, and dark mode.
+- Kept form association out of the current contract: native form submission, reset, `name`, and external validity APIs require a separately designed ElementInternals implementation.
+
 ## Compatibility verification
 
 - Native HTML playground production build: passed.
@@ -67,7 +83,7 @@ pnpm build
 pnpm docs:build
 ```
 
-Vitest currently contains two focused checks: idempotent registration and default Slot rendering.
+Vitest currently contains 17 focused checks across Button and Input, including registration, slots, state reflection, value synchronization, composed event contracts, localized action labels, clearing, password visibility, number stepping, validation semantics, and disabled/readonly forwarding.
 
 The test command was additionally verified with `packages/utils/dist` temporarily unavailable, matching the CI test job's fresh-checkout behavior.
 
