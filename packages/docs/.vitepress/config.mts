@@ -27,12 +27,14 @@ export default defineConfig({
       { text: "首页", link: "/" },
       { text: "开始使用", link: "/guide/getting-started" },
       { text: "组件", link: "/components/button" },
+      { text: "版本变更", link: "/guide/changelog" },
     ],
     sidebar: [
       {
         text: "指南",
         items: [
           { text: "开始使用", link: "/guide/getting-started" },
+          { text: "版本变更", link: "/guide/changelog" },
         ],
       },
       {

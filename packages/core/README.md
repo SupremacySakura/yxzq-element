@@ -49,7 +49,12 @@ defineSuperSelect();
 </super-select>
 ```
 
-Vue 项目需要在模板编译器中设置 `isCustomElement: (tag) => tag.startsWith("super-")`。React + TypeScript 项目需要为 `super-*` 标签补充 `JSX.IntrinsicElements` 声明。完整 HTML、Vue 和 React 示例见项目文档。
+框架中的正确消费方式仍然是注册原生 Custom Element 后使用小写标签：
+
+- Vue + Vite：在模板编译器中设置 `isCustomElement: (tag) => tag.startsWith("super-")`，在 `mount()` 前导入注册入口，复制 Vue 示例的完整 `custom-elements.d.ts`，然后使用 `<super-button>`。
+- React + TypeScript：在 `render()` 前导入注册入口，为 `super-*` 标签补充 `JSX.IntrinsicElements`，然后使用 `<super-button>`。
+
+包中导出的 `SuperButton` 等名称是 `HTMLElement`/`LitElement` 类，不是 Vue 或 React 组件。当前版本不能将它们直接写成 `<SuperButton>`，也不能通过 Vue 的 `app.component()` 把它们变成 Vue 组件。完整配置、React 类型声明和可运行示例见[开始使用文档](https://supremacysakura.github.io/yxzq-element/guide/getting-started)。
 
 - [在线文档](https://supremacysakura.github.io/yxzq-element/)
 - [GitHub](https://github.com/SupremacySakura/yxzq-element)

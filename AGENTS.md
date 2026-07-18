@@ -1,5 +1,11 @@
 # Project guide for agents
 
+## Required reading before development
+
+Before making any code, documentation, configuration, workflow, or release change, read `docs/DEVELOPMENT_WORKFLOW.md` in full and follow its change-classification, synchronization, changelog, and verification requirements. Do not start implementation before completing this reading.
+
+Every repository change must update the `未发布` (`Unreleased`) section of `packages/docs/guide/changelog.md`. When a component is added or modified, review and synchronize the Vue and React consumer type declarations, component documentation, examples, tests, and public entry points required by the development workflow in the same change.
+
 ## Project direction
 
 This repository is a framework-agnostic Web Component library implemented with Lit. It is no longer a Vue component library and must not copy Element Plus APIs, implementation, documentation, or visual design.
@@ -38,7 +44,7 @@ The intended product direction is an original hand-drawn component system. The p
 - `import { registerAll, defineSuperButton, defineSuperCheckbox, defineSuperInput, defineSuperRadio, defineSuperSelect, defineSuperSwitch } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
 - Registration must remain idempotent and safe when `customElements` is unavailable.
 
-When an explicitly authorized component is added, update its component export, `packages/components/index.ts`, `packages/core/components.ts`, core subpath exports, `HTMLElementTagNameMap`, tests, docs, and React example JSX declarations as applicable.
+When an explicitly authorized component is added, update its component export, `packages/components/index.ts`, `packages/core/components.ts`, core subpath exports, `HTMLElementTagNameMap`, tests, docs, Vue `GlobalComponents` declarations, React JSX declarations, examples, and the version changelog as applicable.
 
 ## Component design rules
 
@@ -99,7 +105,9 @@ Unit tests must run directly against workspace source and must pass in a fresh c
 
 ## Compatibility notes
 
+- Named `Super*` exports are Lit/HTMLElement classes, not Vue or React component wrappers. With the current package API, framework consumers register through a side-effect or `define` entry and render lowercase hyphenated `super-*` tags; do not document `<SuperButton>` as working framework syntax.
 - Vue consumers must configure `isCustomElement: (tag) => tag.startsWith("super-")` in the Vue template compiler.
+- Keep `examples/vue/src/custom-elements.d.ts` aligned with every public component property and custom event. It is the copyable Vue Official / Volar template contract and must preserve the real element instance type for template refs.
 - React TypeScript consumers need `JSX.IntrinsicElements` declarations for `super-*` tags. For future custom events or React versions with limited Custom Element event support, add a thin React adapter rather than adding React to the component implementation.
 - Plain browsers cannot resolve npm bare module names by themselves. Native HTML usage needs a bundler, import map, or an ESM-transforming CDN.
 - Generated `dist`, VitePress cache, and VitePress output directories must not be committed.

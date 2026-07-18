@@ -1,148 +1,189 @@
 import type { DetailedHTMLProps, HTMLAttributes } from "react";
+import type { SuperButton } from "yxzq-element/button";
+import type {
+  SuperCheckbox,
+  SuperCheckboxChangeDetail,
+} from "yxzq-element/checkbox";
+import type {
+  SuperInput,
+  SuperInputClearDetail,
+  SuperInputPasswordVisibilityDetail,
+  SuperInputValueDetail,
+} from "yxzq-element/input";
+import type {
+  SuperRadio,
+  SuperRadioChangeDetail,
+} from "yxzq-element/radio";
+import type {
+  SuperSelect,
+  SuperSelectChangeDetail,
+  SuperSelectClearDetail,
+  SuperSelectOpenChangeDetail,
+  SuperSelectSearchDetail,
+} from "yxzq-element/select";
+import type {
+  SuperSwitch,
+  SuperSwitchChangeDetail,
+} from "yxzq-element/switch";
+
+type NumberLike = number | `${number}`;
+type CustomEventHandler<Detail> = (event: CustomEvent<Detail>) => void;
+
+type CustomElementProps<
+  ElementType extends HTMLElement,
+  Attributes extends object,
+  Events extends object = Record<never, never>,
+> = DetailedHTMLProps<HTMLAttributes<ElementType>, ElementType> &
+  Attributes &
+  Events;
 
 type SuperButtonAttributes = {
-  variant?:
-    | "primary"
-    | "secondary"
-    | "success"
-    | "warning"
-    | "danger"
-    | "outline"
-    | "ghost"
-    | "text";
-  size?: "large" | "medium" | "small";
-  shape?: "default" | "pill" | "square";
-  disabled?: boolean;
-  loading?: boolean;
-  "loading-text"?: string;
+  variant?: SuperButton["variant"];
+  size?: SuperButton["size"];
+  shape?: SuperButton["shape"];
+  disabled?: SuperButton["disabled"];
+  loading?: SuperButton["loading"];
+  "loading-text"?: SuperButton["loadingText"];
 };
 
 type SuperInputAttributes = {
-  value?: string;
-  type?: "text" | "search" | "password" | "number" | "email" | "tel" | "url" | "date";
-  size?: "large" | "medium" | "small";
-  validation?: "none" | "success" | "warning" | "error" | "info";
-  placeholder?: string;
-  "helper-text"?: string;
-  disabled?: boolean;
-  readonly?: boolean;
-  required?: boolean;
-  clearable?: boolean;
-  revealable?: boolean;
-  multiline?: boolean;
-  "show-count"?: boolean;
-  maxlength?: number;
-  minlength?: number;
-  min?: string;
-  max?: string;
-  step?: string;
-  rows?: number;
-  inputmode?: string;
-  autocomplete?: string;
-  "clear-label"?: string;
-  "decrement-label"?: string;
-  "increment-label"?: string;
-  "password-show-label"?: string;
-  "password-hide-label"?: string;
+  value?: SuperInput["value"];
+  type?: SuperInput["type"];
+  size?: SuperInput["size"];
+  validation?: SuperInput["validation"];
+  placeholder?: SuperInput["placeholder"];
+  "helper-text"?: SuperInput["helperText"];
+  disabled?: SuperInput["disabled"];
+  readonly?: SuperInput["readOnly"];
+  required?: SuperInput["required"];
+  clearable?: SuperInput["clearable"];
+  revealable?: SuperInput["revealable"];
+  multiline?: SuperInput["multiline"];
+  "show-count"?: SuperInput["showCount"];
+  maxlength?: SuperInput["maxLength"] | `${number}`;
+  minlength?: SuperInput["minLength"] | `${number}`;
+  min?: SuperInput["min"];
+  max?: SuperInput["max"];
+  step?: SuperInput["step"];
+  rows?: NumberLike;
+  inputmode?: SuperInput["inputMode"];
+  autocomplete?: SuperInput["autocomplete"];
+  "clear-label"?: SuperInput["clearLabel"];
+  "decrement-label"?: SuperInput["decrementLabel"];
+  "increment-label"?: SuperInput["incrementLabel"];
+  "password-show-label"?: SuperInput["passwordShowLabel"];
+  "password-hide-label"?: SuperInput["passwordHideLabel"];
 };
 
-type SuperSelectorAttributes = {
-  checked?: boolean;
-  disabled?: boolean;
-  required?: boolean;
-  name?: string;
-  value?: string;
-  size?: "large" | "medium" | "small";
-  validation?: "none" | "success" | "warning" | "error" | "info";
-  "helper-text"?: string;
+type SuperInputEvents = {
+  "onsuper-input"?: CustomEventHandler<SuperInputValueDetail>;
+  "onsuper-change"?: CustomEventHandler<SuperInputValueDetail>;
+  "onsuper-clear"?: CustomEventHandler<SuperInputClearDetail>;
+  "onsuper-password-visibility"?: CustomEventHandler<
+    SuperInputPasswordVisibilityDetail
+  >;
 };
 
-type SuperCheckboxAttributes = SuperSelectorAttributes & {
-  indeterminate?: boolean;
-  variant?: "default" | "card";
+type SuperSelectorAttributes<
+  ElementType extends SuperCheckbox | SuperRadio | SuperSwitch,
+> = {
+  checked?: ElementType["checked"];
+  disabled?: ElementType["disabled"];
+  required?: ElementType["required"];
+  name?: ElementType["name"];
+  value?: ElementType["value"];
+  size?: ElementType["size"];
+  validation?: ElementType["validation"];
+  "helper-text"?: ElementType["helperText"];
 };
 
-type SuperRadioAttributes = SuperSelectorAttributes & {
-  variant?: "default" | "button" | "card";
+type SuperCheckboxAttributes = SuperSelectorAttributes<SuperCheckbox> & {
+  indeterminate?: SuperCheckbox["indeterminate"];
+  variant?: SuperCheckbox["variant"];
 };
 
-type SuperSwitchAttributes = SuperSelectorAttributes;
+type SuperCheckboxEvents = {
+  "onsuper-checkbox-change"?: CustomEventHandler<
+    SuperCheckboxChangeDetail
+  >;
+};
 
-type SuperSelectValue = string | string[];
+type SuperRadioAttributes = SuperSelectorAttributes<SuperRadio> & {
+  variant?: SuperRadio["variant"];
+};
 
-type SuperSelectChangeEvent = CustomEvent<{
-  value: SuperSelectValue;
-  values: string[];
-  name: string;
-  selectedOptions: HTMLOptionElement[];
-  originalEvent: Event;
-}>;
+type SuperRadioEvents = {
+  "onsuper-radio-change"?: CustomEventHandler<SuperRadioChangeDetail>;
+};
+
+type SuperSwitchAttributes = SuperSelectorAttributes<SuperSwitch>;
+
+type SuperSwitchEvents = {
+  "onsuper-switch-change"?: CustomEventHandler<SuperSwitchChangeDetail>;
+};
 
 type SuperSelectAttributes = {
-  value?: SuperSelectValue;
-  multiple?: boolean;
-  searchable?: boolean;
-  clearable?: boolean;
-  disabled?: boolean;
-  readonly?: boolean;
-  required?: boolean;
-  loading?: boolean;
-  open?: boolean;
-  name?: string;
-  size?: "large" | "medium" | "small";
-  variant?: "default" | "pill" | "filled" | "ghost";
-  validation?: "none" | "success" | "warning" | "error" | "info";
-  placeholder?: string;
-  "helper-text"?: string;
-  "clear-label"?: string;
-  "remove-label"?: string;
-  "search-label"?: string;
-  "search-placeholder"?: string;
-  "empty-text"?: string;
-  "loading-text"?: string;
-  "onsuper-select-change"?: (event: SuperSelectChangeEvent) => void;
-  "onsuper-select-clear"?: (
-    event: CustomEvent<{ previousValue: SuperSelectValue; originalEvent: Event }>,
-  ) => void;
-  "onsuper-select-open-change"?: (
-    event: CustomEvent<{
-      open: boolean;
-      reason: "trigger" | "keyboard" | "search" | "selection" | "escape" | "outside";
-      originalEvent: Event;
-    }>,
-  ) => void;
-  "onsuper-select-search"?: (
-    event: CustomEvent<{ query: string; originalEvent: InputEvent }>,
-  ) => void;
+  value?: SuperSelect["value"];
+  multiple?: SuperSelect["multiple"];
+  searchable?: SuperSelect["searchable"];
+  clearable?: SuperSelect["clearable"];
+  disabled?: SuperSelect["disabled"];
+  readonly?: SuperSelect["readOnly"];
+  required?: SuperSelect["required"];
+  loading?: SuperSelect["loading"];
+  open?: SuperSelect["open"];
+  name?: SuperSelect["name"];
+  size?: SuperSelect["size"];
+  variant?: SuperSelect["variant"];
+  validation?: SuperSelect["validation"];
+  placeholder?: SuperSelect["placeholder"];
+  "helper-text"?: SuperSelect["helperText"];
+  "clear-label"?: SuperSelect["clearLabel"];
+  "remove-label"?: SuperSelect["removeLabel"];
+  "search-label"?: SuperSelect["searchLabel"];
+  "search-placeholder"?: SuperSelect["searchPlaceholder"];
+  "empty-text"?: SuperSelect["emptyText"];
+  "loading-text"?: SuperSelect["loadingText"];
+};
+
+type SuperSelectEvents = {
+  "onsuper-select-change"?: CustomEventHandler<SuperSelectChangeDetail>;
+  "onsuper-select-clear"?: CustomEventHandler<SuperSelectClearDetail>;
+  "onsuper-select-open-change"?: CustomEventHandler<
+    SuperSelectOpenChangeDetail
+  >;
+  "onsuper-select-search"?: CustomEventHandler<SuperSelectSearchDetail>;
 };
 
 declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
-      "super-button": DetailedHTMLProps<
-        HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & SuperButtonAttributes;
-      "super-checkbox": DetailedHTMLProps<
-        HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & SuperCheckboxAttributes;
-      "super-input": DetailedHTMLProps<
-        HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & SuperInputAttributes;
-      "super-radio": DetailedHTMLProps<
-        HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & SuperRadioAttributes;
-      "super-select": DetailedHTMLProps<
-        HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & SuperSelectAttributes;
-      "super-switch": DetailedHTMLProps<
-        HTMLAttributes<HTMLElement>,
-        HTMLElement
-      > & SuperSwitchAttributes;
+      "super-button": CustomElementProps<SuperButton, SuperButtonAttributes>;
+      "super-checkbox": CustomElementProps<
+        SuperCheckbox,
+        SuperCheckboxAttributes,
+        SuperCheckboxEvents
+      >;
+      "super-input": CustomElementProps<
+        SuperInput,
+        SuperInputAttributes,
+        SuperInputEvents
+      >;
+      "super-radio": CustomElementProps<
+        SuperRadio,
+        SuperRadioAttributes,
+        SuperRadioEvents
+      >;
+      "super-select": CustomElementProps<
+        SuperSelect,
+        SuperSelectAttributes,
+        SuperSelectEvents
+      >;
+      "super-switch": CustomElementProps<
+        SuperSwitch,
+        SuperSwitchAttributes,
+        SuperSwitchEvents
+      >;
     }
   }
 }

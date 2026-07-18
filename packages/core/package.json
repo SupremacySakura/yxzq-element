@@ -1,6 +1,6 @@
 {
   "name": "yxzq-element",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Framework-agnostic Web Components built with Lit",
   "type": "module",
   "author": "SupremacySakura",

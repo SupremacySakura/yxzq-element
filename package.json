@@ -1,6 +1,6 @@
 {
   "name": "@yxzq-element/workspace",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Framework-agnostic Web Components built with Lit",
   "private": true,
   "type": "module",

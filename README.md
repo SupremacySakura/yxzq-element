@@ -19,6 +19,8 @@ pnpm add yxzq-element
 npm install yxzq-element
 ```
 
+> `yxzq-element` 导出的 `SuperButton` 等名称是 Custom Element 类，不是 Vue 或 React 组件。当前版本在框架中也应使用 `<super-button>` 等小写连字符标签。
+
 ## 原生 HTML
 
 使用 Vite 等构建工具时，导入主入口会注册全部组件：
@@ -47,10 +49,31 @@ import "yxzq-element/select";
 
 ## Vue
 
+先在 `vite.config.ts` 中让 Vue 模板编译器识别 `super-*` 标签：
+
+```ts
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+
+export default defineConfig({
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith("super-"),
+        },
+      },
+    }),
+  ],
+});
+```
+
+然后在应用挂载前导入注册入口：
+
 ```ts
 // main.ts
-import { createApp } from "vue";
 import "yxzq-element";
+import { createApp } from "vue";
 import App from "./App.vue";
 
 createApp(App).mount("#app");
@@ -66,19 +89,13 @@ createApp(App).mount("#app");
 </template>
 ```
 
-Vue 的模板编译器需要把 `super-` 标签识别为 Custom Element：
+请保持 `<super-button>` 的写法。当前包没有 Vue adapter，`<SuperButton>` 会被当成 Vue 组件解析；也不要用 `app.component()` 注册导出的 Lit 元素类。
 
-```ts
-vue({
-  template: {
-    compilerOptions: {
-      isCustomElement: (tag) => tag.startsWith("super-"),
-    },
-  },
-});
-```
+Vue Official / Volar 的完整标签、属性、事件和模板 `ref` 提示需要在消费项目中添加 `src/custom-elements.d.ts`。可直接复制仓库 Vue 示例中的 [`custom-elements.d.ts`](https://github.com/SupremacySakura/yxzq-element/blob/master/examples/vue/src/custom-elements.d.ts)，完整说明见[开始使用文档](https://supremacysakura.github.io/yxzq-element/guide/getting-started)。
 
 ## React
+
+在 `main.tsx` 中先导入注册入口，再渲染应用：
 
 ```tsx
 import "yxzq-element";
@@ -93,7 +110,37 @@ export function App() {
 }
 ```
 
-React + TypeScript 项目需要为 `super-*` 标签补充 `JSX.IntrinsicElements` 声明。仓库中的 [`examples/react`](https://github.com/SupremacySakura/yxzq-element/tree/master/examples/react) 提供了可复制的类型声明和事件接入示例。
+React + TypeScript 项目还需要在 `src/custom-elements.d.ts` 中为用到的标签补充 `JSX.IntrinsicElements` 声明，例如：
+
+```ts
+import type { DetailedHTMLProps, HTMLAttributes } from "react";
+
+type CustomElementProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLElement>,
+  HTMLElement
+>;
+
+declare module "react" {
+  namespace JSX {
+    interface IntrinsicElements {
+      "super-button": CustomElementProps & {
+        variant?: "primary" | "secondary" | "success" | "warning" | "danger" | "outline" | "ghost" | "text";
+        size?: "large" | "medium" | "small";
+        disabled?: boolean;
+        loading?: boolean;
+      };
+      "super-input": CustomElementProps & {
+        value?: string;
+        placeholder?: string;
+        clearable?: boolean;
+        disabled?: boolean;
+      };
+    }
+  }
+}
+```
+
+不要使用 `import { SuperButton } from "yxzq-element"` 后直接渲染 `<SuperButton>`：该导出是 `HTMLElement`/`LitElement` 类，不是 React 组件，因此 TypeScript 会报 `TS2786`。完整步骤和更多标签声明、事件接入示例见[开始使用文档](https://supremacysakura.github.io/yxzq-element/guide/getting-started)和仓库中的 [`examples/react`](https://github.com/SupremacySakura/yxzq-element/tree/master/examples/react)。
 
 ## 显式注册
 
@@ -114,6 +161,8 @@ defineSuperSelect();
 注册函数可以重复执行，并且在 `customElements` 不可用的环境中安全导入。
 
 ## 本地开发
+
+开始修改组件、类型、示例、文档或配置前，请先完整阅读 [仓库开发流程指引](./docs/DEVELOPMENT_WORKFLOW.md)。每一次变更都必须同步更新[版本变更记录](./packages/docs/guide/changelog.md)；新增或修改组件时，还必须同步 Vue/React 类型文件与对应组件文档。
 
 ```bash
 pnpm install --frozen-lockfile
