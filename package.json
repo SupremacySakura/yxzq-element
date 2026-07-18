@@ -4,6 +4,15 @@
   "description": "Framework-agnostic Web Components built with Lit",
   "private": true,
   "type": "module",
+  "author": "SupremacySakura",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SupremacySakura/yxzq-element.git"
+  },
+  "homepage": "https://supremacysakura.github.io/yxzq-element/",
+  "bugs": {
+    "url": "https://github.com/SupremacySakura/yxzq-element/issues"
+  },
   "packageManager": "pnpm@10.22.0",
   "scripts": {
     "dev": "pnpm run build:library && pnpm --filter @yxzq-element/play dev",
@@ -15,7 +24,12 @@
     "typecheck": "tsc -p tsconfig.json && pnpm --filter \"./examples/*\" --if-present typecheck",
     "docs:dev": "pnpm run build:library && pnpm --filter @yxzq-element/docs dev",
     "docs:build": "pnpm run build:library && pnpm --filter @yxzq-element/docs build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "release:version": "node ./scripts/set-release-version.mjs",
+    "release:check": "pnpm typecheck && pnpm test && pnpm build && pnpm docs:build",
+    "release:pack": "node ./scripts/pack-release.mjs",
+    "release:prepare": "pnpm release:check && pnpm release:pack",
+    "release:publish": "node ./scripts/publish-release.mjs"
   },
   "keywords": [
     "web-components",

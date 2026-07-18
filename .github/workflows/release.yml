@@ -1,0 +1,100 @@
+name: Publish to npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      npm_tag:
+        description: npm distribution tag
+        required: true
+        default: latest
+        type: choice
+        options:
+          - latest
+          - next
+      resume_existing:
+        description: Skip versions that already exist after a partial publish
+        required: true
+        default: false
+        type: boolean
+
+concurrency:
+  group: npm-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Verify and pack packages
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 10.22.0
+          cache: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare release
+        run: pnpm release:prepare
+
+      - name: Upload verified packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-release-artifacts
+          path: release-artifacts/
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    name: Publish packages
+    needs: prepare
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Download verified packages
+        uses: actions/download-artifact@v4
+        with:
+          name: npm-release-artifacts
+          path: release-artifacts/
+
+      - name: Publish packages
+        env:
+          ALLOW_ALREADY_PUBLISHED: ${{ inputs.resume_existing && 'yes' || 'no' }}
+          CONFIRM_NPM_PUBLISH: "yes"
+          NPM_TAG: ${{ inputs.npm_tag }}
+        run: node ./scripts/publish-release.mjs "$NPM_TAG"

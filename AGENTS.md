@@ -86,6 +86,17 @@ The library build must succeed before framework examples or docs are built becau
 
 Unit tests must run directly against workspace source and must pass in a fresh clone before any `dist` directory exists. Keep Vitest source aliases in sync with any internal workspace package imported by tests; do not make `pnpm test` depend on `pnpm build:library` or residual build output.
 
+## npm publishing
+
+- The public release set is `@yxzq-element/utils`, `@yxzq-element/components`, and `yxzq-element`. Keep their versions aligned and publish them in that dependency order.
+- `packages/hooks` and `packages/theme` remain private until their public contracts are explicitly completed. Never run an unfiltered recursive workspace publish.
+- Use `pnpm release:prepare` to run the complete verification gate and generate the checked tarballs in `release-artifacts`. The artifact manifest is bound to the current clean Git commit and its SHA-512 integrity. Publish those tarballs through `pnpm release:publish`; do not publish the package directories with plain `npm publish`, because unresolved `workspace:*` dependencies must never reach the registry.
+- Production publishing must target `https://registry.npmjs.org/` with public access. The local publish script requires an explicit confirmation variable and a clean Git worktree.
+- The first release requires an npm account with scope permission and interactive 2FA. After the packages exist, configure npm Trusted Publishing for `.github/workflows/release.yml` and the GitHub `npm` environment; do not store a long-lived npm token in the workflow.
+- Keep release OIDC permission isolated to the publish job. The GitHub `npm` environment must restrict deployments to the protected default branch; the workflow must also reject non-default refs and pass dispatch inputs through environment variables instead of interpolating them into shell commands.
+- A partial-release retry may skip an existing package only when its registry `dist.integrity` exactly matches the locally verified SHA-512 tarball. Never use the recovery switch to bypass a version conflict.
+- Keep the root and per-package README/LICENSE files, package metadata, release scripts, workflow, and `RELEASE.md` consistent whenever the release topology changes.
+
 ## Compatibility notes
 
 - Vue consumers must configure `isCustomElement: (tag) => tag.startsWith("super-")` in the Vue template compiler.

@@ -22,6 +22,7 @@ packages/docs/.vitepress/dist/
 packages/docs/.vitepress/cache/
 .playwright-cli/
 /output/playwright/
+/release-artifacts/
 
 # Editor directories and files
 .vscode/*

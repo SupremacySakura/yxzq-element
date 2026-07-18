@@ -1,6 +1,7 @@
 {
   "name": "@yxzq-element/theme",
   "version": "1.0.0",
+  "private": true,
   "description": "Optional global theme styles for yxzq-element",
   "style": "./index.css",
   "exports": {

@@ -3,6 +3,16 @@
   "version": "1.0.0",
   "description": "Framework-neutral utilities for yxzq-element",
   "type": "module",
+  "author": "SupremacySakura",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SupremacySakura/yxzq-element.git",
+    "directory": "packages/utils"
+  },
+  "homepage": "https://supremacysakura.github.io/yxzq-element/",
+  "bugs": {
+    "url": "https://github.com/SupremacySakura/yxzq-element/issues"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,10 +25,15 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit"
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "prepack": "node ../../scripts/prepack-package.mjs @yxzq-element/utils"
   },
   "license": "ISC"
 }
