@@ -1,6 +1,7 @@
 import {
   defineSuperButton,
   defineSuperCheckbox,
+  defineSuperForm,
   defineSuperInput,
   defineSuperRadio,
   defineSuperSelect,
@@ -10,6 +11,7 @@ import {
 export const componentDefinitions = [
   defineSuperButton,
   defineSuperCheckbox,
+  defineSuperForm,
   defineSuperInput,
   defineSuperRadio,
   defineSuperSelect,

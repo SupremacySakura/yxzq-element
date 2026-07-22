@@ -37,11 +37,12 @@ The intended product direction is an original hand-drawn component system. The p
 - `import "yxzq-element"` registers every component.
 - `import "yxzq-element/button"` registers only `super-button`.
 - `import "yxzq-element/checkbox"` registers only `super-checkbox`.
+- `import "yxzq-element/form"` registers only `super-form`.
 - `import "yxzq-element/input"` registers only `super-input`.
 - `import "yxzq-element/radio"` registers only `super-radio`.
 - `import "yxzq-element/select"` registers only `super-select`.
 - `import "yxzq-element/switch"` registers only `super-switch`.
-- `import { registerAll, defineSuperButton, defineSuperCheckbox, defineSuperInput, defineSuperRadio, defineSuperSelect, defineSuperSwitch } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
+- `import { registerAll, defineSuperButton, defineSuperCheckbox, defineSuperForm, defineSuperInput, defineSuperRadio, defineSuperSelect, defineSuperSwitch } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
 - Registration must remain idempotent and safe when `customElements` is unavailable.
 
 When an explicitly authorized component is added, update its component export, `packages/components/index.ts`, `packages/core/components.ts`, core subpath exports, `HTMLElementTagNameMap`, tests, docs, Vue `GlobalComponents` declarations, React JSX declarations, examples, and the version changelog as applicable.
@@ -58,6 +59,11 @@ When an explicitly authorized component is added, update its component export, `
 - Button icons are consumer content supplied through the `prefix`, `suffix`, or default Slot. Do not add an icon-library dependency to the component package.
 - Button loading state disables interaction, exposes `aria-busy`, and may replace the label through `loading-text`. Icon-only square buttons require an `aria-label`.
 - The current internal native button intentionally uses `type="button"`. Form submission/reset behavior is not part of the public contract yet; do not claim it until a form-associated Custom Element design is implemented and tested.
+- `SuperForm` is a configuration-driven form orchestrator and must not import or embed built-in field components. Every field supplies either an arbitrary Custom Element tag or a renderer function. Form passes the reserved `value` and `onchange` properties plus resolved field props; field components must call `onchange(nextValue)` to update Form state.
+- Form field `deps` list field names. Only those dependency values are passed as a named object to dynamic `props` and `visible` resolvers. Preserve dependency-driven updates, optional clearing on dependency changes or hiding, and transactional `super-form-change` details for user and cascading changes.
+- Form field `rule` is a synchronous function of the current field value. Missing rules pass, `true` passes, and `false` or a thrown error fails with the configured message. Hidden fields are not validated. Do not evaluate string expressions or pass undeclared form values into dependency resolvers.
+- Form Schema and values are JavaScript properties rather than JSON attributes. Runtime renderers and resolver functions are intentionally not serializable; server-persisted component or resolver keys must be mapped to trusted application implementations outside the component.
+- `SuperForm` uses an internal native form for submit/reset semantics but is not form-associated itself. External `FormData`, outer-form reset, constraint-validation and automatic participation by arbitrary fields are not part of its contract; consumers use the composed `super-form-submit` value snapshot.
 - `SuperInput` supports native-style `text`, `search`, `password`, `number`, `email`, `tel`, `url`, and `date` types; multiline input is enabled with the separate `multiline` boolean instead of inventing a non-native input type.
 - Input sizes are `large`, `medium`, and `small`; validation states are `none`, `success`, `warning`, `error`, and `info`. Prefix, suffix, and action content must remain consumer-provided Slots so the component does not depend on an icon library.
 - Input value changes expose composed `super-input` and `super-change` events. Clear and password visibility actions expose `super-clear` and `super-password-visibility`. Keep event detail types exported and do not replace these cross-framework events with Vue-specific model events.

@@ -1,5 +1,61 @@
 <script setup lang="ts">
+import type {
+  SuperFormSchema,
+  SuperFormSubmitDetail,
+} from "yxzq-element/form";
+import { DEMO_BUSINESS_FIELD_TAG } from "./business-form-field";
+
 const selectedTopics = ["sketch", "travel"];
+
+const formSchema: SuperFormSchema = {
+  layout: "horizontal",
+  columns: 2,
+  showReset: true,
+  fields: [
+    {
+      field: "contact",
+      label: "联系人",
+      component: DEMO_BUSINESS_FIELD_TAG,
+      props: { placeholder: "请输入联系人" },
+      required: true,
+      rule: (value) => Boolean(String(value ?? "").trim()),
+      errorMessage: "请输入联系人",
+      extra: "由 Vue 传入配置，字段仍是任意 Web Component",
+    },
+    {
+      field: "country",
+      label: "国家",
+      component: DEMO_BUSINESS_FIELD_TAG,
+      props: { placeholder: "输入 china 查看依赖" },
+    },
+    {
+      field: "city",
+      label: "城市",
+      component: DEMO_BUSINESS_FIELD_TAG,
+      deps: ["country"],
+      props: ({ country }) => ({
+        placeholder: country === "china" ? "请输入城市" : "请先输入国家",
+        disabled: !country,
+      }),
+      clearWhenDepsChange: true,
+    },
+    {
+      field: "invoiceTitle",
+      label: "发票抬头",
+      component: DEMO_BUSINESS_FIELD_TAG,
+      deps: ["country"],
+      props: { placeholder: "请输入发票抬头" },
+      visible: ({ country }) => country === "china",
+    },
+  ],
+};
+
+const formValue = {
+  contact: "张三",
+  country: "china",
+  city: "深圳",
+  invoiceTitle: "网格有限公司",
+};
 
 const handleClick = () => {
   window.alert("Vue 收到了原生 click 事件");
@@ -8,6 +64,10 @@ const handleClick = () => {
 const handleSelectChange = (event: Event) => {
   const detail = (event as CustomEvent<{ values: string[] }>).detail;
   window.alert(`Vue 收到选择结果：${detail.values.join("、")}`);
+};
+
+const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
+  window.alert(`Vue 提交表单：${JSON.stringify(event.detail.values)}`);
 };
 </script>
 
@@ -68,6 +128,17 @@ const handleSelectChange = (event: Event) => {
       <super-switch checked aria-label="自动同步">
         自动同步
       </super-switch>
+    </section>
+    <section class="form-demo" aria-labelledby="form-title">
+      <div>
+        <h2 id="form-title">配置型业务表单</h2>
+        <p>字段由 Vue 配置传入，依赖值只通过 deps 注入。</p>
+      </div>
+      <super-form
+        :schema="formSchema"
+        :value="formValue"
+        @super-form-submit="handleFormSubmit"
+      ></super-form>
     </section>
   </main>
 </template>

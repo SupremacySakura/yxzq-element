@@ -42,3 +42,18 @@ main {
 .select-demo super-select {
   --super-select-width: 19rem;
 }
+
+.form-demo {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-demo h2,
+.form-demo p {
+  margin: 0;
+}
+
+.form-demo p {
+  margin-top: 0.3rem;
+  color: #64748b;
+}

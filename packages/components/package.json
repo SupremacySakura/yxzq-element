@@ -1,6 +1,6 @@
 {
   "name": "@yxzq-element/components",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Lit components for yxzq-element",
   "type": "module",
   "author": "SupremacySakura",
@@ -28,6 +28,10 @@
     "./checkbox": {
       "types": "./dist/Checkbox/index.d.ts",
       "import": "./dist/Checkbox/index.js"
+    },
+    "./form": {
+      "types": "./dist/Form/index.d.ts",
+      "import": "./dist/Form/index.js"
     },
     "./input": {
       "types": "./dist/Input/index.d.ts",

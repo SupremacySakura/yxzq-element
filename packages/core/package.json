@@ -1,6 +1,6 @@
 {
   "name": "yxzq-element",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Framework-agnostic Web Components built with Lit",
   "type": "module",
   "author": "SupremacySakura",
@@ -28,6 +28,10 @@
     "./checkbox": {
       "types": "./dist/checkbox.d.ts",
       "import": "./dist/checkbox.js"
+    },
+    "./form": {
+      "types": "./dist/form.d.ts",
+      "import": "./dist/form.js"
     },
     "./input": {
       "types": "./dist/input.d.ts",
@@ -61,6 +65,7 @@
     "./dist/index.js",
     "./dist/button.js",
     "./dist/checkbox.js",
+    "./dist/form.js",
     "./dist/input.js",
     "./dist/radio.js",
     "./dist/select.js",

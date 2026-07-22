@@ -14,6 +14,7 @@
     "index.ts",
     "Button/**/*.ts",
     "Checkbox/**/*.ts",
+    "Form/**/*.ts",
     "Input/**/*.ts",
     "Radio/**/*.ts",
     "Select/**/*.ts",

@@ -6,6 +6,12 @@
 
 当前暂无变更。
 
+## 1.1.0 — 2026-07-22
+
+### 新增
+
+- 新增无内置字段控件的 `super-form` 配置型表单：支持任意 Custom Element 或渲染函数、统一的 `value` / `onchange` 契约、`deps` 驱动的动态 props 与显示条件、函数 rule 校验、依赖清空策略、手绘响应式 FormItem 布局，以及原生 HTML、Vue、React 消费示例；组件文档提供可复制的 Vue/React Schema、property 绑定和提交事件示例，并补齐非法标签与重复字段诊断、Schema 错误清理、完整公共行为测试及 CSS 定制变量说明。
+
 ## 1.0.1 — 2026-07-18
 
 ### 文档与开发体验

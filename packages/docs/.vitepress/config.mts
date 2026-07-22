@@ -42,6 +42,7 @@ export default defineConfig({
         items: [
           { text: "Button 按钮", link: "/components/button" },
           { text: "Input 输入框", link: "/components/input" },
+          { text: "Form 配置型表单", link: "/components/form" },
           {
             text: "Selector 选择器套装",
             link: "/components/selectors",

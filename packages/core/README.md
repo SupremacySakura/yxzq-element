@@ -20,6 +20,7 @@ import "yxzq-element";
 
 ```js
 import "yxzq-element/button";
+import "yxzq-element/form";
 import "yxzq-element/input";
 import "yxzq-element/select";
 ```
@@ -29,11 +30,13 @@ import "yxzq-element/select";
 ```ts
 import {
   defineSuperButton,
+  defineSuperForm,
   defineSuperSelect,
   registerAll,
 } from "yxzq-element/define";
 
 defineSuperButton();
+defineSuperForm();
 defineSuperSelect();
 // 或 registerAll();
 ```

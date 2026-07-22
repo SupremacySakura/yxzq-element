@@ -19,6 +19,7 @@
       "@yxzq-element/components": ["packages/components/index.ts"],
       "@yxzq-element/components/button": ["packages/components/Button/index.ts"],
       "@yxzq-element/components/checkbox": ["packages/components/Checkbox/index.ts"],
+      "@yxzq-element/components/form": ["packages/components/Form/index.ts"],
       "@yxzq-element/components/input": ["packages/components/Input/index.ts"],
       "@yxzq-element/components/radio": ["packages/components/Radio/index.ts"],
       "@yxzq-element/components/select": ["packages/components/Select/index.ts"],

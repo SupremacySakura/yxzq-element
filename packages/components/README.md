@@ -1,6 +1,6 @@
 # @yxzq-element/components
 
-Super Components 的 Lit 组件实现包。它包含 `SuperButton`、`SuperInput`、`SuperCheckbox`、`SuperRadio`、`SuperSwitch` 和 `SuperSelect` 等类与显式注册函数，不依赖 Vue 或 React。
+Super Components 的 Lit 组件实现包。它包含 `SuperButton`、`SuperInput`、`SuperForm`、`SuperCheckbox`、`SuperRadio`、`SuperSwitch` 和 `SuperSelect` 等类与显式注册函数，不依赖 Vue 或 React。`SuperForm` 不内置字段组件，通过配置接收任意 Custom Element 或渲染函数。
 
 大多数应用应安装并使用主包：
 

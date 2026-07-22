@@ -11,6 +11,13 @@ import type {
   SuperInputValueDetail,
 } from "yxzq-element/input";
 import type {
+  SuperForm,
+  SuperFormChangeDetail,
+  SuperFormInvalidDetail,
+  SuperFormResetDetail,
+  SuperFormSubmitDetail,
+} from "yxzq-element/form";
+import type {
   SuperRadio,
   SuperRadioChangeDetail,
 } from "yxzq-element/radio";
@@ -82,6 +89,19 @@ type SuperInputEvents = {
   "onsuper-password-visibility"?: CustomEventHandler<
     SuperInputPasswordVisibilityDetail
   >;
+};
+
+type SuperFormAttributes = {
+  schema?: SuperForm["schema"];
+  value?: SuperForm["value"];
+  submitting?: SuperForm["submitting"];
+};
+
+type SuperFormEvents = {
+  "onsuper-form-change"?: CustomEventHandler<SuperFormChangeDetail>;
+  "onsuper-form-submit"?: CustomEventHandler<SuperFormSubmitDetail>;
+  "onsuper-form-invalid"?: CustomEventHandler<SuperFormInvalidDetail>;
+  "onsuper-form-reset"?: CustomEventHandler<SuperFormResetDetail>;
 };
 
 type SuperSelectorAttributes<
@@ -163,6 +183,11 @@ declare module "react" {
         SuperCheckbox,
         SuperCheckboxAttributes,
         SuperCheckboxEvents
+      >;
+      "super-form": CustomElementProps<
+        SuperForm,
+        SuperFormAttributes,
+        SuperFormEvents
       >;
       "super-input": CustomElementProps<
         SuperInput,

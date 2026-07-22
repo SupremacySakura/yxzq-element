@@ -11,6 +11,13 @@ import type {
   SuperInputValueDetail,
 } from "yxzq-element/input";
 import type {
+  SuperForm,
+  SuperFormChangeDetail,
+  SuperFormInvalidDetail,
+  SuperFormResetDetail,
+  SuperFormSubmitDetail,
+} from "yxzq-element/form";
+import type {
   SuperRadio,
   SuperRadioChangeDetail,
 } from "yxzq-element/radio";
@@ -92,6 +99,18 @@ type InputEvents = {
   "super-change": CustomEvent<SuperInputValueDetail>;
   "super-clear": CustomEvent<SuperInputClearDetail>;
   "super-password-visibility": CustomEvent<SuperInputPasswordVisibilityDetail>;
+};
+
+type FormProperties =
+  | "schema"
+  | "value"
+  | "submitting";
+
+type FormEvents = {
+  "super-form-change": CustomEvent<SuperFormChangeDetail>;
+  "super-form-submit": CustomEvent<SuperFormSubmitDetail>;
+  "super-form-invalid": CustomEvent<SuperFormInvalidDetail>;
+  "super-form-reset": CustomEvent<SuperFormResetDetail>;
 };
 
 type CheckboxProperties =
@@ -183,6 +202,11 @@ declare module "vue" {
       SuperCheckbox,
       CheckboxProperties,
       CheckboxEvents
+    >;
+    "super-form": DefineCustomElement<
+      SuperForm,
+      FormProperties,
+      FormEvents
     >;
     "super-input": DefineCustomElement<
       SuperInput,

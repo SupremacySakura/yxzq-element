@@ -20,4 +20,6 @@ features:
     details: 组件遵循浏览器 Custom Elements 标准，可直接用于 Vue、React 和原生 HTML。
   - title: ✦ 易于定制
     details: 通过 Slot、CSS Custom Properties 和 Shadow Parts 提供清晰、稳定的扩展边界。
+  - title: ✧ 配置型表单
+    details: Form 不内置字段控件，通过任意业务组件、依赖 props、条件显示与函数校验组织动态表单。
 ---

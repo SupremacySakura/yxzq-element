@@ -2,7 +2,7 @@
 
 Super Components 是一套基于 Lit 的手绘风格 Web Component 组件库。组件实现不依赖 Vue 或 React。
 
-当前提供 Button、Input、Checkbox、Radio、Switch 与 Select 组件。每个组件都保留原生语义，并通过手绘视觉、Shadow DOM 和跨框架事件组成一致的消费体验。
+当前提供 Button、Input、Form、Checkbox、Radio、Switch 与 Select 组件。基础控件保留原生语义；Form 不内置字段组件，通过任意业务组件、依赖配置和函数校验组织表单。所有组件通过手绘视觉、Shadow DOM 和跨框架事件组成一致的消费体验。
 
 ::: warning 先区分组件类与框架组件
 当前 `yxzq-element@1.0.1` 发布的是原生 Custom Element。包中导出的 `SuperButton` 等名称是继承自 `HTMLElement` 的元素类，不是 Vue 组件或 React 组件。
@@ -35,6 +35,7 @@ import "yxzq-element";
 ```ts
 import "yxzq-element/button";
 import "yxzq-element/input";
+import "yxzq-element/form";
 import "yxzq-element/select";
 ```
 
@@ -53,11 +54,13 @@ import "yxzq-element/switch";
 ```ts
 import {
   defineSuperButton,
+  defineSuperForm,
   defineSuperInput,
   registerAll,
 } from "yxzq-element/define";
 
 defineSuperButton();
+defineSuperForm();
 defineSuperInput();
 // 或 registerAll();
 ```
