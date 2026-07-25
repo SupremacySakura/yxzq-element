@@ -20,9 +20,11 @@ import "yxzq-element";
 
 ```js
 import "yxzq-element/button";
+import "yxzq-element/date-picker";
 import "yxzq-element/form";
 import "yxzq-element/input";
 import "yxzq-element/select";
+import "yxzq-element/time-picker";
 ```
 
 需要显式控制注册时机时：
@@ -30,14 +32,18 @@ import "yxzq-element/select";
 ```ts
 import {
   defineSuperButton,
+  defineSuperDatePicker,
   defineSuperForm,
   defineSuperSelect,
+  defineSuperTimePicker,
   registerAll,
 } from "yxzq-element/define";
 
 defineSuperButton();
+defineSuperDatePicker();
 defineSuperForm();
 defineSuperSelect();
+defineSuperTimePicker();
 // 或 registerAll();
 ```
 
@@ -50,6 +56,8 @@ defineSuperSelect();
   <option value="shanghai">上海</option>
   <option value="hangzhou">杭州</option>
 </super-select>
+<super-date-picker aria-label="选择日期"></super-date-picker>
+<super-time-picker aria-label="选择时间"></super-time-picker>
 ```
 
 框架中的正确消费方式仍然是注册原生 Custom Element 后使用小写标签：

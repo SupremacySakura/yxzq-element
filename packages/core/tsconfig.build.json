@@ -14,11 +14,13 @@
     "index.ts",
     "button.ts",
     "checkbox.ts",
+    "date-picker.ts",
     "form.ts",
     "input.ts",
     "radio.ts",
     "select.ts",
     "switch.ts",
+    "time-picker.ts",
     "components.ts",
     "define.ts"
   ]

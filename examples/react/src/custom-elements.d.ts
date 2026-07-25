@@ -5,6 +5,12 @@ import type {
   SuperCheckboxChangeDetail,
 } from "yxzq-element/checkbox";
 import type {
+  SuperDatePicker,
+  SuperDatePickerChangeDetail,
+  SuperDatePickerClearDetail,
+  SuperDatePickerOpenChangeDetail,
+} from "yxzq-element/date-picker";
+import type {
   SuperInput,
   SuperInputClearDetail,
   SuperInputPasswordVisibilityDetail,
@@ -32,6 +38,12 @@ import type {
   SuperSwitch,
   SuperSwitchChangeDetail,
 } from "yxzq-element/switch";
+import type {
+  SuperTimePicker,
+  SuperTimePickerChangeDetail,
+  SuperTimePickerClearDetail,
+  SuperTimePickerOpenChangeDetail,
+} from "yxzq-element/time-picker";
 
 type NumberLike = number | `${number}`;
 type CustomEventHandler<Detail> = (event: CustomEvent<Detail>) => void;
@@ -175,6 +187,83 @@ type SuperSelectEvents = {
   "onsuper-select-search"?: CustomEventHandler<SuperSelectSearchDetail>;
 };
 
+type SuperDatePickerAttributes = {
+  value?: SuperDatePicker["value"];
+  mode?: SuperDatePicker["mode"];
+  size?: SuperDatePicker["size"];
+  validation?: SuperDatePicker["validation"];
+  disabled?: SuperDatePicker["disabled"];
+  clearable?: SuperDatePicker["clearable"];
+  open?: SuperDatePicker["open"];
+  name?: SuperDatePicker["name"];
+  placeholder?: SuperDatePicker["placeholder"];
+  "start-placeholder"?: SuperDatePicker["startPlaceholder"];
+  "end-placeholder"?: SuperDatePicker["endPlaceholder"];
+  min?: SuperDatePicker["min"];
+  max?: SuperDatePicker["max"];
+  "first-day-of-week"?: SuperDatePicker["firstDayOfWeek"] | `${number}`;
+  locale?: SuperDatePicker["locale"];
+  "helper-text"?: SuperDatePicker["helperText"];
+  "today-label"?: SuperDatePicker["todayLabel"];
+  "clear-label"?: SuperDatePicker["clearLabel"];
+  "prev-month-label"?: SuperDatePicker["prevMonthLabel"];
+  "next-month-label"?: SuperDatePicker["nextMonthLabel"];
+  "prev-year-label"?: SuperDatePicker["prevYearLabel"];
+  "next-year-label"?: SuperDatePicker["nextYearLabel"];
+  disabledDate?: SuperDatePicker["disabledDate"];
+  shortcuts?: SuperDatePicker["shortcuts"];
+};
+
+type SuperDatePickerEvents = {
+  "onsuper-date-picker-change"?: CustomEventHandler<
+    SuperDatePickerChangeDetail
+  >;
+  "onsuper-date-picker-clear"?: CustomEventHandler<
+    SuperDatePickerClearDetail
+  >;
+  "onsuper-date-picker-open-change"?: CustomEventHandler<
+    SuperDatePickerOpenChangeDetail
+  >;
+};
+
+type SuperTimePickerAttributes = {
+  value?: SuperTimePicker["value"];
+  range?: SuperTimePicker["range"];
+  format?: SuperTimePicker["format"];
+  size?: SuperTimePicker["size"];
+  validation?: SuperTimePicker["validation"];
+  disabled?: SuperTimePicker["disabled"];
+  clearable?: SuperTimePicker["clearable"];
+  open?: SuperTimePicker["open"];
+  name?: SuperTimePicker["name"];
+  placeholder?: SuperTimePicker["placeholder"];
+  "start-placeholder"?: SuperTimePicker["startPlaceholder"];
+  "end-placeholder"?: SuperTimePicker["endPlaceholder"];
+  "hour-step"?: SuperTimePicker["hourStep"] | `${number}`;
+  "minute-step"?: SuperTimePicker["minuteStep"] | `${number}`;
+  "second-step"?: SuperTimePicker["secondStep"] | `${number}`;
+  "helper-text"?: SuperTimePicker["helperText"];
+  "clear-label"?: SuperTimePicker["clearLabel"];
+  "confirm-label"?: SuperTimePicker["confirmLabel"];
+  "am-label"?: SuperTimePicker["amLabel"];
+  "pm-label"?: SuperTimePicker["pmLabel"];
+  "start-label"?: SuperTimePicker["startLabel"];
+  "end-label"?: SuperTimePicker["endLabel"];
+  shortcuts?: SuperTimePicker["shortcuts"];
+};
+
+type SuperTimePickerEvents = {
+  "onsuper-time-picker-change"?: CustomEventHandler<
+    SuperTimePickerChangeDetail
+  >;
+  "onsuper-time-picker-clear"?: CustomEventHandler<
+    SuperTimePickerClearDetail
+  >;
+  "onsuper-time-picker-open-change"?: CustomEventHandler<
+    SuperTimePickerOpenChangeDetail
+  >;
+};
+
 declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
@@ -183,6 +272,11 @@ declare module "react" {
         SuperCheckbox,
         SuperCheckboxAttributes,
         SuperCheckboxEvents
+      >;
+      "super-date-picker": CustomElementProps<
+        SuperDatePicker,
+        SuperDatePickerAttributes,
+        SuperDatePickerEvents
       >;
       "super-form": CustomElementProps<
         SuperForm,
@@ -208,6 +302,11 @@ declare module "react" {
         SuperSwitch,
         SuperSwitchAttributes,
         SuperSwitchEvents
+      >;
+      "super-time-picker": CustomElementProps<
+        SuperTimePicker,
+        SuperTimePickerAttributes,
+        SuperTimePickerEvents
       >;
     }
   }

@@ -12,6 +12,8 @@ const checkbox = document.querySelector("super-checkbox");
 const radios = document.querySelectorAll("super-radio");
 const switchElement = document.querySelector("super-switch");
 const select = document.querySelector("super-select");
+const datePicker = document.querySelector("super-date-picker");
+const timePicker = document.querySelector("super-time-picker");
 const form = document.querySelector("super-form");
 
 const formSchema: SuperFormSchema = {
@@ -98,6 +100,52 @@ switchElement?.addEventListener("super-switch-change", (event) => {
 
 select?.addEventListener("super-select-change", (event) => {
   writeOutput(`super-select 当前值：${event.detail.values.join("、") || "未选择"}`);
+});
+
+if (datePicker) {
+  const dayKey = (date: Date): string => {
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${date.getFullYear()}-${month}-${day}`;
+  };
+  datePicker.shortcuts = [
+    {
+      label: "本周",
+      value: () => {
+        const today = new Date();
+        const start = new Date(today);
+        start.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+        const end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        return [dayKey(start), dayKey(end)];
+      },
+    },
+    {
+      label: "今天起三天",
+      value: () => {
+        const start = new Date();
+        const end = new Date();
+        end.setDate(start.getDate() + 2);
+        return [dayKey(start), dayKey(end)];
+      },
+    },
+  ];
+}
+
+datePicker?.addEventListener("super-date-picker-change", (event) => {
+  writeOutput(`super-date-picker 当前值：${JSON.stringify(event.detail.value)}`);
+});
+
+if (timePicker) {
+  timePicker.shortcuts = [
+    { label: "上午九点", value: "09:00" },
+    { label: "中午", value: "12:00" },
+    { label: "傍晚", value: "18:30" },
+  ];
+}
+
+timePicker?.addEventListener("super-time-picker-change", (event) => {
+  writeOutput(`super-time-picker 当前值：${JSON.stringify(event.detail.value)}`);
 });
 
 form?.addEventListener("super-form-submit", (event) => {

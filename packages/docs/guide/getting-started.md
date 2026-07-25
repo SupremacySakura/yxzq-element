@@ -2,10 +2,10 @@
 
 Super Components 是一套基于 Lit 的手绘风格 Web Component 组件库。组件实现不依赖 Vue 或 React。
 
-当前提供 Button、Input、Form、Checkbox、Radio、Switch 与 Select 组件。基础控件保留原生语义；Form 不内置字段组件，通过任意业务组件、依赖配置和函数校验组织表单。所有组件通过手绘视觉、Shadow DOM 和跨框架事件组成一致的消费体验。
+当前提供 Button、Input、Form、Checkbox、Radio、Switch、Select、DatePicker 与 TimePicker 组件。基础控件保留原生语义；Form 不内置字段组件，通过任意业务组件、依赖配置和函数校验组织表单。所有组件通过手绘视觉、Shadow DOM 和跨框架事件组成一致的消费体验。
 
 ::: warning 先区分组件类与框架组件
-当前 `yxzq-element@1.0.1` 发布的是原生 Custom Element。包中导出的 `SuperButton` 等名称是继承自 `HTMLElement` 的元素类，不是 Vue 组件或 React 组件。
+当前 `yxzq-element` 包发布的是原生 Custom Element。包中导出的 `SuperButton` 等名称是继承自 `HTMLElement` 的元素类，不是 Vue 组件或 React 组件。
 
 在 Vue 和 React 中都应先导入注册入口，再使用带连字符的小写标签，例如 `<super-button>`。不要把 `SuperButton` 直接写成 `<SuperButton>`。
 :::
@@ -39,6 +39,13 @@ import "yxzq-element/form";
 import "yxzq-element/select";
 ```
 
+日期与时间组件同样支持按需注册：
+
+```ts
+import "yxzq-element/date-picker";
+import "yxzq-element/time-picker";
+```
+
 选择器组件也支持分别注册：
 
 ```ts
@@ -54,14 +61,18 @@ import "yxzq-element/switch";
 ```ts
 import {
   defineSuperButton,
+  defineSuperDatePicker,
   defineSuperForm,
   defineSuperInput,
+  defineSuperTimePicker,
   registerAll,
 } from "yxzq-element/define";
 
 defineSuperButton();
+defineSuperDatePicker();
 defineSuperForm();
 defineSuperInput();
+defineSuperTimePicker();
 // 或 registerAll();
 ```
 
@@ -82,6 +93,8 @@ defineSuperInput();
   <option value="shanghai">上海</option>
   <option value="hangzhou">杭州</option>
 </super-select>
+<super-date-picker aria-label="选择日期"></super-date-picker>
+<super-time-picker aria-label="选择时间"></super-time-picker>
 
 <script type="module">
   import "yxzq-element";
@@ -332,7 +345,7 @@ export function SaveButton() {
 }
 ```
 
-如果业务必须使用大驼峰 `<SuperButton>`，需要额外的 React adapter；当前 `yxzq-element@1.0.1` 没有提供该包装层。
+如果业务必须使用大驼峰 `<SuperButton>`，需要额外的 React adapter；当前包没有提供该包装层。
 
 ## 使用规则速查
 

@@ -2,7 +2,7 @@
 
 Super Components 是一套由 [Lit](https://lit.dev/) 驱动的手绘风 Web Component 组件库，npm 主包名为 `yxzq-element`。组件不依赖 Vue 或 React，使用原生 Custom Elements、Shadow DOM、Slot 和跨 Shadow DOM 的自定义事件，因此可以在原生 HTML、Vue、React 或其他前端技术栈中使用。
 
-- 组件标签统一使用 `super-` 前缀，例如 `super-button`、`super-input`、`super-form` 和 `super-select`。
+- 组件标签统一使用 `super-` 前缀，例如 `super-button`、`super-input`、`super-date-picker` 和 `super-time-picker`。
 - 组件实现保持框架无关；Vue 和 React 只作为消费示例存在。
 - 视觉方向是原创手绘风格，不复刻 Element Plus 的 API 或设计。
 - 支持全量注册、按组件注册，以及对 SSR 更友好的显式注册。
@@ -33,6 +33,9 @@ npm install yxzq-element
   <option value="hangzhou">杭州</option>
 </super-select>
 
+<super-date-picker aria-label="选择日期"></super-date-picker>
+<super-time-picker aria-label="选择时间"></super-time-picker>
+
 <script type="module">
   import "yxzq-element";
 </script>
@@ -42,8 +45,10 @@ npm install yxzq-element
 
 ```js
 import "yxzq-element/button";
+import "yxzq-element/date-picker";
 import "yxzq-element/form";
 import "yxzq-element/select";
+import "yxzq-element/time-picker";
 ```
 
 浏览器不能直接解析 npm 裸模块名称。纯静态 HTML 需要使用 import map、支持 ESM 转换的 CDN，或 Vite 等构建工具。
@@ -150,14 +155,18 @@ declare module "react" {
 ```ts
 import {
   defineSuperButton,
+  defineSuperDatePicker,
   defineSuperForm,
   defineSuperSelect,
+  defineSuperTimePicker,
   registerAll,
 } from "yxzq-element/define";
 
 defineSuperButton();
+defineSuperDatePicker();
 defineSuperForm();
 defineSuperSelect();
+defineSuperTimePicker();
 // 或 registerAll();
 ```
 

@@ -45,6 +45,24 @@
           </optgroup>
         </super-select>
       </section>
+      <section class="picker-demo" aria-labelledby="picker-title">
+        <div>
+          <h2 id="picker-title">手绘日期与时间</h2>
+          <p>日期范围联动、快捷选项与 12 小时制时间。</p>
+        </div>
+        <super-date-picker
+          mode="range"
+          clearable
+          name="trip"
+          aria-label="出行日期"
+        ></super-date-picker>
+        <super-time-picker
+          format="hh:mm A"
+          clearable
+          name="alarm"
+          aria-label="提醒时间"
+        ></super-time-picker>
+      </section>
       <section class="selector-suite" aria-labelledby="selector-title">
         <h2 id="selector-title">选择器套装</h2>
         <super-checkbox checked>接收更新通知</super-checkbox>

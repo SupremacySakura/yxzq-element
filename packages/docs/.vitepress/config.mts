@@ -48,6 +48,14 @@ export default defineConfig({
             link: "/components/selectors",
           },
           { text: "Select 下拉选择器", link: "/components/select" },
+          {
+            text: "DatePicker 日期选择器",
+            link: "/components/date-picker",
+          },
+          {
+            text: "TimePicker 时间选择器",
+            link: "/components/time-picker",
+          },
         ],
       },
     ],

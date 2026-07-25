@@ -1,6 +1,6 @@
 {
   "name": "yxzq-element",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Framework-agnostic Web Components built with Lit",
   "type": "module",
   "author": "SupremacySakura",
@@ -29,6 +29,10 @@
       "types": "./dist/checkbox.d.ts",
       "import": "./dist/checkbox.js"
     },
+    "./date-picker": {
+      "types": "./dist/date-picker.d.ts",
+      "import": "./dist/date-picker.js"
+    },
     "./form": {
       "types": "./dist/form.d.ts",
       "import": "./dist/form.js"
@@ -49,6 +53,10 @@
       "types": "./dist/switch.d.ts",
       "import": "./dist/switch.js"
     },
+    "./time-picker": {
+      "types": "./dist/time-picker.d.ts",
+      "import": "./dist/time-picker.js"
+    },
     "./define": {
       "types": "./dist/define.d.ts",
       "import": "./dist/define.js"
@@ -65,11 +73,13 @@
     "./dist/index.js",
     "./dist/button.js",
     "./dist/checkbox.js",
+    "./dist/date-picker.js",
     "./dist/form.js",
     "./dist/input.js",
     "./dist/radio.js",
     "./dist/select.js",
-    "./dist/switch.js"
+    "./dist/switch.js",
+    "./dist/time-picker.js"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

@@ -1,6 +1,6 @@
 {
   "name": "@yxzq-element/components",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Lit components for yxzq-element",
   "type": "module",
   "author": "SupremacySakura",
@@ -29,6 +29,10 @@
       "types": "./dist/Checkbox/index.d.ts",
       "import": "./dist/Checkbox/index.js"
     },
+    "./date-picker": {
+      "types": "./dist/DatePicker/index.d.ts",
+      "import": "./dist/DatePicker/index.js"
+    },
     "./form": {
       "types": "./dist/Form/index.d.ts",
       "import": "./dist/Form/index.js"
@@ -48,6 +52,10 @@
     "./switch": {
       "types": "./dist/Switch/index.d.ts",
       "import": "./dist/Switch/index.js"
+    },
+    "./time-picker": {
+      "types": "./dist/TimePicker/index.d.ts",
+      "import": "./dist/TimePicker/index.js"
     }
   },
   "files": [

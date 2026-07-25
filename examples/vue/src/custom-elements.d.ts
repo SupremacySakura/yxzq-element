@@ -5,6 +5,12 @@ import type {
   SuperCheckboxChangeDetail,
 } from "yxzq-element/checkbox";
 import type {
+  SuperDatePicker,
+  SuperDatePickerChangeDetail,
+  SuperDatePickerClearDetail,
+  SuperDatePickerOpenChangeDetail,
+} from "yxzq-element/date-picker";
+import type {
   SuperInput,
   SuperInputClearDetail,
   SuperInputPasswordVisibilityDetail,
@@ -32,6 +38,12 @@ import type {
   SuperSwitch,
   SuperSwitchChangeDetail,
 } from "yxzq-element/switch";
+import type {
+  SuperTimePicker,
+  SuperTimePickerChangeDetail,
+  SuperTimePickerClearDetail,
+  SuperTimePickerOpenChangeDetail,
+} from "yxzq-element/time-picker";
 
 type NumberLike = number | `${number}`;
 type CustomElementEventMap = Record<string, Event>;
@@ -191,6 +203,69 @@ type SelectEvents = {
   "super-select-search": CustomEvent<SuperSelectSearchDetail>;
 };
 
+type DatePickerProperties =
+  | "value"
+  | "mode"
+  | "size"
+  | "validation"
+  | "disabled"
+  | "clearable"
+  | "open"
+  | "name"
+  | "placeholder"
+  | "startPlaceholder"
+  | "endPlaceholder"
+  | "min"
+  | "max"
+  | "firstDayOfWeek"
+  | "locale"
+  | "helperText"
+  | "todayLabel"
+  | "clearLabel"
+  | "prevMonthLabel"
+  | "nextMonthLabel"
+  | "prevYearLabel"
+  | "nextYearLabel"
+  | "disabledDate"
+  | "shortcuts";
+
+type DatePickerEvents = {
+  "super-date-picker-change": CustomEvent<SuperDatePickerChangeDetail>;
+  "super-date-picker-clear": CustomEvent<SuperDatePickerClearDetail>;
+  "super-date-picker-open-change": CustomEvent<SuperDatePickerOpenChangeDetail>;
+};
+
+type TimePickerProperties =
+  | "value"
+  | "range"
+  | "format"
+  | "size"
+  | "validation"
+  | "disabled"
+  | "clearable"
+  | "open"
+  | "name"
+  | "placeholder"
+  | "startPlaceholder"
+  | "endPlaceholder"
+  | "hourStep"
+  | "minuteStep"
+  | "secondStep"
+  | "helperText"
+  | "clearLabel"
+  | "confirmLabel"
+  | "amLabel"
+  | "pmLabel"
+  | "startLabel"
+  | "endLabel"
+  | "shortcuts";
+
+type TimePickerEvents = {
+  "super-time-picker-change": CustomEvent<SuperTimePickerChangeDetail>;
+  "super-time-picker-clear": CustomEvent<SuperTimePickerClearDetail>;
+  "super-time-picker-open-change": CustomEvent<SuperTimePickerOpenChangeDetail>;
+};
+
 declare module "vue" {
   interface HTMLAttributes {
     slot?: string;
@@ -202,6 +277,11 @@ declare module "vue" {
       SuperCheckbox,
       CheckboxProperties,
       CheckboxEvents
+    >;
+    "super-date-picker": DefineCustomElement<
+      SuperDatePicker,
+      DatePickerProperties,
+      DatePickerEvents
     >;
     "super-form": DefineCustomElement<
       SuperForm,
@@ -229,6 +309,11 @@ declare module "vue" {
       SuperSwitch,
       SwitchProperties,
       SwitchEvents
+    >;
+    "super-time-picker": DefineCustomElement<
+      SuperTimePicker,
+      TimePickerProperties,
+      TimePickerEvents
     >;
   }
 }

@@ -14,11 +14,13 @@
     "index.ts",
     "Button/**/*.ts",
     "Checkbox/**/*.ts",
+    "DatePicker/**/*.ts",
     "Form/**/*.ts",
     "Input/**/*.ts",
     "Radio/**/*.ts",
     "Select/**/*.ts",
-    "Switch/**/*.ts"
+    "Switch/**/*.ts",
+    "TimePicker/**/*.ts"
   ],
   "exclude": [
     "**/*.test.ts",

@@ -46,6 +46,33 @@ main {
   --super-select-width: 19rem;
 }
 
+.picker-demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 2px solid #9b87d7;
+  border-radius: 14px 20px 16px 19px;
+  background: #fffef9;
+  box-shadow: 3px 4px 0 rgb(51 65 85 / 10%);
+}
+
+.picker-demo > div {
+  flex: 1 1 100%;
+}
+
+.picker-demo h2,
+.picker-demo p {
+  margin: 0;
+}
+
+.picker-demo p {
+  margin-top: 0.3rem;
+  color: #64748b;
+}
+
 .selector-suite {
   display: grid;
   gap: 0.9rem;

@@ -5,8 +5,45 @@ import type {
   SuperFormSchema,
   SuperFormSubmitDetail,
 } from "yxzq-element/form";
+import type { SuperDatePickerShortcut } from "yxzq-element/date-picker";
+import type { SuperTimePickerShortcut } from "yxzq-element/time-picker";
 import { DEMO_BUSINESS_FIELD_TAG } from "./business-form-field";
 import "./style.css";
+
+const dayKey = (date: Date): string => {
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${month}-${day}`;
+};
+
+const dateShortcuts: SuperDatePickerShortcut[] = [
+  {
+    label: "本周",
+    value: () => {
+      const today = new Date();
+      const start = new Date(today);
+      start.setDate(today.getDate() - ((today.getDay() + 6) % 7));
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      return [dayKey(start), dayKey(end)];
+    },
+  },
+  {
+    label: "今天起三天",
+    value: () => {
+      const start = new Date();
+      const end = new Date();
+      end.setDate(start.getDate() + 2);
+      return [dayKey(start), dayKey(end)];
+    },
+  },
+];
+
+const timeShortcuts: SuperTimePickerShortcut[] = [
+  { label: "上午九点", value: "09:00" },
+  { label: "中午", value: "12:00" },
+  { label: "傍晚", value: "18:30" },
+];
 
 const formSchema: SuperFormSchema = {
   layout: "horizontal",
@@ -65,6 +102,18 @@ function App() {
     window.alert(`React 收到选择结果：${event.detail.values.join("、")}`);
   };
 
+  const handleDateChange = (
+    event: CustomEvent<{ value: string | string[] }>,
+  ) => {
+    window.alert(`React 收到日期：${JSON.stringify(event.detail.value)}`);
+  };
+
+  const handleTimeChange = (
+    event: CustomEvent<{ value: string | string[] }>,
+  ) => {
+    window.alert(`React 收到时间：${JSON.stringify(event.detail.value)}`);
+  };
+
   const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
     window.alert(`React 提交表单：${JSON.stringify(event.detail.values)}`);
   };
@@ -114,6 +163,28 @@ function App() {
             <option value="music">音乐</option>
           </optgroup>
         </super-select>
+      </section>
+      <section className="picker-demo" aria-labelledby="picker-title">
+        <div>
+          <h2 id="picker-title">手绘日期与时间</h2>
+          <p>日期范围联动、快捷选项与 12 小时制时间。</p>
+        </div>
+        <super-date-picker
+          mode="range"
+          clearable
+          shortcuts={dateShortcuts}
+          name="trip"
+          aria-label="出行日期"
+          onsuper-date-picker-change={handleDateChange}
+        ></super-date-picker>
+        <super-time-picker
+          format="hh:mm A"
+          clearable
+          shortcuts={timeShortcuts}
+          name="alarm"
+          aria-label="提醒时间"
+          onsuper-time-picker-change={handleTimeChange}
+        ></super-time-picker>
       </section>
       <section aria-labelledby="selector-title">
         <h2 id="selector-title">选择器套装</h2>
