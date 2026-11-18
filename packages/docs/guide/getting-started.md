@@ -2,7 +2,15 @@
 
 Super Components 是一套基于 Lit 的手绘风格 Web Component 组件库。组件实现不依赖 Vue 或 React。
 
-当前提供 Button、Input、Form、Checkbox、Radio、Switch、Select、DatePicker 与 TimePicker 组件。基础控件保留原生语义；Form 不内置字段组件，通过任意业务组件、依赖配置和函数校验组织表单。所有组件通过手绘视觉、Shadow DOM 和跨框架事件组成一致的消费体验。
+当前提供 36 个组件，按用途分为五类：
+
+- 表单：Button、Input、Form、Checkbox、Radio、Switch、Select、DatePicker、TimePicker、Slider、Rate、Upload、Autocomplete。
+- 展示：Tag、Badge、Avatar、Card、Progress、Skeleton、Empty、Table。
+- 反馈：Tooltip、Popover、Popconfirm、Dialog、Drawer、Message、Notification。
+- 导航：Tabs、Breadcrumb、Pagination、Menu、Steps、Dropdown。
+- 布局：Divider、Space。
+
+基础控件保留原生语义；Form 不内置字段组件，通过任意业务组件、依赖配置和函数校验组织表单。所有组件通过手绘视觉、Shadow DOM 和跨框架事件组成一致的消费体验。
 
 ::: warning 先区分组件类与框架组件
 当前 `yxzq-element` 包发布的是原生 Custom Element。包中导出的 `SuperButton` 等名称是继承自 `HTMLElement` 的元素类，不是 Vue 组件或 React 组件。
@@ -37,7 +45,10 @@ import "yxzq-element/button";
 import "yxzq-element/input";
 import "yxzq-element/form";
 import "yxzq-element/select";
+import "yxzq-element/table";
 ```
+
+每个组件都有对应的子路径，例如 `yxzq-element/dialog`、`yxzq-element/tabs`、`yxzq-element/tooltip`；完整的子路径列表见下方显式注册示例与各组件文档页。
 
 日期与时间组件同样支持按需注册：
 
@@ -62,8 +73,10 @@ import "yxzq-element/switch";
 import {
   defineSuperButton,
   defineSuperDatePicker,
+  defineSuperDialog,
   defineSuperForm,
   defineSuperInput,
+  defineSuperTable,
   defineSuperTimePicker,
   registerAll,
 } from "yxzq-element/define";

@@ -25,6 +25,26 @@
       "types": "./dist/button.d.ts",
       "import": "./dist/button.js"
     },
+    "./avatar": {
+      "types": "./dist/avatar.d.ts",
+      "import": "./dist/avatar.js"
+    },
+    "./autocomplete": {
+      "types": "./dist/autocomplete.d.ts",
+      "import": "./dist/autocomplete.js"
+    },
+    "./badge": {
+      "types": "./dist/badge.d.ts",
+      "import": "./dist/badge.js"
+    },
+    "./card": {
+      "types": "./dist/card.d.ts",
+      "import": "./dist/card.js"
+    },
+    "./breadcrumb": {
+      "types": "./dist/breadcrumb.d.ts",
+      "import": "./dist/breadcrumb.js"
+    },
     "./checkbox": {
       "types": "./dist/checkbox.d.ts",
       "import": "./dist/checkbox.js"
@@ -33,29 +53,117 @@
       "types": "./dist/date-picker.d.ts",
       "import": "./dist/date-picker.js"
     },
+    "./dialog": {
+      "types": "./dist/dialog.d.ts",
+      "import": "./dist/dialog.js"
+    },
     "./form": {
       "types": "./dist/form.d.ts",
       "import": "./dist/form.js"
+    },
+    "./divider": {
+      "types": "./dist/divider.d.ts",
+      "import": "./dist/divider.js"
+    },
+    "./drawer": {
+      "types": "./dist/drawer.d.ts",
+      "import": "./dist/drawer.js"
+    },
+    "./dropdown": {
+      "types": "./dist/dropdown.d.ts",
+      "import": "./dist/dropdown.js"
+    },
+    "./empty": {
+      "types": "./dist/empty.d.ts",
+      "import": "./dist/empty.js"
     },
     "./input": {
       "types": "./dist/input.d.ts",
       "import": "./dist/input.js"
     },
+    "./message": {
+      "types": "./dist/message.d.ts",
+      "import": "./dist/message.js"
+    },
+    "./menu": {
+      "types": "./dist/menu.d.ts",
+      "import": "./dist/menu.js"
+    },
+    "./notification": {
+      "types": "./dist/notification.d.ts",
+      "import": "./dist/notification.js"
+    },
+    "./pagination": {
+      "types": "./dist/pagination.d.ts",
+      "import": "./dist/pagination.js"
+    },
+    "./popconfirm": {
+      "types": "./dist/popconfirm.d.ts",
+      "import": "./dist/popconfirm.js"
+    },
+    "./popover": {
+      "types": "./dist/popover.d.ts",
+      "import": "./dist/popover.js"
+    },
+    "./progress": {
+      "types": "./dist/progress.d.ts",
+      "import": "./dist/progress.js"
+    },
     "./radio": {
       "types": "./dist/radio.d.ts",
       "import": "./dist/radio.js"
+    },
+    "./rate": {
+      "types": "./dist/rate.d.ts",
+      "import": "./dist/rate.js"
     },
     "./select": {
       "types": "./dist/select.d.ts",
       "import": "./dist/select.js"
     },
+    "./skeleton": {
+      "types": "./dist/skeleton.d.ts",
+      "import": "./dist/skeleton.js"
+    },
+    "./slider": {
+      "types": "./dist/slider.d.ts",
+      "import": "./dist/slider.js"
+    },
+    "./space": {
+      "types": "./dist/space.d.ts",
+      "import": "./dist/space.js"
+    },
+    "./steps": {
+      "types": "./dist/steps.d.ts",
+      "import": "./dist/steps.js"
+    },
     "./switch": {
       "types": "./dist/switch.d.ts",
       "import": "./dist/switch.js"
     },
+    "./table": {
+      "types": "./dist/table.d.ts",
+      "import": "./dist/table.js"
+    },
+    "./tag": {
+      "types": "./dist/tag.d.ts",
+      "import": "./dist/tag.js"
+    },
+    "./tabs": {
+      "types": "./dist/tabs.d.ts",
+      "import": "./dist/tabs.js"
+    },
     "./time-picker": {
       "types": "./dist/time-picker.d.ts",
       "import": "./dist/time-picker.js"
+    },
+    "./tooltip": {
+      "types": "./dist/tooltip.d.ts",
+      "import": "./dist/tooltip.js"
+    },
+    "./upload": {
+      "types": "./dist/upload.d.ts",
+      "import": "./dist/upload.js"
     },
     "./define": {
       "types": "./dist/define.d.ts",
@@ -71,15 +179,43 @@
   },
   "sideEffects": [
     "./dist/index.js",
+    "./dist/avatar.js",
+    "./dist/autocomplete.js",
+    "./dist/badge.js",
     "./dist/button.js",
+    "./dist/card.js",
     "./dist/checkbox.js",
     "./dist/date-picker.js",
+    "./dist/dialog.js",
+    "./dist/divider.js",
+    "./dist/drawer.js",
+    "./dist/dropdown.js",
+    "./dist/breadcrumb.js",
+    "./dist/empty.js",
     "./dist/form.js",
     "./dist/input.js",
+    "./dist/message.js",
+    "./dist/menu.js",
+    "./dist/notification.js",
+    "./dist/pagination.js",
+    "./dist/popconfirm.js",
+    "./dist/popover.js",
+    "./dist/progress.js",
     "./dist/radio.js",
+    "./dist/rate.js",
     "./dist/select.js",
+    "./dist/skeleton.js",
+    "./dist/slider.js",
+    "./dist/space.js",
+    "./dist/steps.js",
     "./dist/switch.js",
-    "./dist/time-picker.js"
+    "./dist/table.js",
+    "./dist/tag.js",
+    "./dist/tabs.js",
+    "./dist/time-picker.js",
+    "./dist/tooltip.js"
+    ,
+    "./dist/upload.js"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

@@ -25,6 +25,9 @@
     "docs:dev": "pnpm run build:library && pnpm --filter @yxzq-element/docs dev",
     "docs:build": "pnpm run build:library && pnpm --filter @yxzq-element/docs build",
     "test": "vitest run",
+    "check:docs-sync": "node ./scripts/check-docs-sync.mjs",
+    "test:visual": "playwright test",
+    "test:visual:update": "playwright test --update-snapshots",
     "release:version": "node ./scripts/set-release-version.mjs",
     "release:check": "pnpm typecheck && pnpm test && pnpm build && pnpm docs:build",
     "release:pack": "node ./scripts/pack-release.mjs",
@@ -37,6 +40,7 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "@types/node": "20.11.20",
     "jsdom": "24.0.0",
     "postcss-color-mix": "1.1.0",

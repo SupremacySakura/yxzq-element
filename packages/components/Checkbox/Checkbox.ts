@@ -76,7 +76,10 @@ export class SuperCheckbox extends LitElement {
       --super-checkbox-border-color: #34445f;
       --super-checkbox-background: #fffef9;
       --super-checkbox-checked-background: #3978e9;
-      --super-checkbox-checked-color: #ffffff;
+      --super-checkbox-checked-color: var(
+        --super-text-color-inverse,
+        #ffffff
+      );
       --super-checkbox-hover-color: #3fa66a;
       --super-checkbox-focus-color: #356df3;
       --super-checkbox-shadow-color: #9fb7dc;

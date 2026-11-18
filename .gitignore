@@ -21,6 +21,7 @@ dist-ssr
 packages/docs/.vitepress/dist/
 packages/docs/.vitepress/cache/
 .playwright-cli/
+/test-results/
 /output/playwright/
 /release-artifacts/
 

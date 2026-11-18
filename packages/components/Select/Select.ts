@@ -611,7 +611,7 @@ export class SuperSelect extends LitElement {
       box-sizing: border-box;
       inline-size: 17px;
       block-size: 17px;
-      color: #fff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: transparent;
       border: 1.5px solid #64748b;
       border-radius: 3px 5px 2px 4px / 4px 2px 5px 3px;

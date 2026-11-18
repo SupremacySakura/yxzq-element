@@ -597,14 +597,14 @@ export class SuperTimePicker extends LitElement {
     }
 
     .confirm-button {
-      color: #ffffff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: #4b87f5;
       border: 1.5px solid #174ea6;
       box-shadow: 1px 2px 0 -1px #174ea6;
     }
 
     .confirm-button:hover {
-      color: #ffffff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: #6a9df7;
     }
 

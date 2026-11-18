@@ -25,6 +25,26 @@
       "types": "./dist/Button/index.d.ts",
       "import": "./dist/Button/index.js"
     },
+    "./avatar": {
+      "types": "./dist/Avatar/index.d.ts",
+      "import": "./dist/Avatar/index.js"
+    },
+    "./autocomplete": {
+      "types": "./dist/Autocomplete/index.d.ts",
+      "import": "./dist/Autocomplete/index.js"
+    },
+    "./badge": {
+      "types": "./dist/Badge/index.d.ts",
+      "import": "./dist/Badge/index.js"
+    },
+    "./card": {
+      "types": "./dist/Card/index.d.ts",
+      "import": "./dist/Card/index.js"
+    },
+    "./breadcrumb": {
+      "types": "./dist/Breadcrumb/index.d.ts",
+      "import": "./dist/Breadcrumb/index.js"
+    },
     "./checkbox": {
       "types": "./dist/Checkbox/index.d.ts",
       "import": "./dist/Checkbox/index.js"
@@ -33,29 +53,117 @@
       "types": "./dist/DatePicker/index.d.ts",
       "import": "./dist/DatePicker/index.js"
     },
+    "./dialog": {
+      "types": "./dist/Dialog/index.d.ts",
+      "import": "./dist/Dialog/index.js"
+    },
     "./form": {
       "types": "./dist/Form/index.d.ts",
       "import": "./dist/Form/index.js"
+    },
+    "./divider": {
+      "types": "./dist/Divider/index.d.ts",
+      "import": "./dist/Divider/index.js"
+    },
+    "./drawer": {
+      "types": "./dist/Drawer/index.d.ts",
+      "import": "./dist/Drawer/index.js"
+    },
+    "./dropdown": {
+      "types": "./dist/Dropdown/index.d.ts",
+      "import": "./dist/Dropdown/index.js"
+    },
+    "./empty": {
+      "types": "./dist/Empty/index.d.ts",
+      "import": "./dist/Empty/index.js"
     },
     "./input": {
       "types": "./dist/Input/index.d.ts",
       "import": "./dist/Input/index.js"
     },
+    "./message": {
+      "types": "./dist/Message/index.d.ts",
+      "import": "./dist/Message/index.js"
+    },
+    "./menu": {
+      "types": "./dist/Menu/index.d.ts",
+      "import": "./dist/Menu/index.js"
+    },
+    "./notification": {
+      "types": "./dist/Notification/index.d.ts",
+      "import": "./dist/Notification/index.js"
+    },
+    "./pagination": {
+      "types": "./dist/Pagination/index.d.ts",
+      "import": "./dist/Pagination/index.js"
+    },
+    "./popconfirm": {
+      "types": "./dist/Popconfirm/index.d.ts",
+      "import": "./dist/Popconfirm/index.js"
+    },
+    "./popover": {
+      "types": "./dist/Popover/index.d.ts",
+      "import": "./dist/Popover/index.js"
+    },
+    "./progress": {
+      "types": "./dist/Progress/index.d.ts",
+      "import": "./dist/Progress/index.js"
+    },
     "./radio": {
       "types": "./dist/Radio/index.d.ts",
       "import": "./dist/Radio/index.js"
+    },
+    "./rate": {
+      "types": "./dist/Rate/index.d.ts",
+      "import": "./dist/Rate/index.js"
     },
     "./select": {
       "types": "./dist/Select/index.d.ts",
       "import": "./dist/Select/index.js"
     },
+    "./skeleton": {
+      "types": "./dist/Skeleton/index.d.ts",
+      "import": "./dist/Skeleton/index.js"
+    },
+    "./slider": {
+      "types": "./dist/Slider/index.d.ts",
+      "import": "./dist/Slider/index.js"
+    },
+    "./space": {
+      "types": "./dist/Space/index.d.ts",
+      "import": "./dist/Space/index.js"
+    },
+    "./steps": {
+      "types": "./dist/Steps/index.d.ts",
+      "import": "./dist/Steps/index.js"
+    },
     "./switch": {
       "types": "./dist/Switch/index.d.ts",
       "import": "./dist/Switch/index.js"
     },
+    "./table": {
+      "types": "./dist/Table/index.d.ts",
+      "import": "./dist/Table/index.js"
+    },
+    "./tag": {
+      "types": "./dist/Tag/index.d.ts",
+      "import": "./dist/Tag/index.js"
+    },
+    "./tabs": {
+      "types": "./dist/Tabs/index.d.ts",
+      "import": "./dist/Tabs/index.js"
+    },
     "./time-picker": {
       "types": "./dist/TimePicker/index.d.ts",
       "import": "./dist/TimePicker/index.js"
+    },
+    "./tooltip": {
+      "types": "./dist/Tooltip/index.d.ts",
+      "import": "./dist/Tooltip/index.js"
+    },
+    "./upload": {
+      "types": "./dist/Upload/index.d.ts",
+      "import": "./dist/Upload/index.js"
     }
   },
   "files": [
@@ -73,6 +181,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@floating-ui/dom": "^1.8.0",
     "@yxzq-element/utils": "workspace:*",
     "lit": "^3.3.1"
   }

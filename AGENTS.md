@@ -36,15 +36,42 @@ The intended product direction is an original hand-drawn component system. The p
 
 - `import "yxzq-element"` registers every component.
 - `import "yxzq-element/button"` registers only `super-button`.
+- `import "yxzq-element/autocomplete"` registers only `super-autocomplete`.
+- `import "yxzq-element/avatar"` registers only `super-avatar`.
+- `import "yxzq-element/badge"` registers only `super-badge`.
+- `import "yxzq-element/breadcrumb"` registers only `super-breadcrumb`.
+- `import "yxzq-element/card"` registers only `super-card`.
 - `import "yxzq-element/checkbox"` registers only `super-checkbox`.
 - `import "yxzq-element/date-picker"` registers only `super-date-picker`.
+- `import "yxzq-element/dialog"` registers only `super-dialog`.
+- `import "yxzq-element/divider"` registers only `super-divider`.
+- `import "yxzq-element/drawer"` registers only `super-drawer`.
+- `import "yxzq-element/dropdown"` registers only `super-dropdown`.
+- `import "yxzq-element/empty"` registers only `super-empty`.
 - `import "yxzq-element/form"` registers only `super-form`.
 - `import "yxzq-element/input"` registers only `super-input`.
+- `import "yxzq-element/menu"` registers only `super-menu`.
+- `import "yxzq-element/message"` registers only `super-message`.
+- `import "yxzq-element/notification"` registers only `super-notification`.
+- `import "yxzq-element/pagination"` registers only `super-pagination`.
+- `import "yxzq-element/popconfirm"` registers only `super-popconfirm`.
+- `import "yxzq-element/popover"` registers only `super-popover`.
+- `import "yxzq-element/progress"` registers only `super-progress`.
 - `import "yxzq-element/radio"` registers only `super-radio`.
+- `import "yxzq-element/rate"` registers only `super-rate`.
 - `import "yxzq-element/select"` registers only `super-select`.
+- `import "yxzq-element/skeleton"` registers only `super-skeleton`.
+- `import "yxzq-element/slider"` registers only `super-slider`.
+- `import "yxzq-element/space"` registers only `super-space`.
+- `import "yxzq-element/steps"` registers only `super-steps`.
 - `import "yxzq-element/switch"` registers only `super-switch`.
+- `import "yxzq-element/table"` registers only `super-table`.
+- `import "yxzq-element/tabs"` registers only `super-tabs`.
+- `import "yxzq-element/tag"` registers only `super-tag`.
 - `import "yxzq-element/time-picker"` registers only `super-time-picker`.
-- `import { registerAll, defineSuperButton, defineSuperCheckbox, defineSuperDatePicker, defineSuperForm, defineSuperInput, defineSuperRadio, defineSuperSelect, defineSuperSwitch, defineSuperTimePicker } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
+- `import "yxzq-element/tooltip"` registers only `super-tooltip`.
+- `import "yxzq-element/upload"` registers only `super-upload`.
+- `import { registerAll, defineSuperAutocomplete, defineSuperAvatar, defineSuperBadge, defineSuperBreadcrumb, defineSuperButton, defineSuperCard, defineSuperCheckbox, defineSuperDatePicker, defineSuperDialog, defineSuperDivider, defineSuperDrawer, defineSuperDropdown, defineSuperEmpty, defineSuperForm, defineSuperInput, defineSuperMenu, defineSuperMessage, defineSuperNotification, defineSuperPagination, defineSuperPopconfirm, defineSuperPopover, defineSuperProgress, defineSuperRadio, defineSuperRate, defineSuperSelect, defineSuperSkeleton, defineSuperSlider, defineSuperSpace, defineSuperSteps, defineSuperSwitch, defineSuperTable, defineSuperTabs, defineSuperTag, defineSuperTimePicker, defineSuperTooltip, defineSuperUpload } from "yxzq-element/define"` supports explicit registration and SSR-sensitive applications.
 - Registration must remain idempotent and safe when `customElements` is unavailable.
 
 When an explicitly authorized component is added, update its component export, `packages/components/index.ts`, `packages/core/components.ts`, core subpath exports, `HTMLElementTagNameMap`, tests, docs, Vue `GlobalComponents` declarations, React JSX declarations, examples, and the version changelog as applicable.
@@ -124,3 +151,17 @@ Unit tests must run directly against workspace source and must pass in a fresh c
 - Generated `dist`, VitePress cache, and VitePress output directories must not be committed.
 - VitePress's theme toggle is driven by the `html.dark` class. Dark-theme overrides must target that class and maintain readable text/background contrast; do not rely only on `prefers-color-scheme`.
 - GitHub Actions artifact upload/download must remain on v4 or newer. Documentation output lives under the hidden `.vitepress` directory, so artifact upload must keep `include-hidden-files: true` and `if-no-files-found: error`.
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked in GitHub Issues at `SupremacySakura/yxzq-element`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Triage uses the five default labels: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context layout: one `GLOSSARY.md` at the repo root plus `docs/adr/`. See `docs/agents/domain.md`.

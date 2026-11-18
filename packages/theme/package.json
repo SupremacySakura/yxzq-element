@@ -6,10 +6,12 @@
   "style": "./index.css",
   "exports": {
     ".": "./index.css",
+    "./tokens.css": "./tokens.css",
     "./reset.css": "./reset.css"
   },
   "files": [
     "index.css",
+    "tokens.css",
     "reset.css"
   ],
   "sideEffects": [

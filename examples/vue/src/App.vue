@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import type {
   SuperFormSchema,
   SuperFormSubmitDetail,
@@ -8,6 +9,23 @@ import type { SuperTimePickerShortcut } from "yxzq-element/time-picker";
 import { DEMO_BUSINESS_FIELD_TAG } from "./business-form-field";
 
 const selectedTopics = ["sketch", "travel"];
+const dialogOpen = ref(false);
+const drawerOpen = ref(false);
+
+const notify = (): void => {
+  const element = document.createElement("super-notification");
+  element.title = "保存成功";
+  element.message = "你的修改已同步。";
+  element.type = "success";
+  document.body.append(element);
+  window.setTimeout(() => element.remove(), 3200);
+};
+
+const menuItems = [
+  { key: "overview", label: "概览", icon: "◈" },
+  { key: "components", label: "组件", icon: "▤" },
+  { key: "settings", label: "设置", icon: "⚙" },
+];
 
 const dayKey = (date: Date): string => {
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -42,6 +60,45 @@ const timeShortcuts: SuperTimePickerShortcut[] = [
   { label: "上午九点", value: "09:00" },
   { label: "中午", value: "12:00" },
   { label: "傍晚", value: "18:30" },
+];
+
+const handleTagClose = (event: Event): void => {
+  const detail = (event as CustomEvent<{ value: string }>).detail;
+  window.alert(`Vue 关闭标签：${detail.value}`);
+};
+
+const tabItems = [
+  { key: "one", label: "概览" },
+  { key: "two", label: "详情" },
+  { key: "three", label: "设置", disabled: true },
+];
+
+const crumbItems = [
+  { label: "首页", href: "#" },
+  { label: "组件" },
+  { label: "面包屑", current: true },
+];
+
+const dropdownItems = [
+  { key: "edit", label: "编辑" },
+  { key: "copy", label: "复制" },
+  { key: "sep", label: "", divider: true },
+  { key: "delete", label: "删除", danger: true },
+];
+
+const cityItems = ["北京", "上海", "广州", "深圳", "杭州"];
+
+const stepItems = [{ title: "填写信息" }, { title: "确认方案" }, { title: "完成" }];
+
+const tableColumns = [
+  { key: "name", title: "名称" },
+  { key: "status", title: "状态" },
+  { key: "updated", title: "更新时间", sortable: true },
+];
+
+const tableRows = [
+  { id: "1", name: "组件文档", status: "已完成", updated: "2026-11-18" },
+  { id: "2", name: "视觉回归", status: "进行中", updated: "2026-11-17" },
 ];
 
 const formSchema: SuperFormSchema = {
@@ -181,6 +238,102 @@ const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
         aria-label="提醒时间"
         @super-time-picker-change="handleTimeChange"
       ></super-time-picker>
+    </section>
+    <section aria-labelledby="display-title">
+      <h2 id="display-title">手绘展示组件</h2>
+      <super-space direction="horizontal" size="medium" wrap align="center">
+        <super-card variant="outlined" size="small">
+          <span slot="header">卡片标题</span>
+          卡片正文内容
+        </super-card>
+        <super-card variant="filled" size="small" hoverable>
+          悬停卡片
+        </super-card>
+      </super-space>
+      <super-space direction="horizontal" size="small" wrap align="center">
+        <super-tag variant="primary" value="vue">Vue</super-tag>
+        <super-tag
+          variant="success"
+          closable
+          value="ready"
+          @super-tag-close="handleTagClose"
+        >
+          可关闭
+        </super-tag>
+        <super-avatar size="small" icon="手"></super-avatar>
+        <super-badge value="12" status="danger">
+          <span>消息</span>
+        </super-badge>
+        <super-badge dot status="success">
+          <span>在线</span>
+        </super-badge>
+      </super-space>
+      <super-divider content-position="left" variant="hand-drawn">
+        分割
+      </super-divider>
+      <super-tooltip content="悬停查看提示">
+        <super-button variant="outline" size="small">悬停我</super-button>
+      </super-tooltip>
+      <super-progress :value="62" show-text></super-progress>
+      <super-skeleton variant="text" :rows="2" animated></super-skeleton>
+      <super-tabs :items="tabItems" active="one"></super-tabs>
+      <super-breadcrumb :items="crumbItems"></super-breadcrumb>
+      <super-pagination
+        :total="120"
+        :page="2"
+        :page-size="10"
+        show-total
+      ></super-pagination>
+      <super-slider :value="40" :min="0" :max="100"></super-slider>
+      <super-rate :value="3" clearable></super-rate>
+      <super-upload accept="image/*" multiple></super-upload>
+      <super-button variant="primary" size="small" @click="dialogOpen = true">
+        打开对话框
+      </super-button>
+      <super-dialog
+        :open="dialogOpen"
+        title="确认操作"
+        @super-dialog-close="dialogOpen = false"
+      >
+        这是一段由 Vue 控制开关的对话框内容。
+      </super-dialog>
+      <super-popover content="弹出内容" placement="bottom">
+        <super-button variant="outline" size="small">点击弹出</super-button>
+      </super-popover>
+      <super-dropdown :items="dropdownItems">
+        <super-button variant="outline" size="small">更多操作</super-button>
+      </super-dropdown>
+      <super-autocomplete :items="cityItems" placeholder="输入城市"></super-autocomplete>
+      <super-steps :items="stepItems" :active="1"></super-steps>
+      <super-popconfirm title="确认删除？" content="删除后不可恢复">
+        <super-button variant="danger" size="small">删除</super-button>
+      </super-popconfirm>
+      <super-table
+        :columns="tableColumns"
+        :rows="tableRows"
+        selectable
+        striped
+      ></super-table>
+      <super-menu :items="menuItems" active="overview"></super-menu>
+      <super-empty description="没有找到匹配的记录">
+        <super-button slot="action" variant="outline" size="small">
+          新建
+        </super-button>
+      </super-empty>
+      <super-button variant="outline" size="small" @click="drawerOpen = true">
+        打开抽屉
+      </super-button>
+      <super-drawer
+        :open="drawerOpen"
+        title="筛选条件"
+        placement="right"
+        @super-drawer-close="drawerOpen = false"
+      >
+        抽屉内容由消费者控制。
+      </super-drawer>
+      <super-button variant="outline" size="small" @click="notify">
+        显示通知
+      </super-button>
     </section>
     <section aria-labelledby="selector-title">
       <h2 id="selector-title">选择器套装</h2>

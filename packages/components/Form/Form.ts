@@ -402,7 +402,7 @@ export class SuperForm extends LitElement {
     }
 
     .actions .submit {
-      color: #fff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: var(--super-form-primary-color);
       border-color: var(--super-form-primary-shadow-color);
       box-shadow: 2px 3px 0 -1px var(--super-form-primary-shadow-color);
@@ -512,7 +512,7 @@ export class SuperForm extends LitElement {
     }
 
     :host-context(html.dark) .actions .submit {
-      color: #fff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: var(--super-form-primary-color);
     }
   `;

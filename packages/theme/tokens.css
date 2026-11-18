@@ -1,0 +1,63 @@
+/**
+ * Shared design tokens for the hand-drawn Super Components system.
+ *
+ * Consumers can restyle the whole library by overriding these variables;
+ * component-level variables resolve to them by default.
+ */
+:root {
+  /* Palette */
+  --super-color-primary: #4b87f5;
+  --super-color-primary-light-3: #7ba7f8;
+  --super-color-primary-dark-2: #3272e8;
+  --super-color-success: #86cf8b;
+  --super-color-warning: #ffca50;
+  --super-color-danger: #ff7067;
+  --super-color-info: #7d8896;
+
+  --super-text-color-primary: #292524;
+  --super-text-color-regular: #4a4441;
+  --super-text-color-secondary: #6b6360;
+  --super-text-color-placeholder: #9a938f;
+  --super-text-color-inverse: #ffffff;
+
+  --super-background-color: #fffef9;
+  --super-background-color-soft: #f7f4ec;
+  --super-border-color: #2f2a27;
+  --super-border-color-light: #b6ada6;
+  --super-border-color-lighter: #ddd5cd;
+
+  /* Spacing */
+  --super-spacing-xs: 4px;
+  --super-spacing-sm: 8px;
+  --super-spacing-md: 12px;
+  --super-spacing-lg: 16px;
+  --super-spacing-xl: 24px;
+
+  /* Radius */
+  --super-radius-sm: 6px;
+  --super-radius-md: 9px;
+  --super-radius-lg: 14px;
+  --super-radius-pill: 999px;
+
+  /* Hand-drawn characteristics */
+  --super-sketch-width: 2px;
+  --super-sketch-rotation: -0.25deg;
+  --super-paper-texture: rgb(120 113 100 / 6%);
+  --super-sketch-shadow: rgb(23 78 166 / 28%);
+  --super-focus-color: #56c6b7;
+
+  /* Typography */
+  --super-font-family: "Comic Sans MS", "Kaiti SC", STKaiti, system-ui, sans-serif;
+  --super-font-size-base: 14px;
+  --super-font-size-sm: 13px;
+  --super-font-size-lg: 16px;
+
+  /* Motion */
+  --super-motion-duration: 140ms;
+  --super-motion-easing: ease;
+
+  /* Elevation */
+  --super-z-index-overlay: 2000;
+  --super-z-index-modal: 2100;
+  --super-z-index-message: 3000;
+}
