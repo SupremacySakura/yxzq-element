@@ -8,12 +8,14 @@ export const SUPER_DIVIDER_CONTENT_POSITIONS = [
   "right",
 ] as const;
 export const SUPER_DIVIDER_VARIANTS = ["solid", "dashed", "hand-drawn"] as const;
+export const SUPER_DIVIDER_SIZES = ["large", "medium", "small"] as const;
 
 export type SuperDividerDirection =
   (typeof SUPER_DIVIDER_DIRECTIONS)[number];
 export type SuperDividerContentPosition =
   (typeof SUPER_DIVIDER_CONTENT_POSITIONS)[number];
 export type SuperDividerVariant = (typeof SUPER_DIVIDER_VARIANTS)[number];
+export type SuperDividerSize = (typeof SUPER_DIVIDER_SIZES)[number];
 
 export class SuperDivider extends LitElement {
   static properties = {
@@ -25,12 +27,14 @@ export class SuperDivider extends LitElement {
     },
     variant: { type: String, reflect: true },
     color: { type: String, reflect: true },
+    size: { type: String, reflect: true },
   };
 
   declare direction: SuperDividerDirection;
   declare contentPosition: SuperDividerContentPosition;
   declare variant: SuperDividerVariant;
   declare color: string;
+  declare size: SuperDividerSize;
 
   private hasContent: boolean;
 
@@ -40,6 +44,7 @@ export class SuperDivider extends LitElement {
     this.contentPosition = "center";
     this.variant = "solid";
     this.color = "";
+    this.size = "medium";
     this.hasContent = false;
   }
 
@@ -65,6 +70,18 @@ export class SuperDivider extends LitElement {
 
     :host([hidden]) {
       display: none;
+    }
+
+    :host([size="large"]) {
+      --super-divider-gap: var(--super-spacing-lg, 16px);
+      --super-divider-font-size: var(--super-font-size-lg, 16px);
+      --super-divider-content-padding: 0 var(--super-spacing-md, 12px);
+    }
+
+    :host([size="small"]) {
+      --super-divider-gap: var(--super-spacing-xs, 4px);
+      --super-divider-font-size: 12px;
+      --super-divider-content-padding: 0 var(--super-spacing-xs, 4px);
     }
 
     :host([direction="vertical"]) {

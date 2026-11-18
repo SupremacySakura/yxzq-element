@@ -36,6 +36,15 @@ describe("SuperMessage", () => {
     expect(customElements.get(SUPER_MESSAGE_TAG)).toBe(SuperMessage);
   });
 
+  it("defines size-specific typography and padding hooks", () => {
+    expect(SuperMessage.styles.cssText).toContain(':host([size="large"])');
+    expect(SuperMessage.styles.cssText).toContain(':host([size="small"])');
+    expect(SuperMessage.styles.cssText).toContain("--super-message-font-size");
+    expect(SuperMessage.styles.cssText).toContain(
+      "--super-message-padding-inline",
+    );
+  });
+
   it("provides stable defaults and reflects primitive properties", async () => {
     const element = await mountMessage();
 
@@ -46,6 +55,8 @@ describe("SuperMessage", () => {
     expect(element.closable).toBe(false);
     expect(element.closeLabel).toBe("关闭提示");
     expect(element.showIcon).toBe(true);
+    expect(element.size).toBe("medium");
+    expect(element.getAttribute("size")).toBe("medium");
 
     element.message = "草稿已保存";
     element.type = "success";
@@ -53,6 +64,7 @@ describe("SuperMessage", () => {
     element.closable = true;
     element.closeLabel = "收起通知";
     element.showIcon = false;
+    element.size = "small";
     await settle(element);
 
     expect(element.getAttribute("message")).toBe("草稿已保存");
@@ -61,6 +73,7 @@ describe("SuperMessage", () => {
     expect(element.hasAttribute("closable")).toBe(true);
     expect(element.getAttribute("close-label")).toBe("收起通知");
     expect(element.hasAttribute("show-icon")).toBe(false);
+    expect(element.getAttribute("size")).toBe("small");
 
     element.open = true;
     await settle(element);
@@ -227,6 +240,7 @@ describe("showSuperMessage", () => {
       message: "网络连接已恢复",
       type: "success",
       duration: 0,
+      size: "large",
     });
     const element = document.body.querySelector<SuperMessage>(
       SUPER_MESSAGE_TAG,
@@ -237,6 +251,7 @@ describe("showSuperMessage", () => {
     expect(element?.message).toBe("网络连接已恢复");
     expect(element?.type).toBe("success");
     expect(element?.duration).toBe(0);
+    expect(element?.size).toBe("large");
 
     handle.close();
     expect(element?.isConnected).toBe(false);

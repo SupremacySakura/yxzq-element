@@ -42,17 +42,21 @@ describe("SuperDivider", () => {
     expect(element.contentPosition).toBe("center");
     expect(element.variant).toBe("solid");
     expect(element.color).toBe("");
+    expect(element.size).toBe("medium");
+    expect(element.getAttribute("size")).toBe("medium");
 
     element.direction = "vertical";
     element.contentPosition = "left";
     element.variant = "hand-drawn";
     element.color = "#3b82f6";
+    element.size = "large";
     await element.updateComplete;
 
     expect(element.getAttribute("direction")).toBe("vertical");
     expect(element.getAttribute("content-position")).toBe("left");
     expect(element.getAttribute("variant")).toBe("hand-drawn");
     expect(element.getAttribute("color")).toBe("#3b82f6");
+    expect(element.getAttribute("size")).toBe("large");
   });
 
   it("renders optional slot content and keeps it out of vertical mode", async () => {
@@ -87,5 +91,12 @@ describe("SuperDivider", () => {
     );
     expect(divider?.style.getPropertyValue("--super-divider-color"))
       .toBe("rgb(12, 34, 56)");
+  });
+
+  it("defines size-specific spacing and typography hooks", () => {
+    expect(SuperDivider.styles.cssText).toContain(':host([size="large"])');
+    expect(SuperDivider.styles.cssText).toContain(':host([size="small"])');
+    expect(SuperDivider.styles.cssText).toContain("--super-divider-font-size");
+    expect(SuperDivider.styles.cssText).toContain("--super-divider-gap");
   });
 });

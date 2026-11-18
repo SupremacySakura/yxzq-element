@@ -7,6 +7,12 @@ import {
   type FocusTrap,
   sketchyShadow,
 } from "@yxzq-element/utils";
+import {
+  ComposedFocusScope,
+  booleanAttribute,
+  dispatchModalClose,
+  trueBooleanAttribute,
+} from "../internal/modal.js";
 
 export const SUPER_DRAWER_PLACEMENTS = [
   "left",
@@ -37,47 +43,6 @@ export interface SuperDrawerCloseDetail {
 }
 
 let drawerId = 0;
-
-const booleanAttribute = {
-  fromAttribute: (value: string | null): boolean =>
-    value !== null && value !== "false",
-  toAttribute: (value: boolean): string | null => (value ? "" : null),
-};
-
-const trueBooleanAttribute = {
-  fromAttribute: (value: string | null): boolean => value !== "false",
-  toAttribute: (value: boolean): string | null => (value ? "" : null),
-};
-
-class ComposedFocusScope {
-  constructor(
-    private readonly host: HTMLElement,
-    private readonly panel: HTMLElement,
-  ) {}
-
-  querySelectorAll(selector: string): HTMLElement[] {
-    return [
-      ...Array.from(this.panel.querySelectorAll<HTMLElement>(selector)),
-      ...Array.from(this.host.querySelectorAll<HTMLElement>(selector)),
-    ].filter((element, index, elements) => elements.indexOf(element) === index);
-  }
-
-  contains(node: Node | null): boolean {
-    if (!node) {
-      return false;
-    }
-
-    let current: Node | null = node;
-    while (current) {
-      if (this.panel.contains(current) || this.host.contains(current)) {
-        return true;
-      }
-      const root = current.getRootNode();
-      current = root instanceof ShadowRoot ? root.host : null;
-    }
-    return false;
-  }
-}
 
 export class SuperDrawer extends LitElement {
   static properties = {
@@ -411,7 +376,7 @@ export class SuperDrawer extends LitElement {
     }
 
     .action.primary {
-      color: #ffffff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: var(--super-drawer-primary-color);
       border-color: var(--super-drawer-primary-border-color);
     }
@@ -566,46 +531,14 @@ export class SuperDrawer extends LitElement {
       return;
     }
 
-    const beforeClose = new CustomEvent<SuperDrawerBeforeCloseDetail>(
-      "super-drawer-before-close",
-      {
-        detail: { reason },
-        bubbles: true,
-        composed: true,
-        cancelable: true,
+    dispatchModalClose({
+      host: this,
+      eventPrefix: "super-drawer",
+      reason,
+      close: () => {
+        this.open = false;
       },
-    );
-
-    if (!this.dispatchEvent(beforeClose)) {
-      return;
-    }
-
-    if (reason === "confirm") {
-      this.dispatchEvent(
-        new CustomEvent<SuperDrawerCloseDetail>("super-drawer-confirm", {
-          detail: { reason: "confirm" },
-          bubbles: true,
-          composed: true,
-        }),
-      );
-    } else if (reason === "cancel") {
-      this.dispatchEvent(
-        new CustomEvent<SuperDrawerCloseDetail>("super-drawer-cancel", {
-          detail: { reason: "cancel" },
-          bubbles: true,
-          composed: true,
-        }),
-      );
-    }
-
-    this.open = false;
-    this.dispatchEvent(
-      new CustomEvent<SuperDrawerCloseDetail>("super-drawer-close", {
-        detail: { reason },
-        bubbles: true,
-        composed: true,
-      }),
-    );
+    });
   }
 
   private handleConfirm = (): void => {

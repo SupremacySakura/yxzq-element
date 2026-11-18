@@ -5,7 +5,7 @@
 <div class="slider-note">
   <span aria-hidden="true">≈</span>
   <strong>取值提示</strong>
-  <span><code>value</code> 是受控属性：用户拖动只会派发 <code>super-slider-change</code>，由消费者决定是否把新值写回组件。范围值必须通过 JS property 传入。</span>
+  <span><code>value</code> 同时支持受控与非受控用法：用户拖动会先更新组件内部值并派发 <code>super-slider-change</code>；受控消费者可在事件中写回自己的值，组件始终以最后写入的 <code>value</code> 为准。范围值必须通过 JS property 传入。</span>
 </div>
 
 ## 注册
@@ -158,7 +158,7 @@ slider.addEventListener("super-slider-change", (event) => {
 
 | 名称 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `value` | `number \| [number, number]` | `0` | 受控值；单值模式反射到 `value` attribute，范围模式只能使用 JS property 数组 |
+| `value` | `number \| [number, number]` | `0` | 受控或非受控值；单值模式反射到 `value` attribute，范围模式只能使用 JS property 数组 |
 | `min` | `number` | `0` | 最小值 |
 | `max` | `number` | `100` | 最大值 |
 | `step` | `number` | `1` | 步长 |
@@ -178,7 +178,7 @@ slider.addEventListener("super-slider-change", (event) => {
 | --- | --- | --- |
 | `super-slider-change` | `{ value: number \| [number, number] }` | 用户完成一次值调整时派发，`bubbles` 与 `composed` 均为 `true` |
 
-程序化修改 `value` 不会派发用户事件。事件派发后组件会恢复受控值，等待消费者回写。
+程序化修改 `value` 不会派发用户事件。非受控用法下，用户交互会直接更新 `value`；受控用法下，在 `super-slider-change` 监听器中写回旧值即可拒绝本次修改，组件会立即以写回的属性值为准。
 
 ### CSS Parts
 

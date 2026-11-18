@@ -31,12 +31,22 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+      - name: Typecheck
+        run: pnpm typecheck
+
       - name: Check component documentation sync
         run: pnpm check:docs-sync
+
+      - name: Build library and examples
+        run: pnpm build
 
   visual:
     name: Run visual regression
     runs-on: ubuntu-latest
+    # 基线在 macOS 生成;不同操作系统的字体渲染存在差异,因此该 job 仅作为
+    # 提示性检查,不阻塞构建。刷新基线时请在 CI 所用系统上执行
+    # `pnpm test:visual:update` 并提交对应平台的快照。
+    continue-on-error: true
 
     steps:
       - name: Checkout repo
@@ -74,7 +84,7 @@ jobs:
   build:
     name: Build docs
     runs-on: ubuntu-latest
-    needs: [test, visual]
+    needs: [test]
 
     steps:
       - name: Checkout repo

@@ -192,6 +192,7 @@ defineSuperPopconfirm();
 | `icon` | `string` | `?` | 图标字符；设为空字符串时不渲染图标 |
 | `close-on-outside-click` | `boolean` | `true` | 外部指针按下时关闭 |
 | `close-on-escape` | `boolean` | `true` | 按 `Escape` 时关闭并回焦 |
+| `size` | `large \| medium \| small` | `medium` | 尺寸；调整字号、内边距、间距与操作按钮字号 |
 
 ### Events
 
@@ -255,6 +256,7 @@ super-popconfirm {
   --super-popconfirm-padding-inline: var(--super-spacing-lg, 16px);
   --super-popconfirm-gap: var(--super-spacing-sm, 8px);
   --super-popconfirm-icon-size: 26px;
+  --super-popconfirm-action-font-size: var(--super-font-size-sm, 13px);
   --super-popconfirm-content-max-height: min(40vh, 240px);
   --super-popconfirm-z-index: var(--super-z-index-overlay, 2000);
   --super-popconfirm-rotation: var(--super-sketch-rotation, -0.25deg);

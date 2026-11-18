@@ -108,6 +108,24 @@
         <super-popover content="弹出内容" placement="bottom">
           <super-button variant="outline" size="small">点击弹出</super-button>
         </super-popover>
+        <super-menu id="demo-menu" active="overview"></super-menu>
+        <super-empty description="没有找到匹配的记录">
+          <super-button slot="action" variant="outline" size="small">新建</super-button>
+        </super-empty>
+        <super-button id="open-drawer" variant="outline" size="small">打开抽屉</super-button>
+        <super-drawer id="demo-drawer" title="筛选条件" placement="right">
+          抽屉内容由消费者控制。
+        </super-drawer>
+        <super-button id="show-notification" variant="outline" size="small">显示通知</super-button>
+        <super-table id="demo-table" selectable striped></super-table>
+        <super-steps id="demo-steps" active="1"></super-steps>
+        <super-dropdown id="demo-dropdown">
+          <super-button variant="outline" size="small">更多操作</super-button>
+        </super-dropdown>
+        <super-autocomplete id="demo-autocomplete" placeholder="输入城市"></super-autocomplete>
+        <super-popconfirm title="确认删除？" content="删除后不可恢复">
+          <super-button variant="danger" size="small">删除</super-button>
+        </super-popconfirm>
       </section>
       <section class="selector-suite" aria-labelledby="selector-title">
         <h2 id="selector-title">选择器套装</h2>

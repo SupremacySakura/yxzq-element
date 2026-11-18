@@ -26,11 +26,13 @@ export const SUPER_POPCONFIRM_PLACEMENTS = [
 ] as const;
 
 export const SUPER_POPCONFIRM_TRIGGERS = ["click", "hover"] as const;
+export const SUPER_POPCONFIRM_SIZES = ["large", "medium", "small"] as const;
 
 export type SuperPopconfirmPlacement =
   (typeof SUPER_POPCONFIRM_PLACEMENTS)[number];
 export type SuperPopconfirmTrigger =
   (typeof SUPER_POPCONFIRM_TRIGGERS)[number];
+export type SuperPopconfirmSize = (typeof SUPER_POPCONFIRM_SIZES)[number];
 
 export interface SuperPopconfirmConfirmDetail {
   originalEvent: Event;
@@ -76,6 +78,7 @@ export class SuperPopconfirm extends LitElement {
       attribute: "close-on-escape",
       reflect: true,
     },
+    size: { type: String, reflect: true },
   };
 
   declare open: boolean;
@@ -90,6 +93,7 @@ export class SuperPopconfirm extends LitElement {
   declare icon: string;
   declare closeOnOutsideClick: boolean;
   declare closeOnEscape: boolean;
+  declare size: SuperPopconfirmSize;
 
   private readonly panelId = `super-popconfirm-${++popconfirmId}`;
   private readonly titleId = `${this.panelId}-title`;
@@ -122,6 +126,7 @@ export class SuperPopconfirm extends LitElement {
     this.icon = "?";
     this.closeOnOutsideClick = true;
     this.closeOnEscape = true;
+    this.size = "medium";
   }
 
   static styles = css`
@@ -173,6 +178,7 @@ export class SuperPopconfirm extends LitElement {
       --super-popconfirm-padding-inline: var(--super-spacing-lg, 16px);
       --super-popconfirm-gap: var(--super-spacing-sm, 8px);
       --super-popconfirm-icon-size: 26px;
+      --super-popconfirm-action-font-size: var(--super-font-size-sm, 13px);
       --super-popconfirm-content-max-height: min(40vh, 240px);
       --super-popconfirm-z-index: var(--super-z-index-overlay, 2000);
       --super-popconfirm-rotation: var(--super-sketch-rotation, -0.25deg);
@@ -196,6 +202,28 @@ export class SuperPopconfirm extends LitElement {
 
     :host([hidden]) {
       display: none;
+    }
+
+    :host([size="large"]) {
+      --super-popconfirm-width: 320px;
+      --super-popconfirm-font-size: var(--super-font-size-lg, 16px);
+      --super-popconfirm-title-size: 18px;
+      --super-popconfirm-padding-block: var(--super-spacing-lg, 16px);
+      --super-popconfirm-padding-inline: 20px;
+      --super-popconfirm-gap: var(--super-spacing-md, 12px);
+      --super-popconfirm-icon-size: 30px;
+      --super-popconfirm-action-font-size: var(--super-font-size-base, 14px);
+    }
+
+    :host([size="small"]) {
+      --super-popconfirm-width: 264px;
+      --super-popconfirm-font-size: var(--super-font-size-sm, 13px);
+      --super-popconfirm-title-size: var(--super-font-size-base, 14px);
+      --super-popconfirm-padding-block: var(--super-spacing-sm, 8px);
+      --super-popconfirm-padding-inline: var(--super-spacing-md, 12px);
+      --super-popconfirm-gap: 6px;
+      --super-popconfirm-icon-size: 22px;
+      --super-popconfirm-action-font-size: 12px;
     }
 
     slot:not([name]) {
@@ -290,7 +318,7 @@ export class SuperPopconfirm extends LitElement {
       padding: 4px 12px;
       color: var(--super-popconfirm-color);
       font: inherit;
-      font-size: var(--super-font-size-sm, 13px);
+      font-size: var(--super-popconfirm-action-font-size);
       font-weight: 700;
       line-height: 1.2;
       background: var(--super-popconfirm-cancel-background);
@@ -306,7 +334,7 @@ export class SuperPopconfirm extends LitElement {
     }
 
     .confirm {
-      color: #ffffff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: var(--super-popconfirm-primary-color);
       border-color: var(--super-popconfirm-primary-border-color);
     }
@@ -315,7 +343,7 @@ export class SuperPopconfirm extends LitElement {
       background: color-mix(
         in srgb,
         var(--super-popconfirm-primary-color) 82%,
-        #ffffff
+        var(--super-text-color-inverse, #ffffff)
       );
     }
 

@@ -112,7 +112,7 @@ upload.addEventListener("super-upload-submit", async (event) => {
 
 ## 文件列表与移除
 
-`fileList` 是 JavaScript 属性，不会从 HTML 属性反序列化。每项支持内置移除按钮，并会派发包含被移除文件和剩余列表的事件。
+`fileList` 是 JavaScript 属性，不会从 HTML 属性反序列化。每项支持内置移除按钮，并会派发包含被移除文件和剩余列表的事件。只读 `value` 是派生视图，按 `fileList` 顺序返回文件名 `string[]`；修改文件必须写入 `fileList`。
 
 ```ts
 const upload = document.querySelector("super-upload");
@@ -146,6 +146,7 @@ upload.addEventListener("super-upload-remove", (event) => {
 | `max-size` | `number` | 不限制 | 单文件最大字节数 |
 | `auto-upload` | `boolean` | `false` | 选择成功后额外派发提交事件 |
 | `fileList` | `File[]` | `[]` | 当前文件列表，仅支持 JS property |
+| `value` | `string[]` | `[]` | 只读派生视图，按 `fileList` 顺序返回文件名；写入入口是 `fileList` |
 | `size` | `large \| medium \| small` | `medium` | 尺寸 |
 | `validation` | `none \| success \| warning \| error \| info` | `none` | 校验状态 |
 | `prompt-text` | `string` | `选择文件` | 默认提示标题 |

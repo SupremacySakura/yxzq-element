@@ -187,6 +187,7 @@ handle.close();
 | `closable` | `boolean` | `false` | 是否显示关闭按钮 |
 | `closeLabel` | `string` | `关闭提示` | 关闭按钮的可访问名称 |
 | `showIcon` | `boolean` | `true` | 是否显示内置类型符号 |
+| `size` | `large \| medium \| small` | `medium` | 尺寸；调整字号、内边距、图标尺寸与最大宽度 |
 
 ## API
 
@@ -201,6 +202,7 @@ handle.close();
 | `closable` | `boolean` | `false` | 是否显示关闭按钮 |
 | `close-label` | `string` | `关闭提示` | 关闭按钮的可访问名称 |
 | `show-icon` | `boolean` | `true` | 是否显示内置类型符号 |
+| `size` | `large \| medium \| small` | `medium` | 尺寸；调整字号、内边距、图标尺寸与最大宽度 |
 
 ### Events
 

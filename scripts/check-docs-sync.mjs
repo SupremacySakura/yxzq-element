@@ -4,7 +4,7 @@
  * documentation page. Runs in CI so a missing page fails the build instead of
  * drifting silently.
  */
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -29,28 +29,25 @@ const docsFiles = new Set(
     : [],
 );
 
-const readAllDocs = () => {
-  if (!existsSync(docsDir)) {
-    return "";
-  }
-
-  return readdirSync(docsDir)
-    .filter((file) => file.endsWith(".md"))
-    .map((file) => readFileSync(join(docsDir, file), "utf8"))
-    .join("\n");
+/**
+ * Components that intentionally share a single documentation page. AGENTS.md
+ * keeps Checkbox/Radio/Switch documented together as the selector suite, so
+ * they map onto that aggregate page instead of three near-duplicate pages.
+ */
+const AGGREGATE_DOC_PAGES = {
+  Checkbox: "selectors.md",
+  Radio: "selectors.md",
+  Switch: "selectors.md",
 };
 
-const allDocsContent = readAllDocs();
 const missing = [];
 
 for (const name of componentNames) {
   const kebab = toKebabCase(name);
-  const expectedPage = `${kebab}.md`;
-  const tag = `super-${kebab}`;
+  const expectedPage = AGGREGATE_DOC_PAGES[name] ?? `${kebab}.md`;
   const hasDedicatedPage = docsFiles.has(expectedPage);
-  const mentionedInDocs = allDocsContent.includes(tag);
 
-  if (!hasDedicatedPage && !mentionedInDocs) {
+  if (!hasDedicatedPage) {
     missing.push(`${name} (expected packages/docs/components/${expectedPage})`);
   }
 }
@@ -59,7 +56,7 @@ if (missing.length > 0) {
   console.error("Missing component documentation for:");
   missing.forEach((entry) => console.error(`  - ${entry}`));
   console.error(
-    "\nEvery implemented component needs a docs page or an explicit mention in packages/docs/components (ADR-0003).",
+    "\nEvery implemented component needs its own docs page in packages/docs/components (ADR-0003).",
   );
   process.exit(1);
 }

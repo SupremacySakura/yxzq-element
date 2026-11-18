@@ -207,6 +207,7 @@ defineSuperTooltip();
 | `max-width` | `number` | `280` | 弹层最大宽度，单位像素 |
 | `show-arrow` | `boolean` | `true` | 是否渲染手绘箭头 |
 | `interactive` | `boolean` | `false` | 允许弹层内交互，并启用焦点陷阱与滚动锁定 |
+| `size` | `large \| medium \| small` | `medium` | 尺寸；调整字号、内边距与箭头尺寸 |
 
 ### Events
 

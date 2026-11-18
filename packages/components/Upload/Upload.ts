@@ -66,6 +66,16 @@ export class SuperUpload extends LitElement {
 
   private dragging = false;
 
+  /**
+   * Read-only form-control view of the selected files. Mutations go through
+   * `fileList`; this getter mirrors its file names in order.
+   */
+  get value(): string[] {
+    return (Array.isArray(this.fileList) ? this.fileList : []).map(
+      (file) => file.name,
+    );
+  }
+
   constructor() {
     super();
     this.accept = "";

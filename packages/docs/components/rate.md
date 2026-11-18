@@ -5,7 +5,7 @@
 <div class="rate-note">
   <span aria-hidden="true">★</span>
   <strong>取值提示</strong>
-  <span><code>value</code> 是受控属性：用户点击或按键只会派发 <code>super-rate-change</code>，由消费者决定是否写回。开启 <code>allow-half</code> 后值为 0.5 的倍数。</span>
+  <span><code>value</code> 同时支持受控与非受控用法：用户点击或按键会先更新组件内部值并派发 <code>super-rate-change</code>；受控消费者可在事件中写回自己的值，组件始终以最后写入的 <code>value</code> 为准。开启 <code>allow-half</code> 后值为 0.5 的倍数。</span>
 </div>
 
 ## 注册
@@ -114,7 +114,7 @@ rate.addEventListener("super-rate-change", (event) => {
 
 | 名称 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `value` | `number` | `0` | 受控评分值 |
+| `value` | `number` | `0` | 受控或非受控评分值 |
 | `max` | `number` | `5` | 图标数量上限 |
 | `allow-half` | `boolean` | `false` | 允许 0.5 档 |
 | `readonly` | `boolean` | `false` | 只读但可聚焦 |
@@ -131,7 +131,7 @@ rate.addEventListener("super-rate-change", (event) => {
 | --- | --- | --- |
 | `super-rate-change` | `{ value: number }` | 用户点击或键盘调整时派发，`bubbles` 与 `composed` 均为 `true` |
 
-程序化修改 `value` 不会派发用户事件。
+程序化修改 `value` 不会派发用户事件。非受控用法下，用户交互会直接更新 `value`；受控用法下，在 `super-rate-change` 监听器中写回旧值即可拒绝本次修改。
 
 ### Slots
 

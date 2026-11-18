@@ -33,7 +33,7 @@ _避免使用_:弹窗、弹出层组件、modal
 _避免使用_:展示组件、视觉组件
 
 **Form Control**:
-接受用户输入的组件:`input/textarea(已并入 input)/select/checkbox/radio/switch/date-picker/time-picker/slider/rate/upload/autocomplete`。必须暴露 `value` 属性与 `super-*-change` 事件。
+接受用户输入的组件:`input/textarea(已并入 input)/select/checkbox/radio/switch/date-picker/time-picker/slider/rate/upload/autocomplete`。必须暴露 `value` 属性与 `super-*-change` 事件。`upload` 的 `value` 是派生只读视图(按 `fileList` 顺序返回文件名 `string[]`),写入入口是 `fileList`;它不是 form-associated Custom Element,不参与 `FormData`、原生重置或外部约束验证。
 _避免使用_:表单组件、输入组件
 
 ### 设计系统
@@ -63,5 +63,5 @@ _避免使用_:流水线开发、并行开发
 _避免使用_:用户事件、交互事件、自定义事件
 
 **Controlled / Uncontrolled**:
-受控模式:组件 `value` 由消费者属性驱动,用户交互仅触发事件、不改变内部状态。非受控模式:组件内部维护 `value`,用户交互直接更新内部状态并触发事件。两者必须在所有 Form Control 组件中同时支持(ADR-0002)。
+非受控模式:组件内部维护 `value`,用户交互直接更新内部状态并触发事件。受控模式:用户交互先更新内部值并派发事件,消费者随后写回属性;组件始终以最后写入的 `value` 为准,因此消费者在事件中写回旧值即可拒绝本次修改。两者必须在所有 Form Control 组件中同时支持(ADR-0002)。`upload` 是例外:其 `value` 为派生只读视图,写入入口是 `fileList`。
 _避免使用_:受控组件、非受控组件、双向绑定

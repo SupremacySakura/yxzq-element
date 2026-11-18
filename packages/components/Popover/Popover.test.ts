@@ -41,6 +41,15 @@ describe("SuperPopover", () => {
     expect(customElements.get(SUPER_POPOVER_TAG)).toBe(SuperPopover);
   });
 
+  it("defines size-specific typography and padding hooks", () => {
+    expect(SuperPopover.styles.cssText).toContain(':host([size="large"])');
+    expect(SuperPopover.styles.cssText).toContain(':host([size="small"])');
+    expect(SuperPopover.styles.cssText).toContain("--super-popover-font-size");
+    expect(SuperPopover.styles.cssText).toContain(
+      "--super-popover-padding-inline",
+    );
+  });
+
   it("provides stable defaults and reflects primitive properties", async () => {
     const { element } = await mountPopover();
 
@@ -55,6 +64,8 @@ describe("SuperPopover", () => {
     expect(element.width).toBe(280);
     expect(element.closeOnOutsideClick).toBe(true);
     expect(element.closeOnEscape).toBe(true);
+    expect(element.size).toBe("medium");
+    expect(element.getAttribute("size")).toBe("medium");
 
     element.placement = "top-start";
     element.trigger = "hover";
@@ -66,6 +77,7 @@ describe("SuperPopover", () => {
     element.width = 320;
     element.closeOnOutsideClick = false;
     element.closeOnEscape = false;
+    element.size = "large";
     await settle(element);
 
     expect(element.getAttribute("placement")).toBe("top-start");
@@ -78,6 +90,7 @@ describe("SuperPopover", () => {
     expect(element.getAttribute("width")).toBe("320");
     expect(element.hasAttribute("close-on-outside-click")).toBe(false);
     expect(element.hasAttribute("close-on-escape")).toBe(false);
+    expect(element.getAttribute("size")).toBe("large");
   });
 
   it("opens on click, exposes dialog semantics and emits open-change", async () => {

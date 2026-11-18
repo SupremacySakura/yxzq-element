@@ -7,8 +7,10 @@ export const SUPER_MESSAGE_TYPES = [
   "warning",
   "error",
 ] as const;
+export const SUPER_MESSAGE_SIZES = ["large", "medium", "small"] as const;
 
 export type SuperMessageType = (typeof SUPER_MESSAGE_TYPES)[number];
+export type SuperMessageSize = (typeof SUPER_MESSAGE_SIZES)[number];
 
 export interface SuperMessageCloseDetail {
   type: SuperMessageType;
@@ -21,6 +23,7 @@ export interface ShowSuperMessageOptions {
   closable?: boolean;
   closeLabel?: string;
   showIcon?: boolean;
+  size?: SuperMessageSize;
 }
 
 export interface SuperMessageHandle {
@@ -54,6 +57,7 @@ export class SuperMessage extends LitElement {
       attribute: "show-icon",
       reflect: true,
     },
+    size: { type: String, reflect: true },
   };
 
   declare open: boolean;
@@ -63,6 +67,7 @@ export class SuperMessage extends LitElement {
   declare closable: boolean;
   declare closeLabel: string;
   declare showIcon: boolean;
+  declare size: SuperMessageSize;
 
   private closeTimer: number | undefined;
 
@@ -75,6 +80,7 @@ export class SuperMessage extends LitElement {
     this.closable = false;
     this.closeLabel = "关闭提示";
     this.showIcon = true;
+    this.size = "medium";
   }
 
   static styles = css`
@@ -141,6 +147,24 @@ export class SuperMessage extends LitElement {
 
     :host([hidden]) {
       display: none;
+    }
+
+    :host([size="large"]) {
+      --super-message-font-size: var(--super-font-size-lg, 16px);
+      --super-message-gap: var(--super-spacing-md, 12px);
+      --super-message-padding-block: 12px;
+      --super-message-padding-inline: 18px;
+      --super-message-icon-size: 26px;
+      --super-message-max-width: 600px;
+    }
+
+    :host([size="small"]) {
+      --super-message-font-size: var(--super-font-size-sm, 13px);
+      --super-message-gap: 6px;
+      --super-message-padding-block: 7px;
+      --super-message-padding-inline: 11px;
+      --super-message-icon-size: 18px;
+      --super-message-max-width: 480px;
     }
 
     :host([type="success"]) {
@@ -381,6 +405,7 @@ export const showSuperMessage = (
   element.closable = options.closable ?? false;
   element.closeLabel = options.closeLabel ?? "关闭提示";
   element.showIcon = options.showIcon ?? true;
+  element.size = options.size ?? "medium";
   element.open = true;
   element.addEventListener("super-message-close", () => {
     element.remove();

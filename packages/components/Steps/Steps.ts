@@ -220,20 +220,20 @@ export class SuperSteps extends LitElement {
     }
 
     .step[data-status="process"] .indicator {
-      color: #ffffff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: var(--super-steps-process-color);
       border-color: var(--super-steps-process-color);
       box-shadow: 2px 3px 0 -1px var(--super-steps-shadow-color);
     }
 
     .step[data-status="finish"] .indicator {
-      color: #ffffff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: var(--super-steps-finish-color);
       border-color: var(--super-steps-finish-color);
     }
 
     .step[data-status="error"] .indicator {
-      color: #ffffff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: var(--super-steps-error-color);
       border-color: var(--super-steps-error-color);
     }

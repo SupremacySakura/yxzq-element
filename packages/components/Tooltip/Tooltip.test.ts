@@ -78,6 +78,15 @@ describe("SuperTooltip", () => {
     expect(customElements.get(SUPER_TOOLTIP_TAG)).toBe(SuperTooltip);
   });
 
+  it("defines size-specific typography and padding hooks", () => {
+    expect(SuperTooltip.styles.cssText).toContain(':host([size="large"])');
+    expect(SuperTooltip.styles.cssText).toContain(':host([size="small"])');
+    expect(SuperTooltip.styles.cssText).toContain("--super-tooltip-font-size");
+    expect(SuperTooltip.styles.cssText).toContain(
+      "--super-tooltip-padding-inline",
+    );
+  });
+
   it("provides stable defaults", async () => {
     const { element } = await mountTooltip();
 
@@ -91,6 +100,8 @@ describe("SuperTooltip", () => {
     expect(element.maxWidth).toBe(280);
     expect(element.showArrow).toBe(true);
     expect(element.interactive).toBe(false);
+    expect(element.size).toBe("medium");
+    expect(element.getAttribute("size")).toBe("medium");
   });
 
   it("reflects primitive options as attributes", async () => {
@@ -106,6 +117,7 @@ describe("SuperTooltip", () => {
     element.maxWidth = 360;
     element.showArrow = false;
     element.interactive = true;
+    element.size = "small";
     await settle(element);
 
     expect(element.getAttribute("content")).toBe("提示内容");
@@ -118,6 +130,7 @@ describe("SuperTooltip", () => {
     expect(element.getAttribute("max-width")).toBe("360");
     expect(element.hasAttribute("show-arrow")).toBe(false);
     expect(element.hasAttribute("interactive")).toBe(true);
+    expect(element.getAttribute("size")).toBe("small");
   });
 
   it("renders content and associates the tooltip with the first slot element", async () => {

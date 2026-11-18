@@ -225,6 +225,7 @@ defineSuperPopover();
 | `width` | `number` | `280` | 弹层宽度，单位像素；非正数时使用自适应宽度 |
 | `close-on-outside-click` | `boolean` | `true` | 外部指针按下时关闭 |
 | `close-on-escape` | `boolean` | `true` | 按 `Escape` 时关闭并回焦 |
+| `size` | `large \| medium \| small` | `medium` | 尺寸；调整字号、内边距、间距与箭头尺寸 |
 
 ### Events
 

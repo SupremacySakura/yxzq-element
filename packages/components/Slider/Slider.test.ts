@@ -88,10 +88,8 @@ describe("SuperSlider", () => {
     expect(getInputs(element)).toHaveLength(2);
   });
 
-  it("emits a composed change event without mutating the controlled value", async () => {
-    const element = await mountSlider((slider) => {
-      slider.value = 20;
-    });
+  it("updates its value and emits a composed change event when uncontrolled", async () => {
+    const element = await mountSlider();
     const onChange = vi.fn();
     element.addEventListener("super-slider-change", onChange);
     const [input] = getInputs(element);
@@ -101,13 +99,35 @@ describe("SuperSlider", () => {
 
     changeInput(input, 64);
 
-    expect(element.value).toBe(20);
-    expect(input.value).toBe("20");
+    expect(element.value).toBe(64);
+    expect(input.value).toBe("64");
     expect(onChange).toHaveBeenCalledTimes(1);
     const event = onChange.mock.calls[0]?.[0] as CustomEvent<SuperSliderChangeDetail>;
     expect(event.detail.value).toBe(64);
     expect(event.bubbles).toBe(true);
     expect(event.composed).toBe(true);
+  });
+
+  it("restores the consumer-provided value when a controlled listener writes it back", async () => {
+    const element = await mountSlider((slider) => {
+      slider.value = 20;
+    });
+    const onChange = vi.fn((event: CustomEvent<SuperSliderChangeDetail>) => {
+      element.value = 20;
+      expect(event.detail.value).toBe(64);
+    });
+    element.addEventListener("super-slider-change", onChange);
+    const [input] = getInputs(element);
+
+    expect(input).toBeDefined();
+    if (!input) return;
+
+    changeInput(input, 64);
+    await element.updateComplete;
+
+    expect(element.value).toBe(20);
+    expect(input.value).toBe("20");
+    expect(onChange).toHaveBeenCalledTimes(1);
   });
 
   it("adopts controlled value updates and emits nothing for programmatic changes", async () => {
@@ -124,6 +144,9 @@ describe("SuperSlider", () => {
   it("does not emit duplicate events when input and change both fire", async () => {
     const element = await mountSlider((slider) => {
       slider.value = 20;
+    });
+    element.addEventListener("super-slider-change", () => {
+      element.value = 20;
     });
     const onChange = vi.fn();
     element.addEventListener("super-slider-change", onChange);
@@ -194,7 +217,7 @@ describe("SuperSlider", () => {
       }),
     );
     expect(onChange.mock.calls[3]?.[0].detail.value).toBe(50);
-    expect(element.value).toBe(100);
+    expect(element.value).toBe(50);
   });
 
   it("keeps range thumb values ordered and within bounds", async () => {
@@ -219,7 +242,7 @@ describe("SuperSlider", () => {
 
     changeInput(start, 92);
     expect(onChange.mock.calls[0]?.[0].detail.value).toEqual([75, 75]);
-    expect(element.value).toEqual([75, 25]);
+    expect(element.value).toEqual([75, 75]);
   });
 
   it("renders tooltips, vertical orientation and localized labels", async () => {

@@ -59,7 +59,7 @@ export class SuperButton extends LitElement {
       --super-button-background: #4b87f5;
       --super-button-background-hover: #6a9df7;
       --super-button-background-active: #3272e8;
-      --super-button-color: #ffffff;
+      --super-button-color: var(--super-text-color-inverse, #ffffff);
       --super-button-border-color: #174ea6;
       --super-button-shadow-color: #174ea6;
       --super-button-focus-color: #56c6b7;
@@ -104,7 +104,7 @@ export class SuperButton extends LitElement {
       --super-button-background: #86cf8b;
       --super-button-background-hover: #a2dca5;
       --super-button-background-active: #66b96f;
-      --super-button-color: #ffffff;
+      --super-button-color: var(--super-text-color-inverse, #ffffff);
       --super-button-border-color: #2e7738;
       --super-button-shadow-color: #2e7738;
     }
@@ -122,7 +122,7 @@ export class SuperButton extends LitElement {
       --super-button-background: #ff7067;
       --super-button-background-hover: #ff918a;
       --super-button-background-active: #ed5148;
-      --super-button-color: #ffffff;
+      --super-button-color: var(--super-text-color-inverse, #ffffff);
       --super-button-border-color: #b7352f;
       --super-button-shadow-color: #b7352f;
     }

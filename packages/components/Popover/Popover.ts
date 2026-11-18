@@ -26,9 +26,11 @@ export const SUPER_POPOVER_PLACEMENTS = [
 ] as const;
 
 export const SUPER_POPOVER_TRIGGERS = ["click", "hover", "manual"] as const;
+export const SUPER_POPOVER_SIZES = ["large", "medium", "small"] as const;
 
 export type SuperPopoverPlacement = (typeof SUPER_POPOVER_PLACEMENTS)[number];
 export type SuperPopoverTrigger = (typeof SUPER_POPOVER_TRIGGERS)[number];
+export type SuperPopoverSize = (typeof SUPER_POPOVER_SIZES)[number];
 
 export interface SuperPopoverOpenChangeDetail {
   open: boolean;
@@ -61,6 +63,7 @@ export class SuperPopover extends LitElement {
       attribute: "close-on-escape",
       reflect: true,
     },
+    size: { type: String, reflect: true },
   };
 
   declare open: boolean;
@@ -74,6 +77,7 @@ export class SuperPopover extends LitElement {
   declare width: number;
   declare closeOnOutsideClick: boolean;
   declare closeOnEscape: boolean;
+  declare size: SuperPopoverSize;
 
   private readonly popoverId = `super-popover-${++popoverId}`;
   private readonly titleId = `${this.popoverId}-title`;
@@ -104,6 +108,7 @@ export class SuperPopover extends LitElement {
     this.width = 280;
     this.closeOnOutsideClick = true;
     this.closeOnEscape = true;
+    this.size = "medium";
   }
 
   static styles = css`
@@ -155,6 +160,24 @@ export class SuperPopover extends LitElement {
 
     :host([hidden]) {
       display: none;
+    }
+
+    :host([size="large"]) {
+      --super-popover-font-size: var(--super-font-size-lg, 16px);
+      --super-popover-title-size: 18px;
+      --super-popover-padding-block: var(--super-spacing-lg, 16px);
+      --super-popover-padding-inline: 20px;
+      --super-popover-gap: var(--super-spacing-md, 12px);
+      --super-popover-arrow-size: 12px;
+    }
+
+    :host([size="small"]) {
+      --super-popover-font-size: var(--super-font-size-sm, 13px);
+      --super-popover-title-size: var(--super-font-size-base, 14px);
+      --super-popover-padding-block: var(--super-spacing-sm, 8px);
+      --super-popover-padding-inline: var(--super-spacing-md, 12px);
+      --super-popover-gap: 6px;
+      --super-popover-arrow-size: 8px;
     }
 
     slot {

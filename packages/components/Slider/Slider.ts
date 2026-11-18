@@ -493,6 +493,7 @@ export class SuperSlider extends LitElement {
       this.syncInputs();
       return;
     }
+    this.value = value;
     this.emitChange(value);
     this.syncInputs();
   }

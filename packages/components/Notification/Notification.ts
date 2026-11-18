@@ -14,11 +14,14 @@ export const SUPER_NOTIFICATION_PLACEMENTS = [
   "bottom-right",
   "bottom-left",
 ] as const;
+export const SUPER_NOTIFICATION_SIZES = ["large", "medium", "small"] as const;
 
 export type SuperNotificationType =
   (typeof SUPER_NOTIFICATION_TYPES)[number];
 export type SuperNotificationPlacement =
   (typeof SUPER_NOTIFICATION_PLACEMENTS)[number];
+export type SuperNotificationSize =
+  (typeof SUPER_NOTIFICATION_SIZES)[number];
 
 export interface SuperNotificationCloseDetail {
   type: SuperNotificationType;
@@ -33,6 +36,7 @@ export interface ShowSuperNotificationOptions {
   closable?: boolean;
   closeLabel?: string;
   showIcon?: boolean;
+  size?: SuperNotificationSize;
 }
 
 export interface SuperNotificationHandle {
@@ -73,6 +77,7 @@ export class SuperNotification extends LitElement {
       attribute: "show-icon",
       reflect: true,
     },
+    size: { type: String, reflect: true },
     hasTitleSlot: { state: true },
     hasMessageSlot: { state: true },
   };
@@ -86,6 +91,7 @@ export class SuperNotification extends LitElement {
   declare closable: boolean;
   declare closeLabel: string;
   declare showIcon: boolean;
+  declare size: SuperNotificationSize;
   private declare hasTitleSlot: boolean;
   private declare hasMessageSlot: boolean;
 
@@ -102,6 +108,7 @@ export class SuperNotification extends LitElement {
     this.closable = true;
     this.closeLabel = "关闭通知";
     this.showIcon = true;
+    this.size = "medium";
     this.hasTitleSlot = false;
     this.hasMessageSlot = false;
   }
@@ -176,6 +183,26 @@ export class SuperNotification extends LitElement {
 
     :host([hidden]) {
       display: none;
+    }
+
+    :host([size="large"]) {
+      --super-notification-width: 380px;
+      --super-notification-font-size: var(--super-font-size-lg, 16px);
+      --super-notification-title-size: 18px;
+      --super-notification-gap: var(--super-spacing-md, 12px);
+      --super-notification-padding-block: var(--super-spacing-lg, 16px);
+      --super-notification-padding-inline: 20px;
+      --super-notification-icon-size: 30px;
+    }
+
+    :host([size="small"]) {
+      --super-notification-width: 300px;
+      --super-notification-font-size: var(--super-font-size-sm, 13px);
+      --super-notification-title-size: var(--super-font-size-base, 14px);
+      --super-notification-gap: 6px;
+      --super-notification-padding-block: var(--super-spacing-sm, 8px);
+      --super-notification-padding-inline: var(--super-spacing-md, 12px);
+      --super-notification-icon-size: 22px;
     }
 
     :host([placement="top-left"]) {
@@ -506,6 +533,7 @@ export const showSuperNotification = (
   element.closable = options.closable ?? true;
   element.closeLabel = options.closeLabel ?? "关闭通知";
   element.showIcon = options.showIcon ?? true;
+  element.size = options.size ?? "medium";
   element.open = true;
   element.addEventListener("super-notification-close", () => {
     element.remove();

@@ -198,6 +198,7 @@ type SuperDividerAttributes = {
   "content-position"?: SuperDivider["contentPosition"];
   variant?: SuperDivider["variant"];
   color?: SuperDivider["color"];
+  size?: SuperDivider["size"];
 };
 
 type SuperSpaceAttributes = {
@@ -219,6 +220,7 @@ type SuperTooltipAttributes = {
   "max-width"?: SuperTooltip["maxWidth"] | `${number}`;
   "show-arrow"?: SuperTooltip["showArrow"];
   interactive?: SuperTooltip["interactive"];
+  size?: SuperTooltip["size"];
 };
 
 type SuperTooltipEvents = {
@@ -386,6 +388,8 @@ type SuperDialogEvents = {
     SuperDialogBeforeCloseDetail
   >;
   "onsuper-dialog-close"?: CustomEventHandler<SuperDialogCloseDetail>;
+  "onsuper-dialog-confirm"?: CustomEventHandler<SuperDialogCloseDetail>;
+  "onsuper-dialog-cancel"?: CustomEventHandler<SuperDialogCloseDetail>;
 };
 
 type SuperDrawerAttributes = {
@@ -407,6 +411,8 @@ type SuperDrawerEvents = {
     SuperDrawerBeforeCloseDetail
   >;
   "onsuper-drawer-close"?: CustomEventHandler<SuperDrawerCloseDetail>;
+  "onsuper-drawer-confirm"?: CustomEventHandler<SuperDrawerCloseDetail>;
+  "onsuper-drawer-cancel"?: CustomEventHandler<SuperDrawerCloseDetail>;
 };
 
 type SuperPopoverAttributes = {
@@ -421,6 +427,7 @@ type SuperPopoverAttributes = {
   width?: SuperPopover["width"] | `${number}`;
   "close-on-outside-click"?: SuperPopover["closeOnOutsideClick"];
   "close-on-escape"?: SuperPopover["closeOnEscape"];
+  size?: SuperPopover["size"];
 };
 
 type SuperPopoverEvents = {
@@ -437,6 +444,7 @@ type SuperMessageAttributes = {
   closable?: SuperMessage["closable"];
   "close-label"?: SuperMessage["closeLabel"];
   "show-icon"?: SuperMessage["showIcon"];
+  size?: SuperMessage["size"];
 };
 
 type SuperMessageEvents = {
@@ -456,6 +464,7 @@ type SuperPopconfirmAttributes = {
   icon?: SuperPopconfirm["icon"];
   "close-on-outside-click"?: SuperPopconfirm["closeOnOutsideClick"];
   "close-on-escape"?: SuperPopconfirm["closeOnEscape"];
+  size?: SuperPopconfirm["size"];
 };
 
 type SuperPopconfirmEvents = {
@@ -480,6 +489,7 @@ type SuperNotificationAttributes = {
   closable?: SuperNotification["closable"];
   "close-label"?: SuperNotification["closeLabel"];
   "show-icon"?: SuperNotification["showIcon"];
+  size?: SuperNotification["size"];
 };
 
 type SuperNotificationEvents = {

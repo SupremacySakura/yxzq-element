@@ -182,7 +182,12 @@ type CardEvents = {
   "super-card-click": CustomEvent<SuperCardClickDetail>;
 };
 
-type DividerProperties = "direction" | "contentPosition" | "variant" | "color";
+type DividerProperties =
+  | "direction"
+  | "contentPosition"
+  | "variant"
+  | "color"
+  | "size";
 
 type SpaceProperties = "direction" | "size" | "wrap" | "align" | "fill";
 
@@ -196,7 +201,8 @@ type TooltipProperties =
   | "offset"
   | "maxWidth"
   | "showArrow"
-  | "interactive";
+  | "interactive"
+  | "size";
 
 type TooltipEvents = {
   "super-tooltip-open-change": CustomEvent<SuperTooltipOpenChangeDetail>;
@@ -342,6 +348,8 @@ type DialogProperties =
 type DialogEvents = {
   "super-dialog-before-close": CustomEvent<SuperDialogBeforeCloseDetail>;
   "super-dialog-close": CustomEvent<SuperDialogCloseDetail>;
+  "super-dialog-confirm": CustomEvent<SuperDialogCloseDetail>;
+  "super-dialog-cancel": CustomEvent<SuperDialogCloseDetail>;
 };
 
 type DrawerProperties =
@@ -360,6 +368,8 @@ type DrawerProperties =
 type DrawerEvents = {
   "super-drawer-before-close": CustomEvent<SuperDrawerBeforeCloseDetail>;
   "super-drawer-close": CustomEvent<SuperDrawerCloseDetail>;
+  "super-drawer-confirm": CustomEvent<SuperDrawerCloseDetail>;
+  "super-drawer-cancel": CustomEvent<SuperDrawerCloseDetail>;
 };
 
 type PopoverProperties =
@@ -373,7 +383,8 @@ type PopoverProperties =
   | "offset"
   | "width"
   | "closeOnOutsideClick"
-  | "closeOnEscape";
+  | "closeOnEscape"
+  | "size";
 
 type PopoverEvents = {
   "super-popover-open-change": CustomEvent<SuperPopoverOpenChangeDetail>;
@@ -386,7 +397,8 @@ type MessageProperties =
   | "duration"
   | "closable"
   | "closeLabel"
-  | "showIcon";
+  | "showIcon"
+  | "size";
 
 type MessageEvents = {
   "super-message-close": CustomEvent<SuperMessageCloseDetail>;
@@ -404,7 +416,8 @@ type PopconfirmProperties =
   | "disabled"
   | "icon"
   | "closeOnOutsideClick"
-  | "closeOnEscape";
+  | "closeOnEscape"
+  | "size";
 
 type PopconfirmEvents = {
   "super-popconfirm-confirm": CustomEvent<SuperPopconfirmConfirmDetail>;
@@ -421,7 +434,8 @@ type NotificationProperties =
   | "duration"
   | "closable"
   | "closeLabel"
-  | "showIcon";
+  | "showIcon"
+  | "size";
 
 type NotificationEvents = {
   "super-notification-close": CustomEvent<SuperNotificationCloseDetail>;

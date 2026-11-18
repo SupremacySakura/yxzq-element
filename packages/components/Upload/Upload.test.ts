@@ -83,6 +83,7 @@ describe("SuperUpload", () => {
     expect(element.maxSize).toBeUndefined();
     expect(element.autoUpload).toBe(false);
     expect(element.fileList).toEqual([]);
+    expect(element.value).toEqual([]);
     expect(element.size).toBe("medium");
     expect(element.validation).toBe("none");
     expect(element.promptText).toBe("选择文件");
@@ -115,6 +116,24 @@ describe("SuperUpload", () => {
     expect(element.getAttribute("validation")).toBe("warning");
     expect(element.hasAttribute("file-list")).toBe(false);
     expect(element.fileList).toEqual([file]);
+    expect(element.value).toEqual(["notes.txt"]);
+  });
+
+  it("derives a read-only value view from fileList names in order", async () => {
+    const element = await mountUpload();
+    const files = [
+      makeFile("first.txt"),
+      makeFile("second.pdf", 12, "application/pdf"),
+      makeFile("third.png", 24, "image/png"),
+    ];
+
+    element.fileList = files;
+    await element.updateComplete;
+
+    expect(element.value).toEqual(["first.txt", "second.pdf", "third.png"]);
+
+    element.fileList = [files[2] as File];
+    expect(element.value).toEqual(["third.png"]);
   });
 
   it("adds selected files and emits composed change/submit events", async () => {

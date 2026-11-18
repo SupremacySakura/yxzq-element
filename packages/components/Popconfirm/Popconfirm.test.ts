@@ -42,6 +42,17 @@ describe("SuperPopconfirm", () => {
     expect(customElements.get(SUPER_POPCONFIRM_TAG)).toBe(SuperPopconfirm);
   });
 
+  it("defines size-specific typography and padding hooks", () => {
+    expect(SuperPopconfirm.styles.cssText).toContain(':host([size="large"])');
+    expect(SuperPopconfirm.styles.cssText).toContain(':host([size="small"])');
+    expect(SuperPopconfirm.styles.cssText).toContain(
+      "--super-popconfirm-font-size",
+    );
+    expect(SuperPopconfirm.styles.cssText).toContain(
+      "--super-popconfirm-padding-inline",
+    );
+  });
+
   it("provides stable defaults and reflects primitive properties", async () => {
     const { element } = await mountPopconfirm();
 
@@ -57,6 +68,8 @@ describe("SuperPopconfirm", () => {
     expect(element.icon).toBe("?");
     expect(element.closeOnOutsideClick).toBe(true);
     expect(element.closeOnEscape).toBe(true);
+    expect(element.size).toBe("medium");
+    expect(element.getAttribute("size")).toBe("medium");
 
     element.title = "删除这条草稿？";
     element.content = "删除后无法恢复。";
@@ -69,6 +82,7 @@ describe("SuperPopconfirm", () => {
     element.icon = "!";
     element.closeOnOutsideClick = false;
     element.closeOnEscape = false;
+    element.size = "small";
     await settle(element);
 
     expect(element.getAttribute("title")).toBe("删除这条草稿？");
@@ -82,6 +96,7 @@ describe("SuperPopconfirm", () => {
     expect(element.getAttribute("icon")).toBe("!");
     expect(element.hasAttribute("close-on-outside-click")).toBe(false);
     expect(element.hasAttribute("close-on-escape")).toBe(false);
+    expect(element.getAttribute("size")).toBe("small");
   });
 
   it("opens on click with alertdialog semantics and focuses cancel", async () => {

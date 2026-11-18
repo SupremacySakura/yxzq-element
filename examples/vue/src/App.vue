@@ -10,6 +10,22 @@ import { DEMO_BUSINESS_FIELD_TAG } from "./business-form-field";
 
 const selectedTopics = ["sketch", "travel"];
 const dialogOpen = ref(false);
+const drawerOpen = ref(false);
+
+const notify = (): void => {
+  const element = document.createElement("super-notification");
+  element.title = "保存成功";
+  element.message = "你的修改已同步。";
+  element.type = "success";
+  document.body.append(element);
+  window.setTimeout(() => element.remove(), 3200);
+};
+
+const menuItems = [
+  { key: "overview", label: "概览", icon: "◈" },
+  { key: "components", label: "组件", icon: "▤" },
+  { key: "settings", label: "设置", icon: "⚙" },
+];
 
 const dayKey = (date: Date): string => {
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -298,6 +314,26 @@ const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
         selectable
         striped
       ></super-table>
+      <super-menu :items="menuItems" active="overview"></super-menu>
+      <super-empty description="没有找到匹配的记录">
+        <super-button slot="action" variant="outline" size="small">
+          新建
+        </super-button>
+      </super-empty>
+      <super-button variant="outline" size="small" @click="drawerOpen = true">
+        打开抽屉
+      </super-button>
+      <super-drawer
+        :open="drawerOpen"
+        title="筛选条件"
+        placement="right"
+        @super-drawer-close="drawerOpen = false"
+      >
+        抽屉内容由消费者控制。
+      </super-drawer>
+      <super-button variant="outline" size="small" @click="notify">
+        显示通知
+      </super-button>
     </section>
     <section aria-labelledby="selector-title">
       <h2 id="selector-title">选择器套装</h2>

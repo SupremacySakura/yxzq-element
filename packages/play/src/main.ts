@@ -54,6 +54,85 @@ dialog?.addEventListener("super-dialog-close", () => {
   }
 });
 
+type ItemsHost = HTMLElement & { items: unknown[] };
+
+const menu = document.querySelector<ItemsHost>("#demo-menu");
+const steps = document.querySelector<ItemsHost>("#demo-steps");
+const dropdown = document.querySelector<ItemsHost>("#demo-dropdown");
+const autocomplete = document.querySelector<ItemsHost>("#demo-autocomplete");
+const table = document.querySelector<
+  HTMLElement & { columns: unknown[]; rows: unknown[] }
+>("#demo-table");
+
+if (menu) {
+  menu.items = [
+    { key: "overview", label: "概览", icon: "◈" },
+    { key: "components", label: "组件", icon: "▤" },
+    { key: "settings", label: "设置", icon: "⚙" },
+  ];
+}
+
+if (steps) {
+  steps.items = [
+    { title: "填写信息" },
+    { title: "确认方案" },
+    { title: "完成" },
+  ];
+}
+
+if (dropdown) {
+  dropdown.items = [
+    { key: "edit", label: "编辑" },
+    { key: "copy", label: "复制" },
+    { key: "sep", label: "", divider: true },
+    { key: "delete", label: "删除", danger: true },
+  ];
+}
+
+if (autocomplete) {
+  autocomplete.items = ["北京", "上海", "广州", "深圳", "杭州"];
+}
+
+if (table) {
+  table.columns = [
+    { key: "name", title: "名称" },
+    { key: "status", title: "状态" },
+    { key: "updated", title: "更新时间", sortable: true },
+  ];
+  table.rows = [
+    { id: "1", name: "组件文档", status: "已完成", updated: "2026-11-18" },
+    { id: "2", name: "视觉回归", status: "进行中", updated: "2026-11-17" },
+  ];
+}
+
+const openDrawer = document.querySelector("super-button#open-drawer");
+const drawer = document.querySelector<HTMLElement & { open: boolean }>(
+  "#demo-drawer",
+);
+
+openDrawer?.addEventListener("click", () => {
+  if (drawer) {
+    drawer.open = true;
+  }
+});
+
+drawer?.addEventListener("super-drawer-close", () => {
+  if (drawer) {
+    drawer.open = false;
+  }
+});
+
+document
+  .querySelector("super-button#show-notification")
+  ?.addEventListener("click", () => {
+    const element = document.createElement("super-notification");
+    element.title = "保存成功";
+    element.message = "你的修改已同步。";
+    element.type = "success";
+    document.body.append(element);
+    window.setTimeout(() => element.remove(), 3200);
+  });
+
 const formSchema: SuperFormSchema = {
   layout: "horizontal",
   columns: 2,

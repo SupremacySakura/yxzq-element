@@ -89,6 +89,7 @@
 | `content-position` | `left \| center \| right` | `center` | 水平模式下文案的位置 |
 | `variant` | `solid \| dashed \| hand-drawn` | `solid` | 线条视觉类型 |
 | `color` | `string` | 空字符串 | 覆盖线条颜色；为空时使用 `--super-divider-color` |
+| `size` | `large \| medium \| small` | `medium` | 尺寸；调整字号、内容间距与内边距 |
 
 ### Slots
 

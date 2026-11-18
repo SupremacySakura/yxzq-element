@@ -168,7 +168,10 @@ export class SuperTable extends LitElement {
         --super-color-primary-dark-2,
         #3272e8
       );
-      --super-table-selection-mark-color: #ffffff;
+      --super-table-selection-mark-color: var(
+        --super-text-color-inverse,
+        #ffffff
+      );
       --super-table-sort-active-color: var(
         --super-color-primary-dark-2,
         #3272e8

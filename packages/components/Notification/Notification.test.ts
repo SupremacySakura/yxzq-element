@@ -38,6 +38,21 @@ describe("SuperNotification", () => {
     );
   });
 
+  it("defines size-specific typography and padding hooks", () => {
+    expect(SuperNotification.styles.cssText).toContain(
+      ':host([size="large"])',
+    );
+    expect(SuperNotification.styles.cssText).toContain(
+      ':host([size="small"])',
+    );
+    expect(SuperNotification.styles.cssText).toContain(
+      "--super-notification-font-size",
+    );
+    expect(SuperNotification.styles.cssText).toContain(
+      "--super-notification-padding-inline",
+    );
+  });
+
   it("provides stable defaults and reflects primitive properties", async () => {
     const element = await mountNotification();
 
@@ -50,6 +65,8 @@ describe("SuperNotification", () => {
     expect(element.closable).toBe(true);
     expect(element.closeLabel).toBe("关闭通知");
     expect(element.showIcon).toBe(true);
+    expect(element.size).toBe("medium");
+    expect(element.getAttribute("size")).toBe("medium");
 
     element.title = "同步完成";
     element.message = "所有文件已更新";
@@ -59,6 +76,7 @@ describe("SuperNotification", () => {
     element.closable = false;
     element.closeLabel = "收起通知";
     element.showIcon = false;
+    element.size = "large";
     await settle(element);
 
     expect(element.getAttribute("title")).toBe("同步完成");
@@ -69,6 +87,7 @@ describe("SuperNotification", () => {
     expect(element.hasAttribute("closable")).toBe(false);
     expect(element.getAttribute("close-label")).toBe("收起通知");
     expect(element.hasAttribute("show-icon")).toBe(false);
+    expect(element.getAttribute("size")).toBe("large");
 
     element.open = true;
     await settle(element);
@@ -293,6 +312,7 @@ describe("showSuperNotification", () => {
       placement: "bottom-right",
       duration: 0,
       closable: false,
+      size: "small",
     });
     const element = document.body.querySelector<SuperNotification>(
       SUPER_NOTIFICATION_TAG,
@@ -306,6 +326,7 @@ describe("showSuperNotification", () => {
     expect(element?.placement).toBe("bottom-right");
     expect(element?.duration).toBe(0);
     expect(element?.closable).toBe(false);
+    expect(element?.size).toBe("small");
 
     handle.close();
     expect(element?.isConnected).toBe(false);

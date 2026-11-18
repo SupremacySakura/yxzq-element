@@ -307,6 +307,7 @@ export class SuperRate extends LitElement {
       0,
       this.resolvedMax,
     );
+    this.value = quantized;
     this.emitChange(quantized);
   }
 

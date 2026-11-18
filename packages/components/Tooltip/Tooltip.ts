@@ -31,9 +31,11 @@ export const SUPER_TOOLTIP_PLACEMENTS = [
 ] as const;
 
 export const SUPER_TOOLTIP_TRIGGERS = ["hover", "focus", "click"] as const;
+export const SUPER_TOOLTIP_SIZES = ["large", "medium", "small"] as const;
 
 export type SuperTooltipPlacement = (typeof SUPER_TOOLTIP_PLACEMENTS)[number];
 export type SuperTooltipTrigger = (typeof SUPER_TOOLTIP_TRIGGERS)[number];
+export type SuperTooltipSize = (typeof SUPER_TOOLTIP_SIZES)[number];
 
 export interface SuperTooltipOpenChangeDetail {
   open: boolean;
@@ -74,6 +76,7 @@ export class SuperTooltip extends LitElement {
     maxWidth: { type: Number, attribute: "max-width", reflect: true },
     showArrow: { type: Boolean, attribute: "show-arrow", reflect: true },
     interactive: { type: Boolean, reflect: true },
+    size: { type: String, reflect: true },
   };
 
   declare content: string;
@@ -86,6 +89,7 @@ export class SuperTooltip extends LitElement {
   declare maxWidth: number;
   declare showArrow: boolean;
   declare interactive: boolean;
+  declare size: SuperTooltipSize;
 
   private readonly tooltipId = `super-tooltip-${++tooltipId}`;
   private triggerElement: HTMLElement | null = null;
@@ -108,6 +112,7 @@ export class SuperTooltip extends LitElement {
     this.maxWidth = 280;
     this.showArrow = true;
     this.interactive = false;
+    this.size = "medium";
   }
 
   static styles = css`
@@ -153,6 +158,20 @@ export class SuperTooltip extends LitElement {
 
     :host([hidden]) {
       display: none;
+    }
+
+    :host([size="large"]) {
+      --super-tooltip-font-size: var(--super-font-size-base, 14px);
+      --super-tooltip-padding-block: 9px;
+      --super-tooltip-padding-inline: 13px;
+      --super-tooltip-arrow-size: 10px;
+    }
+
+    :host([size="small"]) {
+      --super-tooltip-font-size: 12px;
+      --super-tooltip-padding-block: 5px;
+      --super-tooltip-padding-inline: 8px;
+      --super-tooltip-arrow-size: 7px;
     }
 
     slot {

@@ -7,6 +7,12 @@ import {
   type FocusTrap,
   sketchyShadow,
 } from "@yxzq-element/utils";
+import {
+  ComposedFocusScope,
+  booleanAttribute,
+  dispatchModalClose,
+  trueBooleanAttribute,
+} from "../internal/modal.js";
 
 export const SUPER_DIALOG_SIZES = ["small", "medium", "large"] as const;
 export const SUPER_DIALOG_CLOSE_REASONS = [
@@ -30,53 +36,6 @@ export interface SuperDialogCloseDetail {
 }
 
 let dialogId = 0;
-
-const booleanAttribute = {
-  fromAttribute: (value: string | null): boolean =>
-    value !== null && value !== "false",
-  toAttribute: (value: boolean): string | null => (value ? "" : null),
-};
-
-const trueBooleanAttribute = {
-  fromAttribute: (value: string | null): boolean => value !== "false",
-  toAttribute: (value: boolean): string | null => (value ? "" : null),
-};
-
-/**
- * A focus scope that spans the host's shadow controls and its slotted content.
- * The shared focus trap can only walk one DOM tree, so this lightweight
- * container joins both trees for querying while delegating focus restoration
- * to the trap itself.
- */
-class ComposedFocusScope {
-  constructor(
-    private readonly host: HTMLElement,
-    private readonly panel: HTMLElement,
-  ) {}
-
-  querySelectorAll(selector: string): HTMLElement[] {
-    return [
-      ...Array.from(this.panel.querySelectorAll<HTMLElement>(selector)),
-      ...Array.from(this.host.querySelectorAll<HTMLElement>(selector)),
-    ].filter((element, index, elements) => elements.indexOf(element) === index);
-  }
-
-  contains(node: Node | null): boolean {
-    if (!node) {
-      return false;
-    }
-
-    let current: Node | null = node;
-    while (current) {
-      if (this.panel.contains(current) || this.host.contains(current)) {
-        return true;
-      }
-      const root = current.getRootNode();
-      current = root instanceof ShadowRoot ? root.host : null;
-    }
-    return false;
-  }
-}
 
 export class SuperDialog extends LitElement {
   static properties = {
@@ -369,7 +328,7 @@ export class SuperDialog extends LitElement {
     }
 
     .action.primary {
-      color: #ffffff;
+      color: var(--super-text-color-inverse, #ffffff);
       background: var(--super-dialog-primary-color);
       border-color: var(--super-dialog-primary-border-color);
     }
@@ -472,46 +431,14 @@ export class SuperDialog extends LitElement {
       return;
     }
 
-    const beforeClose = new CustomEvent<SuperDialogBeforeCloseDetail>(
-      "super-dialog-before-close",
-      {
-        detail: { reason },
-        bubbles: true,
-        composed: true,
-        cancelable: true,
+    dispatchModalClose({
+      host: this,
+      eventPrefix: "super-dialog",
+      reason,
+      close: () => {
+        this.open = false;
       },
-    );
-
-    if (!this.dispatchEvent(beforeClose)) {
-      return;
-    }
-
-    if (reason === "confirm") {
-      this.dispatchEvent(
-        new CustomEvent<SuperDialogCloseDetail>("super-dialog-confirm", {
-          detail: { reason: "confirm" },
-          bubbles: true,
-          composed: true,
-        }),
-      );
-    } else if (reason === "cancel") {
-      this.dispatchEvent(
-        new CustomEvent<SuperDialogCloseDetail>("super-dialog-cancel", {
-          detail: { reason: "cancel" },
-          bubbles: true,
-          composed: true,
-        }),
-      );
-    }
-
-    this.open = false;
-    this.dispatchEvent(
-      new CustomEvent<SuperDialogCloseDetail>("super-dialog-close", {
-        detail: { reason },
-        bubbles: true,
-        composed: true,
-      }),
-    );
+    });
   }
 
   private handleConfirm = (): void => {

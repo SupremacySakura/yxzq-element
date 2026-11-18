@@ -96,10 +96,8 @@ describe("SuperRate", () => {
     expect(getStars(element)).toHaveLength(7);
   });
 
-  it("emits a composed change event on click without mutating controlled value", async () => {
-    const element = await mountRate((rate) => {
-      rate.value = 1;
-    });
+  it("updates its value and emits a composed change event when uncontrolled", async () => {
+    const element = await mountRate();
     const onChange = vi.fn();
     element.addEventListener("super-rate-change", onChange);
     const third = getStars(element)[2];
@@ -109,12 +107,34 @@ describe("SuperRate", () => {
 
     clickStar(third);
 
-    expect(element.value).toBe(1);
+    expect(element.value).toBe(3);
     expect(onChange).toHaveBeenCalledTimes(1);
     const event = onChange.mock.calls[0]?.[0] as CustomEvent<SuperRateChangeDetail>;
     expect(event.detail.value).toBe(3);
     expect(event.bubbles).toBe(true);
     expect(event.composed).toBe(true);
+  });
+
+  it("restores the consumer-provided value when a controlled listener writes it back", async () => {
+    const element = await mountRate((rate) => {
+      rate.value = 1;
+    });
+    const onChange = vi.fn((event: CustomEvent<SuperRateChangeDetail>) => {
+      element.value = 1;
+      expect(event.detail.value).toBe(3);
+    });
+    element.addEventListener("super-rate-change", onChange);
+    const third = getStars(element)[2];
+
+    expect(third).toBeDefined();
+    if (!third) return;
+
+    clickStar(third);
+    await element.updateComplete;
+
+    expect(element.value).toBe(1);
+    expect(getSlider(element)?.getAttribute("aria-valuenow")).toBe("1");
+    expect(onChange).toHaveBeenCalledTimes(1);
   });
 
   it("does not emit user events for programmatic changes", async () => {
@@ -158,7 +178,7 @@ describe("SuperRate", () => {
     await element.updateComplete;
     press(slider, "4");
     expect(onChange.mock.calls[4]?.[0].detail.value).toBe(4);
-    expect(element.value).toBe(0);
+    expect(element.value).toBe(4);
   });
 
   it("supports half steps and ignores values beyond the maximum", async () => {
@@ -289,7 +309,7 @@ describe("SuperRate", () => {
     } as DOMRect);
     if (!half) return;
     clickStar(half, { ratio: 0.25 });
-    expect(element.value).toBe(2.5);
+    expect(element.value).toBe(0);
   });
 
   it("forwards focus and blur to the slider container", async () => {
