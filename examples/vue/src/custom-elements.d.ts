@@ -1,6 +1,13 @@
 import type { EmitFn, HTMLAttributes, PublicProps } from "vue";
 import type { SuperButton } from "yxzq-element/button";
 import type { SuperAvatar } from "yxzq-element/avatar";
+import type {
+  SuperAutocomplete,
+  SuperAutocompleteChangeDetail,
+  SuperAutocompleteClearDetail,
+  SuperAutocompleteInputDetail,
+  SuperAutocompleteOpenChangeDetail,
+} from "yxzq-element/autocomplete";
 import type { SuperBadge } from "yxzq-element/badge";
 import type { SuperCard, SuperCardClickDetail } from "yxzq-element/card";
 import type { SuperBreadcrumb } from "yxzq-element/breadcrumb";
@@ -15,11 +22,25 @@ import type {
   SuperDrawerBeforeCloseDetail,
   SuperDrawerCloseDetail,
 } from "yxzq-element/drawer";
+import type {
+  SuperDropdown,
+  SuperDropdownOpenChangeDetail,
+  SuperDropdownSelectDetail,
+} from "yxzq-element/dropdown";
 import type { SuperEmpty } from "yxzq-element/empty";
 import type {
   SuperMessage,
   SuperMessageCloseDetail,
 } from "yxzq-element/message";
+import type {
+  SuperMenu,
+  SuperMenuOpenChangeDetail,
+  SuperMenuSelectDetail,
+} from "yxzq-element/menu";
+import type {
+  SuperNotification,
+  SuperNotificationCloseDetail,
+} from "yxzq-element/notification";
 import type {
   SuperPagination,
   SuperPaginationChangeDetail,
@@ -28,11 +49,23 @@ import type {
   SuperPopover,
   SuperPopoverOpenChangeDetail,
 } from "yxzq-element/popover";
+import type {
+  SuperPopconfirm,
+  SuperPopconfirmCancelDetail,
+  SuperPopconfirmConfirmDetail,
+  SuperPopconfirmOpenChangeDetail,
+} from "yxzq-element/popconfirm";
 import type { SuperProgress } from "yxzq-element/progress";
 import type { SuperRate, SuperRateChangeDetail } from "yxzq-element/rate";
 import type { SuperSkeleton } from "yxzq-element/skeleton";
 import type { SuperSlider, SuperSliderChangeDetail } from "yxzq-element/slider";
 import type { SuperSpace } from "yxzq-element/space";
+import type { SuperSteps, SuperStepsChangeDetail } from "yxzq-element/steps";
+import type {
+  SuperTable,
+  SuperTableSelectDetail,
+  SuperTableSortDetail,
+} from "yxzq-element/table";
 import type { SuperTag, SuperTagCloseDetail } from "yxzq-element/tag";
 import type {
   SuperTabs,
@@ -359,6 +392,129 @@ type MessageEvents = {
   "super-message-close": CustomEvent<SuperMessageCloseDetail>;
 };
 
+type PopconfirmProperties =
+  | "open"
+  | "title"
+  | "content"
+  | "placement"
+  | "trigger"
+  | "confirmText"
+  | "cancelText"
+  | "confirmLoading"
+  | "disabled"
+  | "icon"
+  | "closeOnOutsideClick"
+  | "closeOnEscape";
+
+type PopconfirmEvents = {
+  "super-popconfirm-confirm": CustomEvent<SuperPopconfirmConfirmDetail>;
+  "super-popconfirm-cancel": CustomEvent<SuperPopconfirmCancelDetail>;
+  "super-popconfirm-open-change": CustomEvent<SuperPopconfirmOpenChangeDetail>;
+};
+
+type NotificationProperties =
+  | "open"
+  | "title"
+  | "message"
+  | "type"
+  | "placement"
+  | "duration"
+  | "closable"
+  | "closeLabel"
+  | "showIcon";
+
+type NotificationEvents = {
+  "super-notification-close": CustomEvent<SuperNotificationCloseDetail>;
+};
+
+type DropdownProperties =
+  | "open"
+  | "items"
+  | "trigger"
+  | "placement"
+  | "closeOnSelect"
+  | "closeOnOutsideClick"
+  | "closeOnEscape"
+  | "disabled"
+  | "size";
+
+type DropdownEvents = {
+  "super-dropdown-select": CustomEvent<SuperDropdownSelectDetail>;
+  "super-dropdown-open-change": CustomEvent<SuperDropdownOpenChangeDetail>;
+};
+
+type AutocompleteProperties =
+  | "value"
+  | "items"
+  | "open"
+  | "placeholder"
+  | "disabled"
+  | "size"
+  | "validation"
+  | "clearable"
+  | "loading"
+  | "emptyText"
+  | "clearLabel"
+  | "loadingText"
+  | "minChars"
+  | "filter";
+
+type AutocompleteEvents = {
+  "super-autocomplete-input": CustomEvent<SuperAutocompleteInputDetail>;
+  "super-autocomplete-change": CustomEvent<SuperAutocompleteChangeDetail>;
+  "super-autocomplete-clear": CustomEvent<SuperAutocompleteClearDetail>;
+  "super-autocomplete-open-change": CustomEvent<SuperAutocompleteOpenChangeDetail>;
+};
+
+type MenuProperties =
+  | "items"
+  | "active"
+  | "orientation"
+  | "mode"
+  | "collapsed"
+  | "size";
+
+type MenuEvents = {
+  "super-menu-select": CustomEvent<SuperMenuSelectDetail>;
+  "super-menu-open-change": CustomEvent<SuperMenuOpenChangeDetail>;
+};
+
+type StepsProperties =
+  | "items"
+  | "active"
+  | "direction"
+  | "status"
+  | "clickable"
+  | "size";
+
+type StepsEvents = {
+  "super-steps-change": CustomEvent<SuperStepsChangeDetail>;
+};
+
+type TableProperties =
+  | "columns"
+  | "rows"
+  | "rowKey"
+  | "selectable"
+  | "selectedKeys"
+  | "sortKey"
+  | "sortDirection"
+  | "loading"
+  | "emptyText"
+  | "size"
+  | "striped"
+  | "bordered"
+  | "showHeader"
+  | "stickyHeader"
+  | "selectAllLabel"
+  | "selectRowLabel"
+  | "loadingText";
+
+type TableEvents = {
+  "super-table-sort": CustomEvent<SuperTableSortDetail>;
+  "super-table-select": CustomEvent<SuperTableSelectDetail>;
+};
+
 type InputProperties =
   | "value"
   | "type"
@@ -580,6 +736,29 @@ declare module "vue" {
       DrawerProperties,
       DrawerEvents
     >;
+    "super-popconfirm": DefineCustomElement<
+      SuperPopconfirm,
+      PopconfirmProperties,
+      PopconfirmEvents
+    >;
+    "super-notification": DefineCustomElement<
+      SuperNotification,
+      NotificationProperties,
+      NotificationEvents
+    >;
+    "super-dropdown": DefineCustomElement<
+      SuperDropdown,
+      DropdownProperties,
+      DropdownEvents
+    >;
+    "super-autocomplete": DefineCustomElement<
+      SuperAutocomplete,
+      AutocompleteProperties,
+      AutocompleteEvents
+    >;
+    "super-menu": DefineCustomElement<SuperMenu, MenuProperties, MenuEvents>;
+    "super-steps": DefineCustomElement<SuperSteps, StepsProperties, StepsEvents>;
+    "super-table": DefineCustomElement<SuperTable, TableProperties, TableEvents>;
     "super-empty": DefineCustomElement<SuperEmpty, EmptyProperties>;
     "super-progress": DefineCustomElement<
       SuperProgress,

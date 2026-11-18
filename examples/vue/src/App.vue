@@ -63,6 +63,28 @@ const crumbItems = [
   { label: "面包屑", current: true },
 ];
 
+const dropdownItems = [
+  { key: "edit", label: "编辑" },
+  { key: "copy", label: "复制" },
+  { key: "sep", label: "", divider: true },
+  { key: "delete", label: "删除", danger: true },
+];
+
+const cityItems = ["北京", "上海", "广州", "深圳", "杭州"];
+
+const stepItems = [{ title: "填写信息" }, { title: "确认方案" }, { title: "完成" }];
+
+const tableColumns = [
+  { key: "name", title: "名称" },
+  { key: "status", title: "状态" },
+  { key: "updated", title: "更新时间", sortable: true },
+];
+
+const tableRows = [
+  { id: "1", name: "组件文档", status: "已完成", updated: "2026-11-18" },
+  { id: "2", name: "视觉回归", status: "进行中", updated: "2026-11-17" },
+];
+
 const formSchema: SuperFormSchema = {
   layout: "horizontal",
   columns: 2,
@@ -262,6 +284,20 @@ const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
       <super-popover content="弹出内容" placement="bottom">
         <super-button variant="outline" size="small">点击弹出</super-button>
       </super-popover>
+      <super-dropdown :items="dropdownItems">
+        <super-button variant="outline" size="small">更多操作</super-button>
+      </super-dropdown>
+      <super-autocomplete :items="cityItems" placeholder="输入城市"></super-autocomplete>
+      <super-steps :items="stepItems" :active="1"></super-steps>
+      <super-popconfirm title="确认删除？" content="删除后不可恢复">
+        <super-button variant="danger" size="small">删除</super-button>
+      </super-popconfirm>
+      <super-table
+        :columns="tableColumns"
+        :rows="tableRows"
+        selectable
+        striped
+      ></super-table>
     </section>
     <section aria-labelledby="selector-title">
       <h2 id="selector-title">选择器套装</h2>

@@ -29,6 +29,10 @@
       "types": "./dist/Avatar/index.d.ts",
       "import": "./dist/Avatar/index.js"
     },
+    "./autocomplete": {
+      "types": "./dist/Autocomplete/index.d.ts",
+      "import": "./dist/Autocomplete/index.js"
+    },
     "./badge": {
       "types": "./dist/Badge/index.d.ts",
       "import": "./dist/Badge/index.js"
@@ -65,6 +69,10 @@
       "types": "./dist/Drawer/index.d.ts",
       "import": "./dist/Drawer/index.js"
     },
+    "./dropdown": {
+      "types": "./dist/Dropdown/index.d.ts",
+      "import": "./dist/Dropdown/index.js"
+    },
     "./empty": {
       "types": "./dist/Empty/index.d.ts",
       "import": "./dist/Empty/index.js"
@@ -77,9 +85,21 @@
       "types": "./dist/Message/index.d.ts",
       "import": "./dist/Message/index.js"
     },
+    "./menu": {
+      "types": "./dist/Menu/index.d.ts",
+      "import": "./dist/Menu/index.js"
+    },
+    "./notification": {
+      "types": "./dist/Notification/index.d.ts",
+      "import": "./dist/Notification/index.js"
+    },
     "./pagination": {
       "types": "./dist/Pagination/index.d.ts",
       "import": "./dist/Pagination/index.js"
+    },
+    "./popconfirm": {
+      "types": "./dist/Popconfirm/index.d.ts",
+      "import": "./dist/Popconfirm/index.js"
     },
     "./popover": {
       "types": "./dist/Popover/index.d.ts",
@@ -113,9 +133,17 @@
       "types": "./dist/Space/index.d.ts",
       "import": "./dist/Space/index.js"
     },
+    "./steps": {
+      "types": "./dist/Steps/index.d.ts",
+      "import": "./dist/Steps/index.js"
+    },
     "./switch": {
       "types": "./dist/Switch/index.d.ts",
       "import": "./dist/Switch/index.js"
+    },
+    "./table": {
+      "types": "./dist/Table/index.d.ts",
+      "import": "./dist/Table/index.js"
     },
     "./tag": {
       "types": "./dist/Tag/index.d.ts",

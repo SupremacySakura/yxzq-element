@@ -25,6 +25,11 @@
 - 新增 `super-slider`(单值/范围、原生 range 键盘语义)、`super-rate`(半星、清空、数字键直设)、`super-upload`(选择、拖放、数量与体积限制、不发起网络请求,由消费者通过 `super-upload-submit` 上传)三个表单组件。
 - 新增 `super-dialog` 与 `super-drawer`:模态语义(`role="dialog"` + `aria-modal`)、焦点陷阱、滚动锁定、关闭回焦、Escape 与遮罩关闭、可取消的 `before-close` 事件、页脚确认/取消动作,抽屉支持四个方向与数值/命名尺寸。
 - 新增 `super-popover`(Floating UI 定位、click/hover/manual 触发、外部点击与 Escape 关闭)与 `super-message`(单条全局提示、四种类型、自动关闭、`showSuperMessage()` 命令式入口且 SSR 安全)。
+- 新增 `super-popconfirm`(可取消确认、加载态、开合聚焦管理)与 `super-notification`(四角定位、四种类型、自动关闭、`showSuperNotification()` 命令式入口且 SSR 安全)。
+- 新增 `super-menu`(嵌套子菜单、三种模式、方向键/Home/End/Enter/Space/Escape、roving tabindex、收起态)与 `super-steps`(横向/纵向、状态推导、可选点击)。
+- 新增 `super-dropdown`(菜单语义、disabled/divider 跳过、选中与开合事件)与 `super-autocomplete`(combobox 语义、`aria-activedescendant`、可选自定义 `filter`、加载/空态/清空)。
+- 新增 `super-table`:按 ADR-0006 实现基础集(列/行、slot 单元格与 `formatter`、空态、加载态、三态排序、受控选择),明确不含固定列、展开行、虚拟滚动、树形数据、合计行、单元格合并与列拖拽。
+- 组件库组件总数达到 36 个,全部同步全量/按需注册入口、`define` 显式注册、子路径导出、`HTMLElementTagNameMap`、Vue `GlobalComponents`、React `JSX.IntrinsicElements`、三端示例与文档导航。
 
 ## 1.2.0 — 2026-07-25
 

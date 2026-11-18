@@ -1,6 +1,13 @@
 import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { SuperButton } from "yxzq-element/button";
 import type { SuperAvatar } from "yxzq-element/avatar";
+import type {
+  SuperAutocomplete,
+  SuperAutocompleteChangeDetail,
+  SuperAutocompleteClearDetail,
+  SuperAutocompleteInputDetail,
+  SuperAutocompleteOpenChangeDetail,
+} from "yxzq-element/autocomplete";
 import type { SuperBadge } from "yxzq-element/badge";
 import type { SuperCard, SuperCardClickDetail } from "yxzq-element/card";
 import type { SuperBreadcrumb } from "yxzq-element/breadcrumb";
@@ -15,11 +22,25 @@ import type {
   SuperDrawerBeforeCloseDetail,
   SuperDrawerCloseDetail,
 } from "yxzq-element/drawer";
+import type {
+  SuperDropdown,
+  SuperDropdownOpenChangeDetail,
+  SuperDropdownSelectDetail,
+} from "yxzq-element/dropdown";
 import type { SuperEmpty } from "yxzq-element/empty";
 import type {
   SuperMessage,
   SuperMessageCloseDetail,
 } from "yxzq-element/message";
+import type {
+  SuperMenu,
+  SuperMenuOpenChangeDetail,
+  SuperMenuSelectDetail,
+} from "yxzq-element/menu";
+import type {
+  SuperNotification,
+  SuperNotificationCloseDetail,
+} from "yxzq-element/notification";
 import type {
   SuperPagination,
   SuperPaginationChangeDetail,
@@ -28,6 +49,12 @@ import type {
   SuperPopover,
   SuperPopoverOpenChangeDetail,
 } from "yxzq-element/popover";
+import type {
+  SuperPopconfirm,
+  SuperPopconfirmCancelDetail,
+  SuperPopconfirmConfirmDetail,
+  SuperPopconfirmOpenChangeDetail,
+} from "yxzq-element/popconfirm";
 import type { SuperProgress } from "yxzq-element/progress";
 import type { SuperRate, SuperRateChangeDetail } from "yxzq-element/rate";
 import type { SuperSkeleton } from "yxzq-element/skeleton";
@@ -36,6 +63,12 @@ import type {
   SuperSliderChangeDetail,
 } from "yxzq-element/slider";
 import type { SuperSpace } from "yxzq-element/space";
+import type { SuperSteps, SuperStepsChangeDetail } from "yxzq-element/steps";
+import type {
+  SuperTable,
+  SuperTableSelectDetail,
+  SuperTableSortDetail,
+} from "yxzq-element/table";
 import type { SuperTag, SuperTagCloseDetail } from "yxzq-element/tag";
 import type {
   SuperTabs,
@@ -410,6 +443,158 @@ type SuperMessageEvents = {
   "onsuper-message-close"?: CustomEventHandler<SuperMessageCloseDetail>;
 };
 
+type SuperPopconfirmAttributes = {
+  open?: SuperPopconfirm["open"];
+  title?: SuperPopconfirm["title"];
+  content?: SuperPopconfirm["content"];
+  placement?: SuperPopconfirm["placement"];
+  trigger?: SuperPopconfirm["trigger"];
+  "confirm-text"?: SuperPopconfirm["confirmText"];
+  "cancel-text"?: SuperPopconfirm["cancelText"];
+  "confirm-loading"?: SuperPopconfirm["confirmLoading"];
+  disabled?: SuperPopconfirm["disabled"];
+  icon?: SuperPopconfirm["icon"];
+  "close-on-outside-click"?: SuperPopconfirm["closeOnOutsideClick"];
+  "close-on-escape"?: SuperPopconfirm["closeOnEscape"];
+};
+
+type SuperPopconfirmEvents = {
+  "onsuper-popconfirm-confirm"?: CustomEventHandler<
+    SuperPopconfirmConfirmDetail
+  >;
+  "onsuper-popconfirm-cancel"?: CustomEventHandler<
+    SuperPopconfirmCancelDetail
+  >;
+  "onsuper-popconfirm-open-change"?: CustomEventHandler<
+    SuperPopconfirmOpenChangeDetail
+  >;
+};
+
+type SuperNotificationAttributes = {
+  open?: SuperNotification["open"];
+  title?: SuperNotification["title"];
+  message?: SuperNotification["message"];
+  type?: SuperNotification["type"];
+  placement?: SuperNotification["placement"];
+  duration?: SuperNotification["duration"] | `${number}`;
+  closable?: SuperNotification["closable"];
+  "close-label"?: SuperNotification["closeLabel"];
+  "show-icon"?: SuperNotification["showIcon"];
+};
+
+type SuperNotificationEvents = {
+  "onsuper-notification-close"?: CustomEventHandler<
+    SuperNotificationCloseDetail
+  >;
+};
+
+type SuperDropdownAttributes = {
+  open?: SuperDropdown["open"];
+  items?: SuperDropdown["items"];
+  trigger?: SuperDropdown["trigger"];
+  placement?: SuperDropdown["placement"];
+  "close-on-select"?: SuperDropdown["closeOnSelect"];
+  "close-on-outside-click"?: SuperDropdown["closeOnOutsideClick"];
+  "close-on-escape"?: SuperDropdown["closeOnEscape"];
+  disabled?: SuperDropdown["disabled"];
+  size?: SuperDropdown["size"];
+};
+
+type SuperDropdownEvents = {
+  "onsuper-dropdown-select"?: CustomEventHandler<SuperDropdownSelectDetail>;
+  "onsuper-dropdown-open-change"?: CustomEventHandler<
+    SuperDropdownOpenChangeDetail
+  >;
+};
+
+type SuperAutocompleteAttributes = {
+  value?: SuperAutocomplete["value"];
+  items?: SuperAutocomplete["items"];
+  open?: SuperAutocomplete["open"];
+  placeholder?: SuperAutocomplete["placeholder"];
+  disabled?: SuperAutocomplete["disabled"];
+  size?: SuperAutocomplete["size"];
+  validation?: SuperAutocomplete["validation"];
+  clearable?: SuperAutocomplete["clearable"];
+  loading?: SuperAutocomplete["loading"];
+  "empty-text"?: SuperAutocomplete["emptyText"];
+  "clear-label"?: SuperAutocomplete["clearLabel"];
+  "loading-text"?: SuperAutocomplete["loadingText"];
+  "min-chars"?: SuperAutocomplete["minChars"] | `${number}`;
+  filter?: SuperAutocomplete["filter"];
+  "aria-label"?: SuperAutocomplete["accessibleLabel"];
+};
+
+type SuperAutocompleteEvents = {
+  "onsuper-autocomplete-input"?: CustomEventHandler<
+    SuperAutocompleteInputDetail
+  >;
+  "onsuper-autocomplete-change"?: CustomEventHandler<
+    SuperAutocompleteChangeDetail
+  >;
+  "onsuper-autocomplete-clear"?: CustomEventHandler<
+    SuperAutocompleteClearDetail
+  >;
+  "onsuper-autocomplete-open-change"?: CustomEventHandler<
+    SuperAutocompleteOpenChangeDetail
+  >;
+};
+
+type SuperMenuAttributes = {
+  items?: SuperMenu["items"];
+  active?: SuperMenu["active"];
+  orientation?: SuperMenu["orientation"];
+  mode?: SuperMenu["mode"];
+  collapsed?: SuperMenu["collapsed"];
+  size?: SuperMenu["size"];
+  "aria-label"?: SuperMenu["accessibleLabel"];
+};
+
+type SuperMenuEvents = {
+  "onsuper-menu-select"?: CustomEventHandler<SuperMenuSelectDetail>;
+  "onsuper-menu-open-change"?: CustomEventHandler<SuperMenuOpenChangeDetail>;
+};
+
+type SuperStepsAttributes = {
+  items?: SuperSteps["items"];
+  active?: SuperSteps["active"] | `${number}`;
+  direction?: SuperSteps["direction"];
+  status?: SuperSteps["status"];
+  clickable?: SuperSteps["clickable"];
+  size?: SuperSteps["size"];
+  "aria-label"?: SuperSteps["accessibleLabel"];
+};
+
+type SuperStepsEvents = {
+  "onsuper-steps-change"?: CustomEventHandler<SuperStepsChangeDetail>;
+};
+
+type SuperTableAttributes = {
+  columns?: SuperTable["columns"];
+  rows?: SuperTable["rows"];
+  "row-key"?: SuperTable["rowKey"];
+  selectable?: SuperTable["selectable"];
+  selectedKeys?: SuperTable["selectedKeys"];
+  "sort-key"?: SuperTable["sortKey"];
+  "sort-direction"?: SuperTable["sortDirection"];
+  loading?: SuperTable["loading"];
+  "empty-text"?: SuperTable["emptyText"];
+  size?: SuperTable["size"];
+  striped?: SuperTable["striped"];
+  bordered?: SuperTable["bordered"];
+  "show-header"?: SuperTable["showHeader"];
+  "sticky-header"?: SuperTable["stickyHeader"];
+  "select-all-label"?: SuperTable["selectAllLabel"];
+  "select-row-label"?: SuperTable["selectRowLabel"];
+  "loading-text"?: SuperTable["loadingText"];
+  "aria-label"?: SuperTable["accessibleLabel"];
+};
+
+type SuperTableEvents = {
+  "onsuper-table-sort"?: CustomEventHandler<SuperTableSortDetail>;
+  "onsuper-table-select"?: CustomEventHandler<SuperTableSelectDetail>;
+};
+
 type SuperInputAttributes = {
   value?: SuperInput["value"];
   type?: SuperInput["type"];
@@ -632,6 +817,41 @@ declare module "react" {
         SuperDialog,
         SuperDialogAttributes,
         SuperDialogEvents
+      >;
+      "super-popconfirm": CustomElementProps<
+        SuperPopconfirm,
+        SuperPopconfirmAttributes,
+        SuperPopconfirmEvents
+      >;
+      "super-notification": CustomElementProps<
+        SuperNotification,
+        SuperNotificationAttributes,
+        SuperNotificationEvents
+      >;
+      "super-dropdown": CustomElementProps<
+        SuperDropdown,
+        SuperDropdownAttributes,
+        SuperDropdownEvents
+      >;
+      "super-autocomplete": CustomElementProps<
+        SuperAutocomplete,
+        SuperAutocompleteAttributes,
+        SuperAutocompleteEvents
+      >;
+      "super-menu": CustomElementProps<
+        SuperMenu,
+        SuperMenuAttributes,
+        SuperMenuEvents
+      >;
+      "super-steps": CustomElementProps<
+        SuperSteps,
+        SuperStepsAttributes,
+        SuperStepsEvents
+      >;
+      "super-table": CustomElementProps<
+        SuperTable,
+        SuperTableAttributes,
+        SuperTableEvents
       >;
       "super-drawer": CustomElementProps<
         SuperDrawer,

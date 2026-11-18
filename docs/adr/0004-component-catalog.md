@@ -1,6 +1,6 @@
-# 组件清单:24 个新增 + 9 个现有 = 33 个
+# 组件清单:27 个新增 + 9 个现有 = 36 个
 
-在 ADR-0001 的"约 30 个核心集"约束下,确定新增 24 个组件。明确**不做**的组件:`super-textarea`(并入 `SuperInput` 的 `multiline`)、`super-row`/`super-col`(由 `super-grid` 取代)、`super-container`(布局应交给消费者 CSS)。
+在 ADR-0001 的"约 30 个核心集"约束下,确定新增 27 个组件(略超原始估算,仍远低于全集)。明确**不做**的组件:`super-textarea`(并入 `SuperInput` 的 `multiline`)、`super-row`/`super-col`(由 `super-grid` 取代)、`super-container`(布局应交给消费者 CSS)。
 
 ## 数据展示(7)
 
