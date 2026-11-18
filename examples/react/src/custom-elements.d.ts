@@ -3,9 +3,38 @@ import type { SuperButton } from "yxzq-element/button";
 import type { SuperAvatar } from "yxzq-element/avatar";
 import type { SuperBadge } from "yxzq-element/badge";
 import type { SuperCard, SuperCardClickDetail } from "yxzq-element/card";
+import type { SuperBreadcrumb } from "yxzq-element/breadcrumb";
 import type { SuperDivider } from "yxzq-element/divider";
+import type { SuperEmpty } from "yxzq-element/empty";
+import type {
+  SuperPagination,
+  SuperPaginationChangeDetail,
+} from "yxzq-element/pagination";
+import type { SuperProgress } from "yxzq-element/progress";
+import type { SuperRate, SuperRateChangeDetail } from "yxzq-element/rate";
+import type { SuperSkeleton } from "yxzq-element/skeleton";
+import type {
+  SuperSlider,
+  SuperSliderChangeDetail,
+} from "yxzq-element/slider";
 import type { SuperSpace } from "yxzq-element/space";
 import type { SuperTag, SuperTagCloseDetail } from "yxzq-element/tag";
+import type {
+  SuperTabs,
+  SuperTabsChangeDetail,
+  SuperTabsCloseDetail,
+} from "yxzq-element/tabs";
+import type {
+  SuperTooltip,
+  SuperTooltipOpenChangeDetail,
+} from "yxzq-element/tooltip";
+import type {
+  SuperUpload,
+  SuperUploadChangeDetail,
+  SuperUploadExceedDetail,
+  SuperUploadRemoveDetail,
+  SuperUploadSubmitDetail,
+} from "yxzq-element/upload";
 import type {
   SuperCheckbox,
   SuperCheckboxChangeDetail,
@@ -126,6 +155,164 @@ type SuperSpaceAttributes = {
   wrap?: SuperSpace["wrap"];
   align?: SuperSpace["align"];
   fill?: SuperSpace["fill"];
+};
+
+type SuperTooltipAttributes = {
+  content?: SuperTooltip["content"];
+  placement?: SuperTooltip["placement"];
+  trigger?: SuperTooltip["trigger"];
+  disabled?: SuperTooltip["disabled"];
+  open?: SuperTooltip["open"];
+  delay?: SuperTooltip["delay"] | `${number}`;
+  offset?: SuperTooltip["offset"] | `${number}`;
+  "max-width"?: SuperTooltip["maxWidth"] | `${number}`;
+  "show-arrow"?: SuperTooltip["showArrow"];
+  interactive?: SuperTooltip["interactive"];
+};
+
+type SuperTooltipEvents = {
+  "onsuper-tooltip-open-change"?: CustomEventHandler<
+    SuperTooltipOpenChangeDetail
+  >;
+};
+
+type SuperProgressAttributes = {
+  value?: SuperProgress["value"] | `${number}`;
+  max?: SuperProgress["max"] | `${number}`;
+  variant?: SuperProgress["variant"];
+  status?: SuperProgress["status"];
+  size?: SuperProgress["size"];
+  "show-text"?: SuperProgress["showText"];
+  format?: SuperProgress["format"];
+  indeterminate?: SuperProgress["indeterminate"];
+  striped?: SuperProgress["striped"];
+  "aria-label"?: SuperProgress["accessibleLabel"];
+};
+
+type SuperEmptyAttributes = {
+  description?: SuperEmpty["description"];
+  size?: SuperEmpty["size"];
+  image?: SuperEmpty["image"];
+};
+
+type SuperSkeletonAttributes = {
+  variant?: SuperSkeleton["variant"];
+  rows?: SuperSkeleton["rows"] | `${number}`;
+  animated?: SuperSkeleton["animated"];
+  loading?: SuperSkeleton["loading"];
+  width?: SuperSkeleton["width"];
+  height?: SuperSkeleton["height"];
+  "loading-label"?: SuperSkeleton["loadingLabel"];
+};
+
+type SuperSliderAttributes = {
+  value?: SuperSlider["value"];
+  min?: SuperSlider["min"] | `${number}`;
+  max?: SuperSlider["max"] | `${number}`;
+  step?: SuperSlider["step"] | `${number}`;
+  range?: SuperSlider["range"];
+  disabled?: SuperSlider["disabled"];
+  size?: SuperSlider["size"];
+  validation?: SuperSlider["validation"];
+  "show-tooltip"?: SuperSlider["showTooltip"];
+  vertical?: SuperSlider["vertical"];
+  "aria-label"?: SuperSlider["accessibleLabel"];
+  "start-label"?: SuperSlider["startLabel"];
+  "end-label"?: SuperSlider["endLabel"];
+};
+
+type SuperSliderEvents = {
+  "onsuper-slider-change"?: CustomEventHandler<SuperSliderChangeDetail>;
+};
+
+type SuperRateAttributes = {
+  value?: SuperRate["value"] | `${number}`;
+  max?: SuperRate["max"] | `${number}`;
+  "allow-half"?: SuperRate["allowHalf"];
+  readonly?: SuperRate["readonly"];
+  disabled?: SuperRate["disabled"];
+  size?: SuperRate["size"];
+  validation?: SuperRate["validation"];
+  clearable?: SuperRate["clearable"];
+  "aria-label"?: SuperRate["accessibleLabel"];
+  "clear-label"?: SuperRate["clearLabel"];
+};
+
+type SuperRateEvents = {
+  "onsuper-rate-change"?: CustomEventHandler<SuperRateChangeDetail>;
+};
+
+type SuperUploadAttributes = {
+  accept?: SuperUpload["accept"];
+  multiple?: SuperUpload["multiple"];
+  disabled?: SuperUpload["disabled"];
+  "max-count"?: SuperUpload["maxCount"] | `${number}`;
+  "max-size"?: SuperUpload["maxSize"] | `${number}`;
+  "auto-upload"?: SuperUpload["autoUpload"];
+  size?: SuperUpload["size"];
+  validation?: SuperUpload["validation"];
+  "prompt-text"?: SuperUpload["promptText"];
+  "hint-text"?: SuperUpload["hintText"];
+  "remove-label"?: SuperUpload["removeLabel"];
+  "aria-label"?: SuperUpload["accessibleLabel"];
+};
+
+type SuperUploadEvents = {
+  "onsuper-upload-change"?: CustomEventHandler<SuperUploadChangeDetail>;
+  "onsuper-upload-submit"?: CustomEventHandler<SuperUploadSubmitDetail>;
+  "onsuper-upload-remove"?: CustomEventHandler<SuperUploadRemoveDetail>;
+  "onsuper-upload-exceed"?: CustomEventHandler<SuperUploadExceedDetail>;
+};
+
+type SuperTabsAttributes = {
+  active?: SuperTabs["active"];
+  orientation?: SuperTabs["orientation"];
+  variant?: SuperTabs["variant"];
+  size?: SuperTabs["size"];
+  closable?: SuperTabs["closable"];
+  "close-label"?: SuperTabs["closeLabel"];
+  "aria-label"?: SuperTabs["accessibleLabel"];
+  items?: SuperTabs["items"];
+};
+
+type SuperTabsEvents = {
+  "onsuper-tabs-change"?: CustomEventHandler<SuperTabsChangeDetail>;
+  "onsuper-tabs-close"?: CustomEventHandler<SuperTabsCloseDetail>;
+};
+
+type SuperBreadcrumbAttributes = {
+  separator?: SuperBreadcrumb["separator"];
+  size?: SuperBreadcrumb["size"];
+  "max-items"?: SuperBreadcrumb["maxItems"] | `${number}`;
+  "aria-label"?: SuperBreadcrumb["accessibleLabel"];
+  items?: SuperBreadcrumb["items"];
+};
+
+type SuperPaginationAttributes = {
+  total?: SuperPagination["total"] | `${number}`;
+  page?: SuperPagination["page"] | `${number}`;
+  "page-size"?: SuperPagination["pageSize"] | `${number}`;
+  pageSizes?: SuperPagination["pageSizes"];
+  size?: SuperPagination["size"];
+  disabled?: SuperPagination["disabled"];
+  "show-total"?: SuperPagination["showTotal"];
+  "show-jumper"?: SuperPagination["showJumper"];
+  simple?: SuperPagination["simple"];
+  "aria-label"?: SuperPagination["accessibleLabel"];
+  "prev-label"?: SuperPagination["prevLabel"];
+  "next-label"?: SuperPagination["nextLabel"];
+  "page-label"?: SuperPagination["pageLabel"];
+  "jumper-label"?: SuperPagination["jumperLabel"];
+  "total-label"?: SuperPagination["totalLabel"];
+  "items-label"?: SuperPagination["itemsLabel"];
+  "page-suffix-label"?: SuperPagination["pageSuffixLabel"];
+  "page-size-label"?: SuperPagination["pageSizeLabel"];
+};
+
+type SuperPaginationEvents = {
+  "onsuper-pagination-change"?: CustomEventHandler<
+    SuperPaginationChangeDetail
+  >;
 };
 
 type SuperInputAttributes = {
@@ -338,15 +525,58 @@ declare module "react" {
         SuperCardAttributes,
         SuperCardEvents
       >;
+      "super-breadcrumb": CustomElementProps<
+        SuperBreadcrumb,
+        SuperBreadcrumbAttributes
+      >;
       "super-divider": CustomElementProps<
         SuperDivider,
         SuperDividerAttributes
+      >;
+      "super-empty": CustomElementProps<SuperEmpty, SuperEmptyAttributes>;
+      "super-progress": CustomElementProps<
+        SuperProgress,
+        SuperProgressAttributes
+      >;
+      "super-skeleton": CustomElementProps<
+        SuperSkeleton,
+        SuperSkeletonAttributes
+      >;
+      "super-pagination": CustomElementProps<
+        SuperPagination,
+        SuperPaginationAttributes,
+        SuperPaginationEvents
+      >;
+      "super-rate": CustomElementProps<
+        SuperRate,
+        SuperRateAttributes,
+        SuperRateEvents
+      >;
+      "super-slider": CustomElementProps<
+        SuperSlider,
+        SuperSliderAttributes,
+        SuperSliderEvents
       >;
       "super-space": CustomElementProps<SuperSpace, SuperSpaceAttributes>;
       "super-tag": CustomElementProps<
         SuperTag,
         SuperTagAttributes,
         SuperTagEvents
+      >;
+      "super-tabs": CustomElementProps<
+        SuperTabs,
+        SuperTabsAttributes,
+        SuperTabsEvents
+      >;
+      "super-tooltip": CustomElementProps<
+        SuperTooltip,
+        SuperTooltipAttributes,
+        SuperTooltipEvents
+      >;
+      "super-upload": CustomElementProps<
+        SuperUpload,
+        SuperUploadAttributes,
+        SuperUploadEvents
       >;
       "super-checkbox": CustomElementProps<
         SuperCheckbox,

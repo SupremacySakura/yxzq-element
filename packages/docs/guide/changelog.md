@@ -19,6 +19,10 @@
 - 新增 Playwright 视觉回归基线(`tests/visual`),以 Button 的变体与尺寸作为手绘风参照,并在 CI 中新增视觉回归 job。
 - 新增 `check:docs-sync` 脚本,在 CI 中强制每个已实现组件都必须有文档页或明确文档提及。
 - 新增 6 个展示类组件:`super-tag`(可关闭标签)、`super-badge`(支持上限与圆点模式)、`super-avatar`(图片失败自动回退)、`super-card`(四变体、可选可点击与键盘触发)、`super-divider`(手绘/虚线变体与文案位置)、`super-space`(基于 gap 的间距容器);同步全量与按需注册入口、显式注册函数、公共类型、Vue/React 类型声明、原生 HTML/Vue/React 示例、组件文档与导航、无障碍语义及单元测试。
+- 新增 `super-tooltip` 与共享弹出层基础设施:封装 Floating UI 的定位、翻转、偏移与滚动跟随,支持 hover/focus/click 触发、受控 `open`、关闭延迟、Escape 关闭回焦、`interactive` 模式下的焦点陷阱与滚动锁定。
+- 新增 `super-progress`(线性/环形、状态色、不确定态、自定义 `format`)、`super-empty`(插画/图片/操作区)、`super-skeleton`(文本/矩形/圆形、多行、动画与加载切换)三个展示收尾组件。
+- 新增 `super-tabs`(items 或 `tab` slot、方向键/Home/End、可关闭)、`super-breadcrumb`(items 或 slot、`aria-current`、超量折叠)、`super-pagination`(页码/每页条数/跳页/简版、全部文案可本地化)三个导航组件。
+- 新增 `super-slider`(单值/范围、原生 range 键盘语义)、`super-rate`(半星、清空、数字键直设)、`super-upload`(选择、拖放、数量与体积限制、不发起网络请求,由消费者通过 `super-upload-submit` 上传)三个表单组件。
 
 ## 1.2.0 — 2026-07-25
 

@@ -3,9 +3,35 @@ import type { SuperButton } from "yxzq-element/button";
 import type { SuperAvatar } from "yxzq-element/avatar";
 import type { SuperBadge } from "yxzq-element/badge";
 import type { SuperCard, SuperCardClickDetail } from "yxzq-element/card";
+import type { SuperBreadcrumb } from "yxzq-element/breadcrumb";
 import type { SuperDivider } from "yxzq-element/divider";
+import type { SuperEmpty } from "yxzq-element/empty";
+import type {
+  SuperPagination,
+  SuperPaginationChangeDetail,
+} from "yxzq-element/pagination";
+import type { SuperProgress } from "yxzq-element/progress";
+import type { SuperRate, SuperRateChangeDetail } from "yxzq-element/rate";
+import type { SuperSkeleton } from "yxzq-element/skeleton";
+import type { SuperSlider, SuperSliderChangeDetail } from "yxzq-element/slider";
 import type { SuperSpace } from "yxzq-element/space";
 import type { SuperTag, SuperTagCloseDetail } from "yxzq-element/tag";
+import type {
+  SuperTabs,
+  SuperTabsChangeDetail,
+  SuperTabsCloseDetail,
+} from "yxzq-element/tabs";
+import type {
+  SuperTooltip,
+  SuperTooltipOpenChangeDetail,
+} from "yxzq-element/tooltip";
+import type {
+  SuperUpload,
+  SuperUploadChangeDetail,
+  SuperUploadExceedDetail,
+  SuperUploadRemoveDetail,
+  SuperUploadSubmitDetail,
+} from "yxzq-element/upload";
 import type {
   SuperCheckbox,
   SuperCheckboxChangeDetail,
@@ -108,6 +134,145 @@ type CardEvents = {
 type DividerProperties = "direction" | "contentPosition" | "variant" | "color";
 
 type SpaceProperties = "direction" | "size" | "wrap" | "align" | "fill";
+
+type TooltipProperties =
+  | "content"
+  | "placement"
+  | "trigger"
+  | "disabled"
+  | "open"
+  | "delay"
+  | "offset"
+  | "maxWidth"
+  | "showArrow"
+  | "interactive";
+
+type TooltipEvents = {
+  "super-tooltip-open-change": CustomEvent<SuperTooltipOpenChangeDetail>;
+};
+
+type ProgressProperties =
+  | "value"
+  | "max"
+  | "variant"
+  | "status"
+  | "size"
+  | "showText"
+  | "format"
+  | "indeterminate"
+  | "striped";
+
+type ProgressAttributes = {
+  "aria-label"?: SuperProgress["accessibleLabel"];
+};
+
+type EmptyProperties = "description" | "size" | "image";
+
+type SkeletonProperties =
+  | "variant"
+  | "rows"
+  | "animated"
+  | "loading"
+  | "width"
+  | "height"
+  | "loadingLabel";
+
+type SliderProperties =
+  | "value"
+  | "min"
+  | "max"
+  | "step"
+  | "range"
+  | "disabled"
+  | "size"
+  | "validation"
+  | "showTooltip"
+  | "vertical"
+  | "startLabel"
+  | "endLabel";
+
+type SliderEvents = {
+  "super-slider-change": CustomEvent<SuperSliderChangeDetail>;
+};
+
+type RateProperties =
+  | "value"
+  | "max"
+  | "allowHalf"
+  | "readonly"
+  | "disabled"
+  | "size"
+  | "validation"
+  | "clearable"
+  | "clearLabel";
+
+type RateEvents = {
+  "super-rate-change": CustomEvent<SuperRateChangeDetail>;
+};
+
+type UploadProperties =
+  | "accept"
+  | "multiple"
+  | "disabled"
+  | "maxCount"
+  | "maxSize"
+  | "autoUpload"
+  | "fileList"
+  | "size"
+  | "validation"
+  | "promptText"
+  | "hintText"
+  | "removeLabel";
+
+type UploadEvents = {
+  "super-upload-change": CustomEvent<SuperUploadChangeDetail>;
+  "super-upload-submit": CustomEvent<SuperUploadSubmitDetail>;
+  "super-upload-remove": CustomEvent<SuperUploadRemoveDetail>;
+  "super-upload-exceed": CustomEvent<SuperUploadExceedDetail>;
+};
+
+type TabsProperties =
+  | "active"
+  | "orientation"
+  | "variant"
+  | "size"
+  | "closable"
+  | "closeLabel"
+  | "items";
+
+type TabsEvents = {
+  "super-tabs-change": CustomEvent<SuperTabsChangeDetail>;
+  "super-tabs-close": CustomEvent<SuperTabsCloseDetail>;
+};
+
+type BreadcrumbProperties =
+  | "separator"
+  | "size"
+  | "maxItems"
+  | "items";
+
+type PaginationProperties =
+  | "total"
+  | "page"
+  | "pageSize"
+  | "pageSizes"
+  | "size"
+  | "disabled"
+  | "showTotal"
+  | "showJumper"
+  | "simple"
+  | "prevLabel"
+  | "nextLabel"
+  | "pageLabel"
+  | "jumperLabel"
+  | "totalLabel"
+  | "itemsLabel"
+  | "pageSuffixLabel"
+  | "pageSizeLabel";
+
+type PaginationEvents = {
+  "super-pagination-change": CustomEvent<SuperPaginationChangeDetail>;
+};
 
 type InputProperties =
   | "value"
@@ -316,8 +481,42 @@ declare module "vue" {
       CardAttributes
     >;
     "super-divider": DefineCustomElement<SuperDivider, DividerProperties>;
+    "super-breadcrumb": DefineCustomElement<
+      SuperBreadcrumb,
+      BreadcrumbProperties
+    >;
+    "super-empty": DefineCustomElement<SuperEmpty, EmptyProperties>;
+    "super-progress": DefineCustomElement<
+      SuperProgress,
+      ProgressProperties,
+      Record<never, never>,
+      ProgressAttributes
+    >;
+    "super-skeleton": DefineCustomElement<SuperSkeleton, SkeletonProperties>;
+    "super-pagination": DefineCustomElement<
+      SuperPagination,
+      PaginationProperties,
+      PaginationEvents
+    >;
+    "super-rate": DefineCustomElement<SuperRate, RateProperties, RateEvents>;
+    "super-slider": DefineCustomElement<
+      SuperSlider,
+      SliderProperties,
+      SliderEvents
+    >;
     "super-space": DefineCustomElement<SuperSpace, SpaceProperties>;
     "super-tag": DefineCustomElement<SuperTag, TagProperties, TagEvents>;
+    "super-tabs": DefineCustomElement<SuperTabs, TabsProperties, TabsEvents>;
+    "super-tooltip": DefineCustomElement<
+      SuperTooltip,
+      TooltipProperties,
+      TooltipEvents
+    >;
+    "super-upload": DefineCustomElement<
+      SuperUpload,
+      UploadProperties,
+      UploadEvents
+    >;
     "super-checkbox": DefineCustomElement<
       SuperCheckbox,
       CheckboxProperties,

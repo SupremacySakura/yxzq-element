@@ -118,6 +118,18 @@ function App() {
     window.alert(`React 关闭标签：${event.detail.value}`);
   };
 
+  const tabItems = [
+    { key: "one", label: "概览" },
+    { key: "two", label: "详情" },
+    { key: "three", label: "设置", disabled: true },
+  ];
+
+  const crumbItems = [
+    { label: "首页", href: "#" },
+    { label: "组件" },
+    { label: "面包屑", current: true },
+  ];
+
   const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
     window.alert(`React 提交表单：${JSON.stringify(event.detail.values)}`);
   };
@@ -224,6 +236,24 @@ function App() {
         <super-divider content-position="left" variant="hand-drawn">
           分割
         </super-divider>
+        <super-tooltip content="悬停查看提示">
+          <super-button variant="outline" size="small">
+            悬停我
+          </super-button>
+        </super-tooltip>
+        <super-progress value={62} show-text></super-progress>
+        <super-skeleton variant="text" rows={2} animated></super-skeleton>
+        <super-tabs items={tabItems} active="one"></super-tabs>
+        <super-breadcrumb items={crumbItems}></super-breadcrumb>
+        <super-pagination
+          total={120}
+          page={2}
+          page-size={10}
+          show-total
+        ></super-pagination>
+        <super-slider value={40} min={0} max={100}></super-slider>
+        <super-rate value={3} clearable></super-rate>
+        <super-upload accept="image/*" multiple></super-upload>
       </section>
       <section aria-labelledby="selector-title">
         <h2 id="selector-title">选择器套装</h2>

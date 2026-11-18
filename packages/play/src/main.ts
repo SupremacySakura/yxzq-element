@@ -16,6 +16,26 @@ const datePicker = document.querySelector("super-date-picker");
 const timePicker = document.querySelector("super-time-picker");
 const form = document.querySelector("super-form");
 const closableTag = document.querySelector("super-tag[closable]");
+const tabs = document.querySelector<HTMLElement & { items: unknown[] }>("#demo-tabs");
+const breadcrumb = document.querySelector<
+  HTMLElement & { items: unknown[] }
+>("#demo-breadcrumb");
+
+if (tabs) {
+  tabs.items = [
+    { key: "one", label: "概览" },
+    { key: "two", label: "详情" },
+    { key: "three", label: "设置", disabled: true },
+  ];
+}
+
+if (breadcrumb) {
+  breadcrumb.items = [
+    { label: "首页", href: "#" },
+    { label: "组件" },
+    { label: "面包屑", current: true },
+  ];
+}
 
 const formSchema: SuperFormSchema = {
   layout: "horizontal",

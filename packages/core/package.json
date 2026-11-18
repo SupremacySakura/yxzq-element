@@ -37,6 +37,10 @@
       "types": "./dist/card.d.ts",
       "import": "./dist/card.js"
     },
+    "./breadcrumb": {
+      "types": "./dist/breadcrumb.d.ts",
+      "import": "./dist/breadcrumb.js"
+    },
     "./checkbox": {
       "types": "./dist/checkbox.d.ts",
       "import": "./dist/checkbox.js"
@@ -53,17 +57,41 @@
       "types": "./dist/divider.d.ts",
       "import": "./dist/divider.js"
     },
+    "./empty": {
+      "types": "./dist/empty.d.ts",
+      "import": "./dist/empty.js"
+    },
     "./input": {
       "types": "./dist/input.d.ts",
       "import": "./dist/input.js"
+    },
+    "./pagination": {
+      "types": "./dist/pagination.d.ts",
+      "import": "./dist/pagination.js"
+    },
+    "./progress": {
+      "types": "./dist/progress.d.ts",
+      "import": "./dist/progress.js"
     },
     "./radio": {
       "types": "./dist/radio.d.ts",
       "import": "./dist/radio.js"
     },
+    "./rate": {
+      "types": "./dist/rate.d.ts",
+      "import": "./dist/rate.js"
+    },
     "./select": {
       "types": "./dist/select.d.ts",
       "import": "./dist/select.js"
+    },
+    "./skeleton": {
+      "types": "./dist/skeleton.d.ts",
+      "import": "./dist/skeleton.js"
+    },
+    "./slider": {
+      "types": "./dist/slider.d.ts",
+      "import": "./dist/slider.js"
     },
     "./space": {
       "types": "./dist/space.d.ts",
@@ -77,9 +105,21 @@
       "types": "./dist/tag.d.ts",
       "import": "./dist/tag.js"
     },
+    "./tabs": {
+      "types": "./dist/tabs.d.ts",
+      "import": "./dist/tabs.js"
+    },
     "./time-picker": {
       "types": "./dist/time-picker.d.ts",
       "import": "./dist/time-picker.js"
+    },
+    "./tooltip": {
+      "types": "./dist/tooltip.d.ts",
+      "import": "./dist/tooltip.js"
+    },
+    "./upload": {
+      "types": "./dist/upload.d.ts",
+      "import": "./dist/upload.js"
     },
     "./define": {
       "types": "./dist/define.d.ts",
@@ -102,14 +142,25 @@
     "./dist/checkbox.js",
     "./dist/date-picker.js",
     "./dist/divider.js",
+    "./dist/breadcrumb.js",
+    "./dist/empty.js",
     "./dist/form.js",
     "./dist/input.js",
+    "./dist/pagination.js",
+    "./dist/progress.js",
     "./dist/radio.js",
+    "./dist/rate.js",
     "./dist/select.js",
+    "./dist/skeleton.js",
+    "./dist/slider.js",
     "./dist/space.js",
     "./dist/switch.js",
     "./dist/tag.js",
-    "./dist/time-picker.js"
+    "./dist/tabs.js",
+    "./dist/time-picker.js",
+    "./dist/tooltip.js"
+    ,
+    "./dist/upload.js"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

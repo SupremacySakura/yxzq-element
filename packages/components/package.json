@@ -37,6 +37,10 @@
       "types": "./dist/Card/index.d.ts",
       "import": "./dist/Card/index.js"
     },
+    "./breadcrumb": {
+      "types": "./dist/Breadcrumb/index.d.ts",
+      "import": "./dist/Breadcrumb/index.js"
+    },
     "./checkbox": {
       "types": "./dist/Checkbox/index.d.ts",
       "import": "./dist/Checkbox/index.js"
@@ -53,17 +57,41 @@
       "types": "./dist/Divider/index.d.ts",
       "import": "./dist/Divider/index.js"
     },
+    "./empty": {
+      "types": "./dist/Empty/index.d.ts",
+      "import": "./dist/Empty/index.js"
+    },
     "./input": {
       "types": "./dist/Input/index.d.ts",
       "import": "./dist/Input/index.js"
+    },
+    "./pagination": {
+      "types": "./dist/Pagination/index.d.ts",
+      "import": "./dist/Pagination/index.js"
+    },
+    "./progress": {
+      "types": "./dist/Progress/index.d.ts",
+      "import": "./dist/Progress/index.js"
     },
     "./radio": {
       "types": "./dist/Radio/index.d.ts",
       "import": "./dist/Radio/index.js"
     },
+    "./rate": {
+      "types": "./dist/Rate/index.d.ts",
+      "import": "./dist/Rate/index.js"
+    },
     "./select": {
       "types": "./dist/Select/index.d.ts",
       "import": "./dist/Select/index.js"
+    },
+    "./skeleton": {
+      "types": "./dist/Skeleton/index.d.ts",
+      "import": "./dist/Skeleton/index.js"
+    },
+    "./slider": {
+      "types": "./dist/Slider/index.d.ts",
+      "import": "./dist/Slider/index.js"
     },
     "./space": {
       "types": "./dist/Space/index.d.ts",
@@ -77,9 +105,21 @@
       "types": "./dist/Tag/index.d.ts",
       "import": "./dist/Tag/index.js"
     },
+    "./tabs": {
+      "types": "./dist/Tabs/index.d.ts",
+      "import": "./dist/Tabs/index.js"
+    },
     "./time-picker": {
       "types": "./dist/TimePicker/index.d.ts",
       "import": "./dist/TimePicker/index.js"
+    },
+    "./tooltip": {
+      "types": "./dist/Tooltip/index.d.ts",
+      "import": "./dist/Tooltip/index.js"
+    },
+    "./upload": {
+      "types": "./dist/Upload/index.d.ts",
+      "import": "./dist/Upload/index.js"
     }
   },
   "files": [
