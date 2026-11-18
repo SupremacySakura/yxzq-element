@@ -124,3 +124,17 @@ Unit tests must run directly against workspace source and must pass in a fresh c
 - Generated `dist`, VitePress cache, and VitePress output directories must not be committed.
 - VitePress's theme toggle is driven by the `html.dark` class. Dark-theme overrides must target that class and maintain readable text/background contrast; do not rely only on `prefers-color-scheme`.
 - GitHub Actions artifact upload/download must remain on v4 or newer. Documentation output lives under the hidden `.vitepress` directory, so artifact upload must keep `include-hidden-files: true` and `if-no-files-found: error`.
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked in GitHub Issues at `SupremacySakura/yxzq-element`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Triage uses the five default labels: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context layout: one `GLOSSARY.md` at the repo root plus `docs/adr/`. See `docs/agents/domain.md`.
