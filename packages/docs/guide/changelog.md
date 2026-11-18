@@ -40,6 +40,10 @@
 - 将 Dialog 与 Drawer 重复的布尔属性转换器、组合焦点作用域与关闭事件序列抽取到内部共享模块,公共 API、事件名、事件顺序、焦点陷阱和滚动锁定行为保持不变。
 - 为 Tag 与 Steps 的注册常量补充命名说明,保留现有 `SUPER_TAG_TAG` / `SUPER_STEPS_TAG` 公共名称,避免破坏性重命名。
 
+### 修复
+
+- 修复 `master` 推送后 GitHub Pages 部署因失效的 `GH_TOKEN` 失败的问题:部署 job 改用 GitHub Actions 内置的 `GITHUB_TOKEN`,并仅向该 job 授予写入仓库内容的权限,现有 `gh-pages` 发布方式保持不变。
+
 ## 1.2.0 — 2026-07-25
 
 ### 新增
