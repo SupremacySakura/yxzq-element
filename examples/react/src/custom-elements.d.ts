@@ -4,12 +4,30 @@ import type { SuperAvatar } from "yxzq-element/avatar";
 import type { SuperBadge } from "yxzq-element/badge";
 import type { SuperCard, SuperCardClickDetail } from "yxzq-element/card";
 import type { SuperBreadcrumb } from "yxzq-element/breadcrumb";
+import type {
+  SuperDialog,
+  SuperDialogBeforeCloseDetail,
+  SuperDialogCloseDetail,
+} from "yxzq-element/dialog";
 import type { SuperDivider } from "yxzq-element/divider";
+import type {
+  SuperDrawer,
+  SuperDrawerBeforeCloseDetail,
+  SuperDrawerCloseDetail,
+} from "yxzq-element/drawer";
 import type { SuperEmpty } from "yxzq-element/empty";
+import type {
+  SuperMessage,
+  SuperMessageCloseDetail,
+} from "yxzq-element/message";
 import type {
   SuperPagination,
   SuperPaginationChangeDetail,
 } from "yxzq-element/pagination";
+import type {
+  SuperPopover,
+  SuperPopoverOpenChangeDetail,
+} from "yxzq-element/popover";
 import type { SuperProgress } from "yxzq-element/progress";
 import type { SuperRate, SuperRateChangeDetail } from "yxzq-element/rate";
 import type { SuperSkeleton } from "yxzq-element/skeleton";
@@ -315,6 +333,83 @@ type SuperPaginationEvents = {
   >;
 };
 
+type SuperDialogAttributes = {
+  open?: SuperDialog["open"];
+  title?: SuperDialog["title"];
+  width?: SuperDialog["width"];
+  size?: SuperDialog["size"];
+  closable?: SuperDialog["closable"];
+  "mask-closable"?: SuperDialog["maskClosable"];
+  "close-on-escape"?: SuperDialog["closeOnEscape"];
+  "close-label"?: SuperDialog["closeLabel"];
+  "show-footer"?: SuperDialog["showFooter"];
+  "confirm-text"?: SuperDialog["confirmText"];
+  "cancel-text"?: SuperDialog["cancelText"];
+  loading?: SuperDialog["loading"];
+};
+
+type SuperDialogEvents = {
+  "onsuper-dialog-before-close"?: CustomEventHandler<
+    SuperDialogBeforeCloseDetail
+  >;
+  "onsuper-dialog-close"?: CustomEventHandler<SuperDialogCloseDetail>;
+};
+
+type SuperDrawerAttributes = {
+  open?: SuperDrawer["open"];
+  title?: SuperDrawer["title"];
+  placement?: SuperDrawer["placement"];
+  size?: SuperDrawer["size"] | `${number}`;
+  closable?: SuperDrawer["closable"];
+  "mask-closable"?: SuperDrawer["maskClosable"];
+  "close-on-escape"?: SuperDrawer["closeOnEscape"];
+  "close-label"?: SuperDrawer["closeLabel"];
+  "show-footer"?: SuperDrawer["showFooter"];
+  "confirm-text"?: SuperDrawer["confirmText"];
+  "cancel-text"?: SuperDrawer["cancelText"];
+};
+
+type SuperDrawerEvents = {
+  "onsuper-drawer-before-close"?: CustomEventHandler<
+    SuperDrawerBeforeCloseDetail
+  >;
+  "onsuper-drawer-close"?: CustomEventHandler<SuperDrawerCloseDetail>;
+};
+
+type SuperPopoverAttributes = {
+  open?: SuperPopover["open"];
+  placement?: SuperPopover["placement"];
+  trigger?: SuperPopover["trigger"];
+  title?: SuperPopover["title"];
+  content?: SuperPopover["content"];
+  disabled?: SuperPopover["disabled"];
+  arrow?: SuperPopover["arrow"];
+  offset?: SuperPopover["offset"] | `${number}`;
+  width?: SuperPopover["width"] | `${number}`;
+  "close-on-outside-click"?: SuperPopover["closeOnOutsideClick"];
+  "close-on-escape"?: SuperPopover["closeOnEscape"];
+};
+
+type SuperPopoverEvents = {
+  "onsuper-popover-open-change"?: CustomEventHandler<
+    SuperPopoverOpenChangeDetail
+  >;
+};
+
+type SuperMessageAttributes = {
+  open?: SuperMessage["open"];
+  message?: SuperMessage["message"];
+  type?: SuperMessage["type"];
+  duration?: SuperMessage["duration"] | `${number}`;
+  closable?: SuperMessage["closable"];
+  "close-label"?: SuperMessage["closeLabel"];
+  "show-icon"?: SuperMessage["showIcon"];
+};
+
+type SuperMessageEvents = {
+  "onsuper-message-close"?: CustomEventHandler<SuperMessageCloseDetail>;
+};
+
 type SuperInputAttributes = {
   value?: SuperInput["value"];
   type?: SuperInput["type"];
@@ -533,6 +628,16 @@ declare module "react" {
         SuperDivider,
         SuperDividerAttributes
       >;
+      "super-dialog": CustomElementProps<
+        SuperDialog,
+        SuperDialogAttributes,
+        SuperDialogEvents
+      >;
+      "super-drawer": CustomElementProps<
+        SuperDrawer,
+        SuperDrawerAttributes,
+        SuperDrawerEvents
+      >;
       "super-empty": CustomElementProps<SuperEmpty, SuperEmptyAttributes>;
       "super-progress": CustomElementProps<
         SuperProgress,
@@ -546,6 +651,16 @@ declare module "react" {
         SuperPagination,
         SuperPaginationAttributes,
         SuperPaginationEvents
+      >;
+      "super-popover": CustomElementProps<
+        SuperPopover,
+        SuperPopoverAttributes,
+        SuperPopoverEvents
+      >;
+      "super-message": CustomElementProps<
+        SuperMessage,
+        SuperMessageAttributes,
+        SuperMessageEvents
       >;
       "super-rate": CustomElementProps<
         SuperRate,

@@ -49,6 +49,10 @@
       "types": "./dist/DatePicker/index.d.ts",
       "import": "./dist/DatePicker/index.js"
     },
+    "./dialog": {
+      "types": "./dist/Dialog/index.d.ts",
+      "import": "./dist/Dialog/index.js"
+    },
     "./form": {
       "types": "./dist/Form/index.d.ts",
       "import": "./dist/Form/index.js"
@@ -56,6 +60,10 @@
     "./divider": {
       "types": "./dist/Divider/index.d.ts",
       "import": "./dist/Divider/index.js"
+    },
+    "./drawer": {
+      "types": "./dist/Drawer/index.d.ts",
+      "import": "./dist/Drawer/index.js"
     },
     "./empty": {
       "types": "./dist/Empty/index.d.ts",
@@ -65,9 +73,17 @@
       "types": "./dist/Input/index.d.ts",
       "import": "./dist/Input/index.js"
     },
+    "./message": {
+      "types": "./dist/Message/index.d.ts",
+      "import": "./dist/Message/index.js"
+    },
     "./pagination": {
       "types": "./dist/Pagination/index.d.ts",
       "import": "./dist/Pagination/index.js"
+    },
+    "./popover": {
+      "types": "./dist/Popover/index.d.ts",
+      "import": "./dist/Popover/index.js"
     },
     "./progress": {
       "types": "./dist/Progress/index.d.ts",

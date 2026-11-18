@@ -37,6 +37,23 @@ if (breadcrumb) {
   ];
 }
 
+const openDialog = document.querySelector("super-button#open-dialog");
+const dialog = document.querySelector<HTMLElement & { open: boolean }>(
+  "#demo-dialog",
+);
+
+openDialog?.addEventListener("click", () => {
+  if (dialog) {
+    dialog.open = true;
+  }
+});
+
+dialog?.addEventListener("super-dialog-close", () => {
+  if (dialog) {
+    dialog.open = false;
+  }
+});
+
 const formSchema: SuperFormSchema = {
   layout: "horizontal",
   columns: 2,

@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "yxzq-element";
 import type {
@@ -130,6 +130,8 @@ function App() {
     { label: "面包屑", current: true },
   ];
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
     window.alert(`React 提交表单：${JSON.stringify(event.detail.values)}`);
   };
@@ -254,6 +256,25 @@ function App() {
         <super-slider value={40} min={0} max={100}></super-slider>
         <super-rate value={3} clearable></super-rate>
         <super-upload accept="image/*" multiple></super-upload>
+        <super-button
+          variant="primary"
+          size="small"
+          onClick={() => setDialogOpen(true)}
+        >
+          打开对话框
+        </super-button>
+        <super-dialog
+          open={dialogOpen}
+          title="确认操作"
+          onsuper-dialog-close={() => setDialogOpen(false)}
+        >
+          这是一段由 React 控制开关的对话框内容。
+        </super-dialog>
+        <super-popover content="弹出内容" placement="bottom">
+          <super-button variant="outline" size="small">
+            点击弹出
+          </super-button>
+        </super-popover>
       </section>
       <section aria-labelledby="selector-title">
         <h2 id="selector-title">选择器套装</h2>

@@ -23,6 +23,8 @@
 - 新增 `super-progress`(线性/环形、状态色、不确定态、自定义 `format`)、`super-empty`(插画/图片/操作区)、`super-skeleton`(文本/矩形/圆形、多行、动画与加载切换)三个展示收尾组件。
 - 新增 `super-tabs`(items 或 `tab` slot、方向键/Home/End、可关闭)、`super-breadcrumb`(items 或 slot、`aria-current`、超量折叠)、`super-pagination`(页码/每页条数/跳页/简版、全部文案可本地化)三个导航组件。
 - 新增 `super-slider`(单值/范围、原生 range 键盘语义)、`super-rate`(半星、清空、数字键直设)、`super-upload`(选择、拖放、数量与体积限制、不发起网络请求,由消费者通过 `super-upload-submit` 上传)三个表单组件。
+- 新增 `super-dialog` 与 `super-drawer`:模态语义(`role="dialog"` + `aria-modal`)、焦点陷阱、滚动锁定、关闭回焦、Escape 与遮罩关闭、可取消的 `before-close` 事件、页脚确认/取消动作,抽屉支持四个方向与数值/命名尺寸。
+- 新增 `super-popover`(Floating UI 定位、click/hover/manual 触发、外部点击与 Escape 关闭)与 `super-message`(单条全局提示、四种类型、自动关闭、`showSuperMessage()` 命令式入口且 SSR 安全)。
 
 ## 1.2.0 — 2026-07-25
 

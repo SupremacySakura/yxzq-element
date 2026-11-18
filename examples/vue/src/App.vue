@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import type {
   SuperFormSchema,
   SuperFormSubmitDetail,
@@ -8,6 +9,7 @@ import type { SuperTimePickerShortcut } from "yxzq-element/time-picker";
 import { DEMO_BUSINESS_FIELD_TAG } from "./business-form-field";
 
 const selectedTopics = ["sketch", "travel"];
+const dialogOpen = ref(false);
 
 const dayKey = (date: Date): string => {
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -247,6 +249,19 @@ const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
       <super-slider :value="40" :min="0" :max="100"></super-slider>
       <super-rate :value="3" clearable></super-rate>
       <super-upload accept="image/*" multiple></super-upload>
+      <super-button variant="primary" size="small" @click="dialogOpen = true">
+        打开对话框
+      </super-button>
+      <super-dialog
+        :open="dialogOpen"
+        title="确认操作"
+        @super-dialog-close="dialogOpen = false"
+      >
+        这是一段由 Vue 控制开关的对话框内容。
+      </super-dialog>
+      <super-popover content="弹出内容" placement="bottom">
+        <super-button variant="outline" size="small">点击弹出</super-button>
+      </super-popover>
     </section>
     <section aria-labelledby="selector-title">
       <h2 id="selector-title">选择器套装</h2>

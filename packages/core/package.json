@@ -49,6 +49,10 @@
       "types": "./dist/date-picker.d.ts",
       "import": "./dist/date-picker.js"
     },
+    "./dialog": {
+      "types": "./dist/dialog.d.ts",
+      "import": "./dist/dialog.js"
+    },
     "./form": {
       "types": "./dist/form.d.ts",
       "import": "./dist/form.js"
@@ -56,6 +60,10 @@
     "./divider": {
       "types": "./dist/divider.d.ts",
       "import": "./dist/divider.js"
+    },
+    "./drawer": {
+      "types": "./dist/drawer.d.ts",
+      "import": "./dist/drawer.js"
     },
     "./empty": {
       "types": "./dist/empty.d.ts",
@@ -65,9 +73,17 @@
       "types": "./dist/input.d.ts",
       "import": "./dist/input.js"
     },
+    "./message": {
+      "types": "./dist/message.d.ts",
+      "import": "./dist/message.js"
+    },
     "./pagination": {
       "types": "./dist/pagination.d.ts",
       "import": "./dist/pagination.js"
+    },
+    "./popover": {
+      "types": "./dist/popover.d.ts",
+      "import": "./dist/popover.js"
     },
     "./progress": {
       "types": "./dist/progress.d.ts",
@@ -141,12 +157,16 @@
     "./dist/card.js",
     "./dist/checkbox.js",
     "./dist/date-picker.js",
+    "./dist/dialog.js",
     "./dist/divider.js",
+    "./dist/drawer.js",
     "./dist/breadcrumb.js",
     "./dist/empty.js",
     "./dist/form.js",
     "./dist/input.js",
+    "./dist/message.js",
     "./dist/pagination.js",
+    "./dist/popover.js",
     "./dist/progress.js",
     "./dist/radio.js",
     "./dist/rate.js",

@@ -4,12 +4,30 @@ import type { SuperAvatar } from "yxzq-element/avatar";
 import type { SuperBadge } from "yxzq-element/badge";
 import type { SuperCard, SuperCardClickDetail } from "yxzq-element/card";
 import type { SuperBreadcrumb } from "yxzq-element/breadcrumb";
+import type {
+  SuperDialog,
+  SuperDialogBeforeCloseDetail,
+  SuperDialogCloseDetail,
+} from "yxzq-element/dialog";
 import type { SuperDivider } from "yxzq-element/divider";
+import type {
+  SuperDrawer,
+  SuperDrawerBeforeCloseDetail,
+  SuperDrawerCloseDetail,
+} from "yxzq-element/drawer";
 import type { SuperEmpty } from "yxzq-element/empty";
+import type {
+  SuperMessage,
+  SuperMessageCloseDetail,
+} from "yxzq-element/message";
 import type {
   SuperPagination,
   SuperPaginationChangeDetail,
 } from "yxzq-element/pagination";
+import type {
+  SuperPopover,
+  SuperPopoverOpenChangeDetail,
+} from "yxzq-element/popover";
 import type { SuperProgress } from "yxzq-element/progress";
 import type { SuperRate, SuperRateChangeDetail } from "yxzq-element/rate";
 import type { SuperSkeleton } from "yxzq-element/skeleton";
@@ -274,6 +292,73 @@ type PaginationEvents = {
   "super-pagination-change": CustomEvent<SuperPaginationChangeDetail>;
 };
 
+type DialogProperties =
+  | "open"
+  | "title"
+  | "width"
+  | "size"
+  | "closable"
+  | "maskClosable"
+  | "closeOnEscape"
+  | "closeLabel"
+  | "showFooter"
+  | "confirmText"
+  | "cancelText"
+  | "loading";
+
+type DialogEvents = {
+  "super-dialog-before-close": CustomEvent<SuperDialogBeforeCloseDetail>;
+  "super-dialog-close": CustomEvent<SuperDialogCloseDetail>;
+};
+
+type DrawerProperties =
+  | "open"
+  | "title"
+  | "placement"
+  | "size"
+  | "closable"
+  | "maskClosable"
+  | "closeOnEscape"
+  | "closeLabel"
+  | "showFooter"
+  | "confirmText"
+  | "cancelText";
+
+type DrawerEvents = {
+  "super-drawer-before-close": CustomEvent<SuperDrawerBeforeCloseDetail>;
+  "super-drawer-close": CustomEvent<SuperDrawerCloseDetail>;
+};
+
+type PopoverProperties =
+  | "open"
+  | "placement"
+  | "trigger"
+  | "title"
+  | "content"
+  | "disabled"
+  | "arrow"
+  | "offset"
+  | "width"
+  | "closeOnOutsideClick"
+  | "closeOnEscape";
+
+type PopoverEvents = {
+  "super-popover-open-change": CustomEvent<SuperPopoverOpenChangeDetail>;
+};
+
+type MessageProperties =
+  | "open"
+  | "message"
+  | "type"
+  | "duration"
+  | "closable"
+  | "closeLabel"
+  | "showIcon";
+
+type MessageEvents = {
+  "super-message-close": CustomEvent<SuperMessageCloseDetail>;
+};
+
 type InputProperties =
   | "value"
   | "type"
@@ -485,6 +570,16 @@ declare module "vue" {
       SuperBreadcrumb,
       BreadcrumbProperties
     >;
+    "super-dialog": DefineCustomElement<
+      SuperDialog,
+      DialogProperties,
+      DialogEvents
+    >;
+    "super-drawer": DefineCustomElement<
+      SuperDrawer,
+      DrawerProperties,
+      DrawerEvents
+    >;
     "super-empty": DefineCustomElement<SuperEmpty, EmptyProperties>;
     "super-progress": DefineCustomElement<
       SuperProgress,
@@ -497,6 +592,16 @@ declare module "vue" {
       SuperPagination,
       PaginationProperties,
       PaginationEvents
+    >;
+    "super-popover": DefineCustomElement<
+      SuperPopover,
+      PopoverProperties,
+      PopoverEvents
+    >;
+    "super-message": DefineCustomElement<
+      SuperMessage,
+      MessageProperties,
+      MessageEvents
     >;
     "super-rate": DefineCustomElement<SuperRate, RateProperties, RateEvents>;
     "super-slider": DefineCustomElement<
