@@ -44,6 +44,11 @@ const timeShortcuts: SuperTimePickerShortcut[] = [
   { label: "傍晚", value: "18:30" },
 ];
 
+const handleTagClose = (event: Event): void => {
+  const detail = (event as CustomEvent<{ value: string }>).detail;
+  window.alert(`Vue 关闭标签：${detail.value}`);
+};
+
 const formSchema: SuperFormSchema = {
   layout: "horizontal",
   columns: 2,
@@ -181,6 +186,39 @@ const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
         aria-label="提醒时间"
         @super-time-picker-change="handleTimeChange"
       ></super-time-picker>
+    </section>
+    <section aria-labelledby="display-title">
+      <h2 id="display-title">手绘展示组件</h2>
+      <super-space direction="horizontal" size="medium" wrap align="center">
+        <super-card variant="outlined" size="small">
+          <span slot="header">卡片标题</span>
+          卡片正文内容
+        </super-card>
+        <super-card variant="filled" size="small" hoverable>
+          悬停卡片
+        </super-card>
+      </super-space>
+      <super-space direction="horizontal" size="small" wrap align="center">
+        <super-tag variant="primary" value="vue">Vue</super-tag>
+        <super-tag
+          variant="success"
+          closable
+          value="ready"
+          @super-tag-close="handleTagClose"
+        >
+          可关闭
+        </super-tag>
+        <super-avatar size="small" icon="手"></super-avatar>
+        <super-badge value="12" status="danger">
+          <span>消息</span>
+        </super-badge>
+        <super-badge dot status="success">
+          <span>在线</span>
+        </super-badge>
+      </super-space>
+      <super-divider content-position="left" variant="hand-drawn">
+        分割
+      </super-divider>
     </section>
     <section aria-labelledby="selector-title">
       <h2 id="selector-title">选择器套装</h2>

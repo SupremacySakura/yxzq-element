@@ -25,6 +25,18 @@
       "types": "./dist/Button/index.d.ts",
       "import": "./dist/Button/index.js"
     },
+    "./avatar": {
+      "types": "./dist/Avatar/index.d.ts",
+      "import": "./dist/Avatar/index.js"
+    },
+    "./badge": {
+      "types": "./dist/Badge/index.d.ts",
+      "import": "./dist/Badge/index.js"
+    },
+    "./card": {
+      "types": "./dist/Card/index.d.ts",
+      "import": "./dist/Card/index.js"
+    },
     "./checkbox": {
       "types": "./dist/Checkbox/index.d.ts",
       "import": "./dist/Checkbox/index.js"
@@ -36,6 +48,10 @@
     "./form": {
       "types": "./dist/Form/index.d.ts",
       "import": "./dist/Form/index.js"
+    },
+    "./divider": {
+      "types": "./dist/Divider/index.d.ts",
+      "import": "./dist/Divider/index.js"
     },
     "./input": {
       "types": "./dist/Input/index.d.ts",
@@ -49,9 +65,17 @@
       "types": "./dist/Select/index.d.ts",
       "import": "./dist/Select/index.js"
     },
+    "./space": {
+      "types": "./dist/Space/index.d.ts",
+      "import": "./dist/Space/index.js"
+    },
     "./switch": {
       "types": "./dist/Switch/index.d.ts",
       "import": "./dist/Switch/index.js"
+    },
+    "./tag": {
+      "types": "./dist/Tag/index.d.ts",
+      "import": "./dist/Tag/index.js"
     },
     "./time-picker": {
       "types": "./dist/TimePicker/index.d.ts",

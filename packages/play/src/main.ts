@@ -15,6 +15,7 @@ const select = document.querySelector("super-select");
 const datePicker = document.querySelector("super-date-picker");
 const timePicker = document.querySelector("super-time-picker");
 const form = document.querySelector("super-form");
+const closableTag = document.querySelector("super-tag[closable]");
 
 const formSchema: SuperFormSchema = {
   layout: "horizontal",
@@ -146,6 +147,10 @@ if (timePicker) {
 
 timePicker?.addEventListener("super-time-picker-change", (event) => {
   writeOutput(`super-time-picker 当前值：${JSON.stringify(event.detail.value)}`);
+});
+
+closableTag?.addEventListener("super-tag-close", (event) => {
+  writeOutput(`关闭标签：${(event as CustomEvent<{ value: string }>).detail.value}`);
 });
 
 form?.addEventListener("super-form-submit", (event) => {

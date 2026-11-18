@@ -20,7 +20,7 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:5199",
   },
   webServer: {
-    command: "pnpm exec vite --port 5199 --strictPort",
+    command: "pnpm exec vite --port 5199 --strictPort --host 127.0.0.1",
     url: "http://127.0.0.1:5199/tests/visual/harness.html",
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

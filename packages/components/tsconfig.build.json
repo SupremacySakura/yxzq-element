@@ -12,14 +12,20 @@
   },
   "include": [
     "index.ts",
+    "Avatar/**/*.ts",
+    "Badge/**/*.ts",
     "Button/**/*.ts",
+    "Card/**/*.ts",
     "Checkbox/**/*.ts",
     "DatePicker/**/*.ts",
+    "Divider/**/*.ts",
     "Form/**/*.ts",
     "Input/**/*.ts",
     "Radio/**/*.ts",
     "Select/**/*.ts",
+    "Space/**/*.ts",
     "Switch/**/*.ts",
+    "Tag/**/*.ts",
     "TimePicker/**/*.ts"
   ],
   "exclude": [

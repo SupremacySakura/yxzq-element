@@ -1,5 +1,11 @@
 import type { DetailedHTMLProps, HTMLAttributes } from "react";
 import type { SuperButton } from "yxzq-element/button";
+import type { SuperAvatar } from "yxzq-element/avatar";
+import type { SuperBadge } from "yxzq-element/badge";
+import type { SuperCard, SuperCardClickDetail } from "yxzq-element/card";
+import type { SuperDivider } from "yxzq-element/divider";
+import type { SuperSpace } from "yxzq-element/space";
+import type { SuperTag, SuperTagCloseDetail } from "yxzq-element/tag";
 import type {
   SuperCheckbox,
   SuperCheckboxChangeDetail,
@@ -63,6 +69,63 @@ type SuperButtonAttributes = {
   disabled?: SuperButton["disabled"];
   loading?: SuperButton["loading"];
   "loading-text"?: SuperButton["loadingText"];
+};
+
+type SuperTagAttributes = {
+  variant?: SuperTag["variant"];
+  size?: SuperTag["size"];
+  closable?: SuperTag["closable"];
+  value?: SuperTag["value"];
+  "close-label"?: SuperTag["closeLabel"];
+};
+
+type SuperTagEvents = {
+  "onsuper-tag-close"?: CustomEventHandler<SuperTagCloseDetail>;
+};
+
+type SuperBadgeAttributes = {
+  value?: SuperBadge["value"];
+  max?: SuperBadge["max"] | `${number}`;
+  dot?: SuperBadge["dot"];
+  status?: SuperBadge["status"];
+  size?: SuperBadge["size"];
+  hidden?: SuperBadge["hidden"];
+};
+
+type SuperAvatarAttributes = {
+  src?: SuperAvatar["src"];
+  alt?: SuperAvatar["alt"];
+  size?: SuperAvatar["size"];
+  shape?: SuperAvatar["shape"];
+  icon?: SuperAvatar["icon"];
+  fallback?: SuperAvatar["fallback"];
+};
+
+type SuperCardAttributes = {
+  variant?: SuperCard["variant"];
+  size?: SuperCard["size"];
+  hoverable?: SuperCard["hoverable"];
+  clickable?: SuperCard["clickable"];
+  "aria-label"?: SuperCard["accessibleLabel"];
+};
+
+type SuperCardEvents = {
+  "onsuper-card-click"?: CustomEventHandler<SuperCardClickDetail>;
+};
+
+type SuperDividerAttributes = {
+  direction?: SuperDivider["direction"];
+  "content-position"?: SuperDivider["contentPosition"];
+  variant?: SuperDivider["variant"];
+  color?: SuperDivider["color"];
+};
+
+type SuperSpaceAttributes = {
+  direction?: SuperSpace["direction"];
+  size?: SuperSpace["size"];
+  wrap?: SuperSpace["wrap"];
+  align?: SuperSpace["align"];
+  fill?: SuperSpace["fill"];
 };
 
 type SuperInputAttributes = {
@@ -268,6 +331,23 @@ declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
       "super-button": CustomElementProps<SuperButton, SuperButtonAttributes>;
+      "super-avatar": CustomElementProps<SuperAvatar, SuperAvatarAttributes>;
+      "super-badge": CustomElementProps<SuperBadge, SuperBadgeAttributes>;
+      "super-card": CustomElementProps<
+        SuperCard,
+        SuperCardAttributes,
+        SuperCardEvents
+      >;
+      "super-divider": CustomElementProps<
+        SuperDivider,
+        SuperDividerAttributes
+      >;
+      "super-space": CustomElementProps<SuperSpace, SuperSpaceAttributes>;
+      "super-tag": CustomElementProps<
+        SuperTag,
+        SuperTagAttributes,
+        SuperTagEvents
+      >;
       "super-checkbox": CustomElementProps<
         SuperCheckbox,
         SuperCheckboxAttributes,

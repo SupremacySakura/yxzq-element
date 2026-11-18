@@ -114,6 +114,10 @@ function App() {
     window.alert(`React 收到时间：${JSON.stringify(event.detail.value)}`);
   };
 
+  const handleTagClose = (event: CustomEvent<{ value: string }>) => {
+    window.alert(`React 关闭标签：${event.detail.value}`);
+  };
+
   const handleFormSubmit = (event: CustomEvent<SuperFormSubmitDetail>) => {
     window.alert(`React 提交表单：${JSON.stringify(event.detail.values)}`);
   };
@@ -185,6 +189,41 @@ function App() {
           aria-label="提醒时间"
           onsuper-time-picker-change={handleTimeChange}
         ></super-time-picker>
+      </section>
+      <section aria-labelledby="display-title">
+        <h2 id="display-title">手绘展示组件</h2>
+        <super-space direction="horizontal" size="medium" wrap align="center">
+          <super-card variant="outlined" size="small">
+            <span slot="header">卡片标题</span>
+            卡片正文内容
+          </super-card>
+          <super-card variant="filled" size="small" hoverable>
+            悬停卡片
+          </super-card>
+        </super-space>
+        <super-space direction="horizontal" size="small" wrap align="center">
+          <super-tag variant="primary" value="react">
+            React
+          </super-tag>
+          <super-tag
+            variant="success"
+            closable
+            value="ready"
+            onsuper-tag-close={handleTagClose}
+          >
+            可关闭
+          </super-tag>
+          <super-avatar size="small" icon="手"></super-avatar>
+          <super-badge value="12" status="danger">
+            <span>消息</span>
+          </super-badge>
+          <super-badge dot status="success">
+            <span>在线</span>
+          </super-badge>
+        </super-space>
+        <super-divider content-position="left" variant="hand-drawn">
+          分割
+        </super-divider>
       </section>
       <section aria-labelledby="selector-title">
         <h2 id="selector-title">选择器套装</h2>

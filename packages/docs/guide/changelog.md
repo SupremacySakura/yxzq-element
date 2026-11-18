@@ -18,6 +18,7 @@
 - 新增 `@yxzq-element/theme/tokens.css` 共享设计令牌层,覆盖调色板、间距、圆角、手绘特征、字体、动效与层级;`index.css` 默认引入令牌,消费者可只覆盖约 20 个核心变量完成整体换肤。
 - 新增 Playwright 视觉回归基线(`tests/visual`),以 Button 的变体与尺寸作为手绘风参照,并在 CI 中新增视觉回归 job。
 - 新增 `check:docs-sync` 脚本,在 CI 中强制每个已实现组件都必须有文档页或明确文档提及。
+- 新增 6 个展示类组件:`super-tag`(可关闭标签)、`super-badge`(支持上限与圆点模式)、`super-avatar`(图片失败自动回退)、`super-card`(四变体、可选可点击与键盘触发)、`super-divider`(手绘/虚线变体与文案位置)、`super-space`(基于 gap 的间距容器);同步全量与按需注册入口、显式注册函数、公共类型、Vue/React 类型声明、原生 HTML/Vue/React 示例、组件文档与导航、无障碍语义及单元测试。
 
 ## 1.2.0 — 2026-07-25
 

@@ -41,6 +41,12 @@ export default defineConfig({
         text: "组件",
         items: [
           { text: "Button 按钮", link: "/components/button" },
+          { text: "Tag 标签", link: "/components/tag" },
+          { text: "Badge 徽标", link: "/components/badge" },
+          { text: "Avatar 头像", link: "/components/avatar" },
+          { text: "Card 卡片", link: "/components/card" },
+          { text: "Divider 分割线", link: "/components/divider" },
+          { text: "Space 间距", link: "/components/space" },
           { text: "Input 输入框", link: "/components/input" },
           { text: "Form 配置型表单", link: "/components/form" },
           {

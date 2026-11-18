@@ -25,6 +25,18 @@
       "types": "./dist/button.d.ts",
       "import": "./dist/button.js"
     },
+    "./avatar": {
+      "types": "./dist/avatar.d.ts",
+      "import": "./dist/avatar.js"
+    },
+    "./badge": {
+      "types": "./dist/badge.d.ts",
+      "import": "./dist/badge.js"
+    },
+    "./card": {
+      "types": "./dist/card.d.ts",
+      "import": "./dist/card.js"
+    },
     "./checkbox": {
       "types": "./dist/checkbox.d.ts",
       "import": "./dist/checkbox.js"
@@ -36,6 +48,10 @@
     "./form": {
       "types": "./dist/form.d.ts",
       "import": "./dist/form.js"
+    },
+    "./divider": {
+      "types": "./dist/divider.d.ts",
+      "import": "./dist/divider.js"
     },
     "./input": {
       "types": "./dist/input.d.ts",
@@ -49,9 +65,17 @@
       "types": "./dist/select.d.ts",
       "import": "./dist/select.js"
     },
+    "./space": {
+      "types": "./dist/space.d.ts",
+      "import": "./dist/space.js"
+    },
     "./switch": {
       "types": "./dist/switch.d.ts",
       "import": "./dist/switch.js"
+    },
+    "./tag": {
+      "types": "./dist/tag.d.ts",
+      "import": "./dist/tag.js"
     },
     "./time-picker": {
       "types": "./dist/time-picker.d.ts",
@@ -71,14 +95,20 @@
   },
   "sideEffects": [
     "./dist/index.js",
+    "./dist/avatar.js",
+    "./dist/badge.js",
     "./dist/button.js",
+    "./dist/card.js",
     "./dist/checkbox.js",
     "./dist/date-picker.js",
+    "./dist/divider.js",
     "./dist/form.js",
     "./dist/input.js",
     "./dist/radio.js",
     "./dist/select.js",
+    "./dist/space.js",
     "./dist/switch.js",
+    "./dist/tag.js",
     "./dist/time-picker.js"
   ],
   "scripts": {

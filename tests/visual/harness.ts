@@ -1,4 +1,4 @@
-import "/packages/core/index.ts";
+import "yxzq-element";
 
 const params = new URLSearchParams(window.location.search);
 const markup = params.get("markup") ?? "";

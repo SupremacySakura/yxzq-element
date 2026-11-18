@@ -1,5 +1,11 @@
 import type { EmitFn, HTMLAttributes, PublicProps } from "vue";
 import type { SuperButton } from "yxzq-element/button";
+import type { SuperAvatar } from "yxzq-element/avatar";
+import type { SuperBadge } from "yxzq-element/badge";
+import type { SuperCard, SuperCardClickDetail } from "yxzq-element/card";
+import type { SuperDivider } from "yxzq-element/divider";
+import type { SuperSpace } from "yxzq-element/space";
+import type { SuperTag, SuperTagCloseDetail } from "yxzq-element/tag";
 import type {
   SuperCheckbox,
   SuperCheckboxChangeDetail,
@@ -74,6 +80,34 @@ type ButtonProperties =
   | "disabled"
   | "loading"
   | "loadingText";
+
+type TagProperties = "variant" | "size" | "closable" | "value" | "closeLabel";
+
+type TagEvents = {
+  "super-tag-close": CustomEvent<SuperTagCloseDetail>;
+};
+
+type BadgeProperties = "value" | "max" | "dot" | "status" | "size" | "hidden";
+
+type AvatarProperties = "src" | "alt" | "size" | "shape" | "icon" | "fallback";
+
+type CardProperties =
+  | "variant"
+  | "size"
+  | "hoverable"
+  | "clickable";
+
+type CardAttributes = {
+  "aria-label"?: SuperCard["accessibleLabel"];
+};
+
+type CardEvents = {
+  "super-card-click": CustomEvent<SuperCardClickDetail>;
+};
+
+type DividerProperties = "direction" | "contentPosition" | "variant" | "color";
+
+type SpaceProperties = "direction" | "size" | "wrap" | "align" | "fill";
 
 type InputProperties =
   | "value"
@@ -273,6 +307,17 @@ declare module "vue" {
 
   interface GlobalComponents {
     "super-button": DefineCustomElement<SuperButton, ButtonProperties>;
+    "super-avatar": DefineCustomElement<SuperAvatar, AvatarProperties>;
+    "super-badge": DefineCustomElement<SuperBadge, BadgeProperties>;
+    "super-card": DefineCustomElement<
+      SuperCard,
+      CardProperties,
+      CardEvents,
+      CardAttributes
+    >;
+    "super-divider": DefineCustomElement<SuperDivider, DividerProperties>;
+    "super-space": DefineCustomElement<SuperSpace, SpaceProperties>;
+    "super-tag": DefineCustomElement<SuperTag, TagProperties, TagEvents>;
     "super-checkbox": DefineCustomElement<
       SuperCheckbox,
       CheckboxProperties,
