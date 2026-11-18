@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>Super Components visual harness</title>
+    <link rel="stylesheet" href="/packages/theme/tokens.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: var(--super-background-color);
+        font-family: var(--super-font-family);
+      }
+
+      #stage {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+      }
+    </style>
+    <script type="module" src="/tests/visual/harness.ts"></script>
+  </head>
+  <body>
+    <div id="stage"></div>
+  </body>
+</html>

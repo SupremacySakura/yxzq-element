@@ -73,6 +73,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@floating-ui/dom": "^1.8.0",
     "@yxzq-element/utils": "workspace:*",
     "lit": "^3.3.1"
   }

@@ -12,6 +12,9 @@
   },
   "include": [
     "index.ts",
-    "custom-element.ts"
+    "custom-element.ts",
+    "focus-trap.ts",
+    "scroll-lock.ts",
+    "sketch.ts"
   ]
 }
