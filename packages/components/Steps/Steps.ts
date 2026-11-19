@@ -1,5 +1,9 @@
 import { css, html, LitElement, nothing } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_STEPS_DIRECTIONS = ["horizontal", "vertical"] as const;
 export const SUPER_STEPS_STATUSES = [
@@ -29,7 +33,7 @@ let stepsId = 0;
 export class SuperSteps extends LitElement {
   static properties = {
     items: { attribute: false },
-    active: { type: Number, reflect: true },
+    active: { type: Number, reflect: true, noAccessor: true },
     direction: { type: String, reflect: true },
     status: { type: String, reflect: true },
     clickable: { type: Boolean, reflect: true },
@@ -42,7 +46,6 @@ export class SuperSteps extends LitElement {
   };
 
   declare items: SuperStepsItem[];
-  declare active: number;
   declare direction: SuperStepsDirection;
   declare status: SuperStepsStatus;
   declare clickable: boolean;
@@ -50,11 +53,42 @@ export class SuperSteps extends LitElement {
   declare accessibleLabel: string;
 
   private readonly uid = `super-steps-${++stepsId}`;
+  private _active = 0;
+  private readonly controlledValueGuard = createControlledValueGuard<number>({
+    host: this,
+    getValue: () => this._active,
+    setValue: (value) => this.setInternalActive(value),
+  });
+
+  get active(): number {
+    return this._active;
+  }
+
+  set active(value: number) {
+    this.controlledValueGuard.markExternal(value);
+    this.setInternalActive(value);
+  }
+
+  private setInternalActive(value: number): void {
+    const oldValue = this._active;
+    this._active = value;
+    this.requestUpdate("active", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
 
   constructor() {
     super();
     this.items = [];
-    this.active = 0;
+    this._active = 0;
     this.direction = "horizontal";
     this.status = "process";
     this.clickable = false;
@@ -72,8 +106,8 @@ export class SuperSteps extends LitElement {
         --super-text-color-secondary,
         #6b6360
       );
-      --super-steps-wait-color: var(--super-text-color-placeholder, #9a938f);
-      --super-steps-process-color: var(--super-color-primary, #4b87f5);
+      --super-steps-wait-color: var(--super-text-color-secondary, #6b6360);
+      --super-steps-process-color: #245cbe;
       --super-steps-finish-color: var(--super-color-success, #86cf8b);
       --super-steps-error-color: var(--super-color-danger, #ff7067);
       --super-steps-connector-color: var(--super-border-color-light, #b6ada6);
@@ -360,7 +394,8 @@ export class SuperSteps extends LitElement {
     if (!item) {
       return;
     }
-    this.active = index;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalActive(index);
     this.dispatchEvent(
       new CustomEvent<SuperStepsChangeDetail>("super-steps-change", {
         detail: { active: index },
@@ -368,6 +403,7 @@ export class SuperSteps extends LitElement {
         composed: true,
       }),
     );
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private handleClick = (event: MouseEvent): void => {
@@ -405,6 +441,11 @@ export class SuperSteps extends LitElement {
     event.preventDefault();
     this.activate(Number(target.dataset.stepIndex));
   };
+
+  override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    super.disconnectedCallback();
+  }
 
   private renderStep(index: number, item: SuperStepsItem) {
     const status = this.stepStatus(index);

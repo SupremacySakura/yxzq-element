@@ -2,7 +2,11 @@ import { css, html, LitElement, nothing, unsafeCSS } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { sketchyShadow } from "@yxzq-element/utils";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+  sketchyShadow,
+} from "@yxzq-element/utils";
 
 export const SUPER_TABLE_SIZES = ["large", "medium", "small"] as const;
 export const SUPER_TABLE_ALIGNS = ["left", "center", "right"] as const;
@@ -60,18 +64,20 @@ export class SuperTable extends LitElement {
     rows: { attribute: false },
     rowKey: { type: String, attribute: "row-key", reflect: true },
     selectable: { type: Boolean, reflect: true },
-    selectedKeys: { attribute: false },
+    selectedKeys: { attribute: false, noAccessor: true },
     sortKey: {
       type: String,
       attribute: "sort-key",
       reflect: true,
       converter: emptyAttributeConverter,
+      noAccessor: true,
     },
     sortDirection: {
       type: String,
       attribute: "sort-direction",
       reflect: true,
       converter: emptyAttributeConverter,
+      noAccessor: true,
     },
     loading: { type: Boolean, reflect: true },
     emptyText: { type: String, attribute: "empty-text", reflect: true },
@@ -107,9 +113,6 @@ export class SuperTable extends LitElement {
   declare rows: SuperTableRow[];
   declare rowKey: string;
   declare selectable: boolean;
-  declare selectedKeys: string[];
-  declare sortKey: string;
-  declare sortDirection: SuperTableSortDirection | "";
   declare loading: boolean;
   declare emptyText: string;
   declare size: SuperTableSize;
@@ -122,15 +125,91 @@ export class SuperTable extends LitElement {
   declare loadingText: string;
   declare accessibleLabel: string;
 
+  private _selectedKeys: string[] = [];
+  private _sortKey = "";
+  private _sortDirection: SuperTableSortDirection | "" = "";
+  private readonly selectedKeysGuard = createControlledValueGuard<string[]>({
+    host: this,
+    getValue: () => this._selectedKeys,
+    setValue: (value) => this.setInternalSelectedKeys(value),
+  });
+  private readonly sortKeyGuard = createControlledValueGuard<string>({
+    host: this,
+    getValue: () => this._sortKey,
+    setValue: (value) => this.setInternalSortKey(value),
+  });
+  private readonly sortDirectionGuard = createControlledValueGuard<
+    SuperTableSortDirection | ""
+  >({
+    host: this,
+    getValue: () => this._sortDirection,
+    setValue: (value) => this.setInternalSortDirection(value),
+  });
+
+  get selectedKeys(): string[] {
+    return this._selectedKeys;
+  }
+
+  set selectedKeys(value: string[]) {
+    this.selectedKeysGuard.markExternal(value);
+    this.setInternalSelectedKeys(value);
+  }
+
+  private setInternalSelectedKeys(value: string[]): void {
+    const oldValue = this._selectedKeys;
+    this._selectedKeys = value;
+    this.requestUpdate("selectedKeys", oldValue);
+  }
+
+  get sortKey(): string {
+    return this._sortKey;
+  }
+
+  set sortKey(value: string) {
+    this.sortKeyGuard.markExternal(value);
+    this.setInternalSortKey(value);
+  }
+
+  private setInternalSortKey(value: string): void {
+    const oldValue = this._sortKey;
+    this._sortKey = value;
+    this.requestUpdate("sortKey", oldValue);
+  }
+
+  get sortDirection(): SuperTableSortDirection | "" {
+    return this._sortDirection;
+  }
+
+  set sortDirection(value: SuperTableSortDirection | "") {
+    this.sortDirectionGuard.markExternal(value);
+    this.setInternalSortDirection(value);
+  }
+
+  private setInternalSortDirection(value: SuperTableSortDirection | ""): void {
+    const oldValue = this._sortDirection;
+    this._sortDirection = value;
+    this.requestUpdate("sortDirection", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
     this.columns = [];
     this.rows = [];
     this.rowKey = "id";
     this.selectable = false;
-    this.selectedKeys = [];
-    this.sortKey = "";
-    this.sortDirection = "";
+    this._selectedKeys = [];
+    this._sortKey = "";
+    this._sortDirection = "";
     this.loading = false;
     this.emptyText = "暂无数据";
     this.size = "medium";
@@ -692,15 +771,19 @@ export class SuperTable extends LitElement {
         ? "desc"
         : "none";
 
+    const sortKeyMutation = this.sortKeyGuard.capture();
+    const sortDirectionMutation = this.sortDirectionGuard.capture();
     if (direction === "none") {
-      this.sortKey = "";
-      this.sortDirection = "";
+      this.setInternalSortKey("");
+      this.setInternalSortDirection("");
     } else {
-      this.sortKey = column.key;
-      this.sortDirection = direction;
+      this.setInternalSortKey(column.key);
+      this.setInternalSortDirection(direction);
     }
 
     this.emitSort(column.key, direction);
+    this.sortKeyGuard.confirm(sortKeyMutation);
+    this.sortDirectionGuard.confirm(sortDirectionMutation);
   };
 
   private handleSelectAll = (): void => {
@@ -720,8 +803,10 @@ export class SuperTable extends LitElement {
       ? current.filter((key) => !keys.includes(key))
       : Array.from(new Set([...current, ...keys]));
 
-    this.selectedKeys = next;
+    const controlledMutation = this.selectedKeysGuard.capture();
+    this.setInternalSelectedKeys(next);
     this.emitSelect(next, null, !allSelected);
+    this.selectedKeysGuard.confirm(controlledMutation);
   };
 
   private handleRowSelect = (event: Event): void => {
@@ -743,9 +828,18 @@ export class SuperTable extends LitElement {
       ? [...current, key]
       : current.filter((entry) => entry !== key);
 
-    this.selectedKeys = next;
+    const controlledMutation = this.selectedKeysGuard.capture();
+    this.setInternalSelectedKeys(next);
     this.emitSelect(next, row, selected);
+    this.selectedKeysGuard.confirm(controlledMutation);
   };
+
+  override disconnectedCallback(): void {
+    this.selectedKeysGuard.dispose();
+    this.sortKeyGuard.dispose();
+    this.sortDirectionGuard.dispose();
+    super.disconnectedCallback();
+  }
 
   private renderSelectionCell(row: SuperTableRow, index: number) {
     const key = this.getRowKey(row, index);

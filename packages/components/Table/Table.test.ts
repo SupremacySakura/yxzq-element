@@ -118,6 +118,30 @@ describe("SuperTable", () => {
     expect(element.hasAttribute("sort-direction")).toBe(false);
   });
 
+  it("keeps attribute-initialized sort state uncontrolled", async () => {
+    defineSuperTable();
+    const element = document.createElement(SUPER_TABLE_TAG);
+    element.setAttribute("sort-key", "name");
+    element.setAttribute("sort-direction", "asc");
+    element.columns = [{ key: "name", title: "姓名", sortable: true }];
+    element.rows = rows;
+    document.body.append(element);
+    await element.updateComplete;
+
+    const onSort = vi.fn();
+    document.body.addEventListener("super-table-sort", onSort);
+    element.shadowRoot
+      ?.querySelector<HTMLButtonElement>(".sort-button")
+      ?.click();
+    await element.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
+
+    expect(element.sortKey).toBe("name");
+    expect(element.sortDirection).toBe("desc");
+    expect(onSort).toHaveBeenCalledTimes(1);
+  });
+
   it("renders columns, rows and aligned cells", async () => {
     const element = await mountTable((table) => {
       table.columns = columns;

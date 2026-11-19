@@ -314,6 +314,14 @@ document.addEventListener("super-switch-change", (event) => {
 });
 ```
 
+## 受控状态
+
+Checkbox、Radio 与 Switch 的 `checked` 同时支持受控与非受控用法。
+
+- 通过 HTML attribute 初始化时，该值只是非受控默认值；用户操作会直接更新组件状态。
+- 通过 JavaScript property 再次写入后进入受控模式。用户操作会先更新内部状态并派发对应 change 事件，然后在下一个动画帧确认父级是否写回；父级未写回时，组件恢复最近一次外部提交值。
+- 在事件处理函数中同步写回新值表示接受本次操作，写回旧值或不写入表示拒绝。程序化 property 修改不会派发用户事件。
+
 ## 无障碍
 
 - 为一组相关选项使用原生 `fieldset` 与 `legend`，不要只依赖视觉边框表达分组。

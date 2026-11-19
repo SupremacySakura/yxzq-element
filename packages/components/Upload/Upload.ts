@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import { createControlledValueGuard } from "@yxzq-element/utils";
 
 export const SUPER_UPLOAD_SIZES = ["large", "medium", "small"] as const;
 export const SUPER_UPLOAD_VALIDATIONS = [
@@ -41,7 +42,7 @@ export class SuperUpload extends LitElement {
     maxCount: { type: Number, attribute: "max-count", reflect: true },
     maxSize: { type: Number, attribute: "max-size", reflect: true },
     autoUpload: { type: Boolean, attribute: "auto-upload", reflect: true },
-    fileList: { attribute: false },
+    fileList: { attribute: false, noAccessor: true },
     size: { type: String, reflect: true },
     validation: { type: String, reflect: true },
     promptText: { type: String, attribute: "prompt-text" },
@@ -56,7 +57,6 @@ export class SuperUpload extends LitElement {
   declare maxCount: number | undefined;
   declare maxSize: number | undefined;
   declare autoUpload: boolean;
-  declare fileList: File[];
   declare size: SuperUploadSize;
   declare validation: SuperUploadValidation;
   declare promptText: string;
@@ -64,7 +64,32 @@ export class SuperUpload extends LitElement {
   declare removeLabel: string;
   declare accessibleLabel: string;
 
+  private _fileList: File[] = [];
+  private readonly controlledValueGuard = createControlledValueGuard<File[]>({
+    host: this,
+    getValue: () => this._fileList,
+    setValue: (fileList) => this.setInternalFileList(fileList),
+    clone: (fileList) => [...fileList],
+    equals: (left, right) =>
+      left.length === right.length &&
+      left.every((file, index) => file === right[index]),
+  });
   private dragging = false;
+
+  get fileList(): File[] {
+    return this._fileList;
+  }
+
+  set fileList(fileList: File[]) {
+    this.controlledValueGuard.markExternal(fileList);
+    this.setInternalFileList(fileList);
+  }
+
+  private setInternalFileList(fileList: File[]): void {
+    const oldValue = this._fileList;
+    this._fileList = [...fileList];
+    this.requestUpdate("fileList", oldValue);
+  }
 
   /**
    * Read-only form-control view of the selected files. Mutations go through
@@ -84,7 +109,7 @@ export class SuperUpload extends LitElement {
     this.maxCount = undefined;
     this.maxSize = undefined;
     this.autoUpload = false;
-    this.fileList = [];
+    this._fileList = [];
     this.size = "medium";
     this.validation = "none";
     this.promptText = "选择文件";
@@ -450,6 +475,7 @@ export class SuperUpload extends LitElement {
     }
 
     const current = Array.isArray(this.fileList) ? this.fileList : [];
+    const base = this.multiple ? current : [];
     const existingKeys = new Set(
       current.map((file) => `${file.name}:${file.size}:${file.lastModified}`),
     );
@@ -462,9 +488,10 @@ export class SuperUpload extends LitElement {
       return true;
     });
 
-    const available = this.maxCount === undefined
-      ? unique
-      : unique.slice(0, Math.max(0, this.maxCount - current.length));
+    const availableCount = this.maxCount === undefined
+      ? unique.length
+      : Math.max(0, this.maxCount - base.length);
+    const available = unique.slice(0, availableCount);
     const overflow = unique.slice(available.length);
 
     if (overflow.length > 0) {
@@ -475,7 +502,11 @@ export class SuperUpload extends LitElement {
       return;
     }
 
-    this.fileList = [...current, ...available];
+    const nextFileList = this.multiple
+      ? [...current, ...available]
+      : available;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalFileList(nextFileList);
     this.emit<SuperUploadChangeDetail>("super-upload-change", {
       fileList: this.fileList,
     });
@@ -485,6 +516,7 @@ export class SuperUpload extends LitElement {
         files: available,
       });
     }
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private handleInputChange(event: Event): void {
@@ -559,14 +591,22 @@ export class SuperUpload extends LitElement {
     if (index < 0) {
       return;
     }
-    this.fileList = [
+    const nextFileList = [
       ...current.slice(0, index),
       ...current.slice(index + 1),
     ];
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalFileList(nextFileList);
     this.emit<SuperUploadRemoveDetail>("super-upload-remove", {
       file,
       fileList: this.fileList,
     });
+    this.controlledValueGuard.confirm(controlledMutation);
+  }
+
+  override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    super.disconnectedCallback();
   }
 
   protected render() {

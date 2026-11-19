@@ -166,6 +166,12 @@ picker.disabledDate = (date) => date.getDay() === 0 || date.getDay() === 6;
 | `Enter` / `Space` | 在网格中选择聚焦的单元格 |
 | `Escape` | 关闭面板并把焦点还给触发器 |
 
+## 受控状态
+
+`value` 与 `open` 同时支持受控与非受控用法。HTML attribute 初始化只作为非受控默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户点选、快捷项、今天或清空会先更新内部值并派发 `super-date-picker-change`；用户开合面板会派发 `super-date-picker-open-change`。随后组件在下一个动画帧分别确认父级是否写回。父级在事件中同步写入新值即接受修改；未写回的属性恢复最近一次外部提交值，范围数组会按元素比较。程序化写入不会派发用户事件。
+
 ## API
 
 ### Attributes / Properties

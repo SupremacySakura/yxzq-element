@@ -137,6 +137,12 @@ menu.addEventListener("super-menu-select", (event) => {
 
 子菜单内部始终使用上下方向键移动，即使顶层是横向布局。`active` 的祖先项会自动展开，便于在页面加载后直接定位当前项。请为没有可见标题的菜单提供 `aria-label`，并保证同一菜单内 `key` 唯一。
 
+## 受控状态
+
+`active` 同时支持受控与非受控用法。HTML attribute 初始化只作为非受控默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户激活叶子项时会先更新内部当前项并派发 `super-menu-select`，随后在下一个动画帧确认父级是否写回。父级同步写入新 key 即接受修改；不写入时组件恢复最近一次外部提交值。子菜单展开状态是组件内部交互状态，不单独暴露受控 property。
+
 ## API
 
 ### Attributes / Properties
@@ -192,7 +198,7 @@ Menu 不使用 Slot；内容完全来自 `items` 属性，因此图标由字符�
 ```css
 super-menu {
   --super-menu-color: var(--super-text-color-regular);
-  --super-menu-active-color: var(--super-color-primary-dark-2);
+  --super-menu-active-color: #245cbe;
   --super-menu-active-background: color-mix(in srgb, var(--super-color-primary) 13%, #fffef9);
   --super-menu-hover-background: color-mix(in srgb, var(--super-color-primary) 8%, transparent);
   --super-menu-background: var(--super-background-color);

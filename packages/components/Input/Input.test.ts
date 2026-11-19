@@ -263,4 +263,24 @@ describe("SuperInput", () => {
     expect(input?.required).toBe(true);
     expect(input?.getAttribute("aria-label")).toBe("搜索关键词");
   });
+
+  it("keeps an attribute-initialized value uncontrolled", async () => {
+    defineSuperInput();
+    const element = document.createElement(SUPER_INPUT_TAG);
+    element.setAttribute("value", "初始值");
+    document.body.append(element);
+    await element.updateComplete;
+
+    const input = getInput(element);
+    if (!input) {
+      throw new Error("input is missing");
+    }
+    input.value = "用户输入";
+    input.dispatchEvent(new Event("input", { bubbles: true, composed: true }));
+    await element.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
+
+    expect(element.value).toBe("用户输入");
+  });
 });

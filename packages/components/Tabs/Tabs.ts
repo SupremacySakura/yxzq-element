@@ -1,5 +1,9 @@
 import { css, html, LitElement, nothing } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_TABS_ORIENTATIONS = ["horizontal", "vertical"] as const;
 export const SUPER_TABS_VARIANTS = ["line", "card", "segment"] as const;
@@ -33,7 +37,7 @@ let tabsId = 0;
 
 export class SuperTabs extends LitElement {
   static properties = {
-    active: { type: String, reflect: true },
+    active: { type: String, reflect: true, noAccessor: true },
     orientation: { type: String, reflect: true },
     variant: { type: String, reflect: true },
     size: { type: String, reflect: true },
@@ -43,7 +47,6 @@ export class SuperTabs extends LitElement {
     items: { attribute: false },
   };
 
-  declare active: string;
   declare orientation: SuperTabsOrientation;
   declare variant: SuperTabsVariant;
   declare size: SuperTabsSize;
@@ -53,10 +56,41 @@ export class SuperTabs extends LitElement {
   declare items: SuperTabsItem[];
 
   private readonly uid = `super-tabs-${++tabsId}`;
+  private _active = "";
+  private readonly controlledValueGuard = createControlledValueGuard<string>({
+    host: this,
+    getValue: () => this._active,
+    setValue: (value) => this.setInternalActive(value),
+  });
+
+  get active(): string {
+    return this._active;
+  }
+
+  set active(value: string) {
+    this.controlledValueGuard.markExternal(value);
+    this.setInternalActive(value);
+  }
+
+  private setInternalActive(value: string): void {
+    const oldValue = this._active;
+    this._active = value;
+    this.requestUpdate("active", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
 
   constructor() {
     super();
-    this.active = "";
+    this._active = "";
     this.orientation = "horizontal";
     this.variant = "line";
     this.size = "medium";
@@ -73,7 +107,7 @@ export class SuperTabs extends LitElement {
       --super-tabs-tab-padding-inline: 14px;
       --super-tabs-font-size: var(--super-font-size-base, 14px);
       --super-tabs-color: var(--super-text-color-regular, #4a4441);
-      --super-tabs-active-color: var(--super-color-primary-dark-2, #3272e8);
+      --super-tabs-active-color: #245cbe;
       --super-tabs-background: transparent;
       --super-tabs-active-background: color-mix(
         in srgb,
@@ -475,8 +509,10 @@ export class SuperTabs extends LitElement {
     if (!key || key === this.effectiveActive) {
       return;
     }
-    this.active = key;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalActive(key);
     this.emitChange(key);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private findTab(key: string): HTMLElement | null {
@@ -602,6 +638,11 @@ export class SuperTabs extends LitElement {
       return;
     }
     super.blur();
+  }
+
+  override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    super.disconnectedCallback();
   }
 
   private renderItems() {

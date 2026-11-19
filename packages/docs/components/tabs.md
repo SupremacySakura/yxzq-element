@@ -155,6 +155,12 @@ tabs.addEventListener("super-tabs-close", (event) => {
 
 切换使用自动激活模式：方向键移动即更新 `active` 并派发事件。面板带 `tabindex="0"`，方便键盘用户从触发项继续进入内容。请为没有可见标题的 Tabs 提供 `aria-label`。
 
+## 受控状态
+
+`active` 同时支持受控与非受控用法。HTML attribute 初始化只作为非受控默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户点击、键盘切换或关闭相关操作会先更新内部选中项并派发对应事件，随后在下一个动画帧确认父级是否写回。父级在 `super-tabs-change` 中同步写回新 key 即接受切换；不写入时组件恢复最近一次外部提交的 `active`。程序化写入不会派发用户事件。
+
 ## API
 
 ### Attributes / Properties
@@ -203,7 +209,7 @@ tabs.addEventListener("super-tabs-close", (event) => {
 ```css
 super-tabs {
   --super-tabs-color: var(--super-text-color-regular);
-  --super-tabs-active-color: var(--super-color-primary-dark-2);
+  --super-tabs-active-color: #245cbe;
   --super-tabs-active-background: color-mix(in srgb, var(--super-color-primary) 13%, #fffef9);
   --super-tabs-border-color: var(--super-border-color-light);
   --super-tabs-indicator-color: var(--super-color-primary);

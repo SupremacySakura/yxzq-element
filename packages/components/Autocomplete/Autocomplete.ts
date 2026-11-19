@@ -7,6 +7,10 @@ import {
 } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 import { createFloating, type FloatingController } from "../internal/floating.js";
 
 export const SUPER_AUTOCOMPLETE_SIZES = ["large", "medium", "small"] as const;
@@ -63,9 +67,9 @@ let autocompleteId = 0;
 
 export class SuperAutocomplete extends LitElement {
   static properties = {
-    value: { type: String, reflect: true },
+    value: { type: String, reflect: true, noAccessor: true },
     items: { attribute: false },
-    open: { type: Boolean, reflect: true },
+    open: { type: Boolean, reflect: true, noAccessor: true },
     placeholder: { type: String, reflect: true },
     disabled: { type: Boolean, reflect: true },
     size: { type: String, reflect: true },
@@ -85,9 +89,7 @@ export class SuperAutocomplete extends LitElement {
     activeIndex: { state: true },
   };
 
-  declare value: string;
   declare items: SuperAutocompleteItems;
-  declare open: boolean;
   declare placeholder: string;
   declare disabled: boolean;
   declare size: SuperAutocompleteSize;
@@ -104,16 +106,66 @@ export class SuperAutocomplete extends LitElement {
 
   private readonly controlId = `super-autocomplete-${++autocompleteId}`;
   private readonly listboxId = `${this.controlId}-listbox`;
+  private _value = "";
+  private _open = false;
+  private readonly controlledValueGuard = createControlledValueGuard<string>({
+    host: this,
+    getValue: () => this._value,
+    setValue: (value) => this.setInternalValue(value),
+  });
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
   private floating: FloatingController | null = null;
   private listboxElement: HTMLElement | null = null;
   private inputElement: HTMLInputElement | null = null;
   private suppressFocusOpen = false;
 
+  get value(): string {
+    return this._value;
+  }
+
+  set value(value: string) {
+    this.controlledValueGuard.markExternal(value);
+    this.setInternalValue(value);
+  }
+
+  private setInternalValue(value: string): void {
+    const oldValue = this._value;
+    this._value = value;
+    this.requestUpdate("value", oldValue);
+  }
+
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
-    this.value = "";
     this.items = [];
-    this.open = false;
     this.placeholder = "输入以搜索";
     this.disabled = false;
     this.size = "medium";
@@ -518,7 +570,8 @@ export class SuperAutocomplete extends LitElement {
       return;
     }
 
-    this.open = nextOpen;
+    const controlledMutation = this.controlledOpenGuard.capture();
+    this.setInternalOpen(nextOpen);
     if (nextOpen) {
       this.realignActiveOption();
     } else {
@@ -534,6 +587,7 @@ export class SuperAutocomplete extends LitElement {
         },
       ),
     );
+    this.controlledOpenGuard.confirm(controlledMutation);
   }
 
   private moveActive(direction: 1 | -1): void {
@@ -566,7 +620,8 @@ export class SuperAutocomplete extends LitElement {
       return;
     }
 
-    this.value = option.value;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalValue(option.value);
     this.activeIndex = -1;
     this.setOpen(false);
     this.dispatchEvent(
@@ -579,6 +634,7 @@ export class SuperAutocomplete extends LitElement {
         },
       ),
     );
+    this.controlledValueGuard.confirm(controlledMutation);
     this.focusInputWithoutOpening();
     void originalEvent;
   }
@@ -595,7 +651,8 @@ export class SuperAutocomplete extends LitElement {
 
   private handleInput = (event: InputEvent): void => {
     const input = event.currentTarget as HTMLInputElement;
-    this.value = input.value;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalValue(input.value);
     if (!this.disabled) {
       this.setOpen(true);
       this.realignActiveOption();
@@ -610,6 +667,7 @@ export class SuperAutocomplete extends LitElement {
         },
       ),
     );
+    this.controlledValueGuard.confirm(controlledMutation);
   };
 
   private handleClear = (event: MouseEvent): void => {
@@ -620,7 +678,8 @@ export class SuperAutocomplete extends LitElement {
     }
 
     const previousValue = this.value;
-    this.value = "";
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalValue("");
     this.activeIndex = -1;
     this.setOpen(false);
     this.dispatchEvent(
@@ -633,6 +692,7 @@ export class SuperAutocomplete extends LitElement {
         },
       ),
     );
+    this.controlledValueGuard.confirm(controlledMutation);
     this.focusInputWithoutOpening();
   };
 
@@ -759,6 +819,8 @@ export class SuperAutocomplete extends LitElement {
   }
 
   override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    this.controlledOpenGuard.dispose();
     this.destroyFloating();
     this.ownerDocument.removeEventListener(
       "pointerdown",
@@ -770,7 +832,7 @@ export class SuperAutocomplete extends LitElement {
 
   protected willUpdate(changedProperties: PropertyValues<this>): void {
     if (this.disabled && this.open) {
-      this.open = false;
+      this.setInternalOpen(false);
       this.activeIndex = -1;
     }
 

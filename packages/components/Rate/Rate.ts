@@ -1,5 +1,9 @@
 import { css, html, LitElement, nothing } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_RATE_SIZES = ["large", "medium", "small"] as const;
 export const SUPER_RATE_VALIDATIONS = [
@@ -22,7 +26,7 @@ const clamp = (value: number, min: number, max: number): number =>
 
 export class SuperRate extends LitElement {
   static properties = {
-    value: { type: Number, reflect: true },
+    value: { type: Number, reflect: true, noAccessor: true },
     max: { type: Number, reflect: true },
     allowHalf: { type: Boolean, attribute: "allow-half", reflect: true },
     readonly: { type: Boolean, reflect: true },
@@ -34,7 +38,6 @@ export class SuperRate extends LitElement {
     clearLabel: { type: String, attribute: "clear-label" },
   };
 
-  declare value: number;
   declare max: number;
   declare allowHalf: boolean;
   declare readonly: boolean;
@@ -45,13 +48,43 @@ export class SuperRate extends LitElement {
   declare accessibleLabel: string;
   declare clearLabel: string;
 
+  private _value = 0;
+  private readonly controlledValueGuard = createControlledValueGuard<number>({
+    host: this,
+    getValue: () => this._value,
+    setValue: (value) => this.setInternalValue(value),
+  });
   private hoverValue: number | undefined;
   private iconNodes: Node[] = [];
   private hasCustomIcon = false;
 
+  get value(): number {
+    return this._value;
+  }
+
+  set value(value: number) {
+    this.controlledValueGuard.markExternal(value);
+    this.setInternalValue(value);
+  }
+
+  private setInternalValue(value: number): void {
+    const oldValue = this._value;
+    this._value = value;
+    this.requestUpdate("value", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
-    this.value = 0;
     this.max = 5;
     this.allowHalf = false;
     this.readonly = false;
@@ -307,8 +340,10 @@ export class SuperRate extends LitElement {
       0,
       this.resolvedMax,
     );
-    this.value = quantized;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalValue(quantized);
     this.emitChange(quantized);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private valueForPointer(event: PointerEvent | MouseEvent): number {
@@ -378,6 +413,11 @@ export class SuperRate extends LitElement {
 
   override blur(): void {
     this.renderRoot?.querySelector<HTMLElement>('[role="slider"]')?.blur();
+  }
+
+  override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    super.disconnectedCallback();
   }
 
   protected override updated(): void {

@@ -153,7 +153,7 @@ defineSuperBadge();
 | `--super-badge-offset` | `4px` | 相对内容右上角的偏移 |
 | `--super-badge-padding-inline` | `5px` | 徽标水平内边距 |
 | `--super-badge-font-size` | `12px` | 徽标字号 |
-| `--super-badge-color` | `#ffffff` | 徽标文字色 |
+| `--super-badge-color` | `#1f1915` | 徽标文字色；`warning` 状态使用 `#352809` |
 | `--super-badge-background` | `var(--super-color-primary, #4b87f5)` | 徽标背景色 |
 | `--super-badge-border-color` | `#174ea6` | 徽标边框色 |
 | `--super-badge-shadow-color` | `rgb(23 78 166 / 24%)` | 手绘阴影色 |

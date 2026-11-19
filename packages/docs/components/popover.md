@@ -189,7 +189,9 @@ defineSuperPopover();
 
 ## 受控与禁用
 
-`open` 是受控状态。直接设置属性会更新显示，但不会派发 `super-popover-open-change`；只有点击、悬停、键盘激活、外部点击或 `Escape` 等用户操作才会派发。`disabled` 会立即关闭并阻止再次打开。
+`open` 同时支持受控与非受控用法。HTML `open` attribute 只作为初始默认值；通过 property 写入后进入受控模式，程序化修改不会派发 `super-popover-open-change`。
+
+点击、悬停、键盘激活、外部点击或 `Escape` 等用户操作会先更新内部显示状态并派发 open-change，然后在下一个动画帧确认父级是否写回。父级在事件中同步写回新值即接受；不写入时恢复最近一次外部提交状态。`disabled` 会立即关闭并阻止再次打开。
 
 ```html
 <super-popover id="controlled-popover" trigger="manual" title="由外部状态控制">

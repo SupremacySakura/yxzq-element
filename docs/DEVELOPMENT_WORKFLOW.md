@@ -85,9 +85,11 @@ pnpm typecheck
 pnpm test
 pnpm build
 pnpm docs:build
+pnpm test:contract
 ```
 
 - `pnpm test` 必须能在没有任何残留 `dist` 的全新检出中直接运行，不得依赖先构建库。
+- 修改组件公共属性、事件、焦点/键盘交互、弹层或响应式布局时，还必须运行 `pnpm test:contract`；该命令在原生 HTML、Vue 与 React 三个真实宿主中验证清单驱动的契约。扩展方式见 [`tests/contract/README.md`](../tests/contract/README.md)。
 - 视觉、响应式、键盘、焦点、弹层或 Shadow DOM 交互发生变化时，还要在真实浏览器中检查相关文档或示例；仅通过编译不代表完成。
 - 文档或配置变更至少执行其直接相关的检查；只要涉及组件、公共类型或注册入口，就执行上述四项完整门禁。
 - 交付前执行 `git diff --check`，并再次检查 `git status --short`，确认没有生成的 `dist`、VitePress 缓存或输出被纳入提交。

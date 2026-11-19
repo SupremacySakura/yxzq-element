@@ -1,6 +1,10 @@
 import { css, html, LitElement, nothing } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_INPUT_TYPES = [
   "text",
@@ -74,7 +78,6 @@ export class SuperInput extends LitElement {
     hasAction: { state: true },
   };
 
-  declare value: string;
   declare type: SuperInputType;
   declare size: SuperInputSize;
   declare validation: SuperInputValidation;
@@ -105,10 +108,40 @@ export class SuperInput extends LitElement {
   private declare hasPrefix: boolean;
   private declare hasSuffix: boolean;
   private declare hasAction: boolean;
+  private _value = "";
+  private readonly controlledValueGuard = createControlledValueGuard<string>({
+    host: this,
+    getValue: () => this._value,
+    setValue: (value) => this.setInternalValue(value),
+  });
+
+  get value(): string {
+    return this._value;
+  }
+
+  set value(value: string) {
+    this.controlledValueGuard.markExternal(value);
+    this.setInternalValue(value);
+  }
+
+  private setInternalValue(value: string): void {
+    const oldValue = this._value;
+    this._value = value;
+    this.requestUpdate("value", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
 
   constructor() {
     super();
-    this.value = "";
     this.type = "text";
     this.size = "medium";
     this.validation = "none";
@@ -531,14 +564,18 @@ export class SuperInput extends LitElement {
 
   private handleInput(event: Event): void {
     const field = event.currentTarget as HTMLInputElement | HTMLTextAreaElement;
-    this.value = field.value;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalValue(field.value);
     this.emitValueEvent("super-input", event);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private handleChange(event: Event): void {
     const field = event.currentTarget as HTMLInputElement | HTMLTextAreaElement;
-    this.value = field.value;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalValue(field.value);
     this.emitValueEvent("super-change", event);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private clearInput(): void {
@@ -548,8 +585,9 @@ export class SuperInput extends LitElement {
     }
 
     const previousValue = this.value;
+    const controlledMutation = this.controlledValueGuard.capture();
     field.value = "";
-    this.value = "";
+    this.setInternalValue("");
     field.dispatchEvent(new InputEvent("input", {
       bubbles: true,
       composed: true,
@@ -560,6 +598,7 @@ export class SuperInput extends LitElement {
       bubbles: true,
       composed: true,
     }));
+    this.controlledValueGuard.confirm(controlledMutation);
     field.focus();
   }
 
@@ -598,13 +637,20 @@ export class SuperInput extends LitElement {
     } else {
       field.stepDown();
     }
-    this.value = field.value;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalValue(field.value);
     field.dispatchEvent(new InputEvent("input", {
       bubbles: true,
       composed: true,
       inputType: "insertReplacementText",
     }));
+    this.controlledValueGuard.confirm(controlledMutation);
     field.focus();
+  }
+
+  override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    super.disconnectedCallback();
   }
 
   private updateSlotPresence(

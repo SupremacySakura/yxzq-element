@@ -375,4 +375,33 @@ describe("SuperDialog", () => {
       expect(getPart(element, part)).not.toBeNull();
     }
   });
+
+  it("keeps an attribute-initialized open state uncontrolled", async () => {
+    defineSuperDialog();
+    const element = document.createElement(SUPER_DIALOG_TAG);
+    element.setAttribute("open", "");
+    element.textContent = "正文";
+    document.body.append(element);
+    await settle(element);
+
+    getPart(element, "close")?.click();
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await settle(element);
+
+    expect(element.open).toBe(false);
+  });
+
+  it("restores a controlled open state when a close is rejected", async () => {
+    const element = await mountDialog((dialog) => {
+      dialog.open = true;
+    });
+
+    getPart(element, "close")?.click();
+    expect(element.open).toBe(false);
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await settle(element);
+
+    expect(element.open).toBe(true);
+    expect(getPart(element, "dialog")).not.toBeNull();
+  });
 });

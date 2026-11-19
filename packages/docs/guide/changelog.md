@@ -4,7 +4,36 @@
 
 ## 未发布
 
-_暂无变更。_
+### 新增
+
+- 新增跨框架契约测试体系:单一场景清单驱动原生 HTML、Vue 与 React 三个真实 Vite 宿主,覆盖 36 个组件、58 个公开事件、键盘/焦点/关闭行为、axe WCAG 2.2 AA 扫描、移动视口与受控状态回滚;Chromium 全量作为 PR 门禁,Firefox/WebKit 覆盖高风险交互(ADR-0011)。
+- 新增已发布 npm 包的独立烟测 `pnpm smoke:npm <version>`,在隔离目录中安装 registry 产物,验证 36 个标签注册、全量导入、按需导入与 Shadow DOM 挂载;`1.3.0` 已验证通过。
+- 新增 `tests/contract/README.md`,记录契约清单、三端宿主、运行命令、扩展步骤与浏览器/SSR 边界。
+
+### 变更
+
+- 所有可被用户交互修改的表单值与导航/数据状态统一支持"交互先提交、下一帧确认"的回滚语义:父级未写回新值时,`Input`、`Select`、`Checkbox`、`Radio`、`Switch`、`Slider`、`Rate`、`DatePicker`、`TimePicker`、`Tabs`、`Steps`、`Menu`、`Pagination`、`Table` 与 `Upload` 会恢复到最近一次外部提交值;通过 HTML attribute 初始化的值保持非受控(ADR-0012)。
+- `Dialog`、`Drawer`、`Tooltip`、`Popover`、`Popconfirm`、`Dropdown`、`Autocomplete`、`Select`、`DatePicker` 与 `TimePicker` 的 `open` 也支持受控回滚,`Autocomplete` 的 `value` 同样纳入统一契约;父级拒绝关闭后,弹层会恢复焦点陷阱与滚动锁定。`Message` 与 `Notification` 作为自动关闭的瞬态提示保持命令式语义,不纳入用户关闭回滚。
+- `super-upload` 在 `multiple=false` 时改为单文件替换语义:新选择替换已有文件;`multiple` 时继续追加,去重、类型/体积/数量限制与 `auto-upload` 行为不变。
+- React 类型声明补充 camelCase property 别名与 `accessibleLabel` 等非派生属性,同时保留既有 kebab-case 属性键;自定义事件类型不变。
+- `super-button`、`super-badge`、`super-form`、`super-menu`、`super-steps` 与 `super-tabs` 调整前景/背景色,满足 WCAG 2.2 AA 对比度。
+
+### 修复
+
+- 修复 React 19 父级拒绝受控变更时组件停留在新值的问题;事件仍照常派发,父级在事件中写回新值即接受修改。
+- 修复纯 HTML 中通过 `value` / `checked` attribute 初始化后,用户输入或切换会在下一帧回弹的问题;初始 attribute 只作为非受控默认值。
+- 修复 `super-upload` 单文件模式可累积多个文件的问题。
+- 修复 `super-badge`、`super-button`、`super-form` 提交按钮、`super-menu` 当前项、`super-steps` 未完成标题与 `super-tabs` 当前项的颜色对比度违规。
+- 修复 `super-breadcrumb` 链接在相邻堆叠时命中高度不足 24px、触发 WCAG 2.2 AA target-size 违规的问题。
+- 修复受控弹层在父级拒绝关闭后停留在关闭态的问题;回滚时会重新激活焦点陷阱、滚动锁定与打开事件状态。
+
+### 文档与开发体验
+
+- 新增 ADR-0011(跨框架契约测试架构)与 ADR-0012(受控状态提交确认),并在术语表补充 Framework Parity、Contract Scenario、Controlled Commit / Rollback 与 Attribute Initialization。
+- 契约宿主新增 `count` 参数,并补充 36 个组件的双实例挂载、Shadow Root 内 id 唯一性与 axe WCAG 2.2 AA 回归,覆盖原生 HTML、Vue 与 React;契约页仅由测试服务器提供,不进入示例生产构建。
+- 组件文档补充值、导航状态与 10 个弹层组件的受控状态说明,并明确 `Message` / `Notification` 的瞬态语义与 `Upload` 的 `fileList` 写入入口。
+- 高风险交互测试适配 macOS WebKit 仅用 `Option+Tab` 遍历控件的平台行为;Linux CI 继续使用标准 `Tab`。Firefox 高风险矩阵可在 Linux CI 或可正常启动 Firefox 的主机执行,当前 macOS 开发机因浏览器启动与沙箱限制未能本地执行。
+- CI 新增 `pull_request` 触发与跨框架契约 job,失败时上传 Playwright 报告与 trace/screenshot;GitHub Pages 部署仍只发生在 `master` 推送。
 
 ## 1.3.0 — 2026-11-18
 

@@ -484,9 +484,9 @@ super-form {
   --super-form-muted-color: #687386;
   --super-form-border-color: #46556b;
   --super-form-line-color: #c8ced8;
-  --super-form-primary-color: #3978e9;
-  --super-form-primary-hover-color: #5d91ef;
-  --super-form-primary-active-color: #2866d7;
+  --super-form-primary-color: #245cbe;
+  --super-form-primary-hover-color: #2a63cc;
+  --super-form-primary-active-color: #174ea6;
   --super-form-primary-shadow-color: #174ea6;
   --super-form-danger-color: #df343d;
   --super-form-focus-color: #56c6b7;

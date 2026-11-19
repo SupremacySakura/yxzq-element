@@ -1,6 +1,10 @@
 import { css, html, LitElement, nothing } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_PAGINATION_SIZES = ["large", "medium", "small"] as const;
 
@@ -16,8 +20,13 @@ type PageEntry = number | "ellipsis";
 export class SuperPagination extends LitElement {
   static properties = {
     total: { type: Number, reflect: true },
-    page: { type: Number, reflect: true },
-    pageSize: { type: Number, attribute: "page-size", reflect: true },
+    page: { type: Number, reflect: true, noAccessor: true },
+    pageSize: {
+      type: Number,
+      attribute: "page-size",
+      reflect: true,
+      noAccessor: true,
+    },
     pageSizes: { attribute: false },
     size: { type: String, reflect: true },
     disabled: { type: Boolean, reflect: true },
@@ -48,8 +57,6 @@ export class SuperPagination extends LitElement {
   };
 
   declare total: number;
-  declare page: number;
-  declare pageSize: number;
   declare pageSizes: number[];
   declare size: SuperPaginationSize;
   declare disabled: boolean;
@@ -66,11 +73,64 @@ export class SuperPagination extends LitElement {
   declare pageSuffixLabel: string;
   declare pageSizeLabel: string;
 
+  private _page = 1;
+  private _pageSize = 10;
+  private readonly pageGuard = createControlledValueGuard<number>({
+    host: this,
+    getValue: () => this._page,
+    setValue: (value) => this.setInternalPage(value),
+  });
+  private readonly pageSizeGuard = createControlledValueGuard<number>({
+    host: this,
+    getValue: () => this._pageSize,
+    setValue: (value) => this.setInternalPageSize(value),
+  });
+
+  get page(): number {
+    return this._page;
+  }
+
+  set page(value: number) {
+    this.pageGuard.markExternal(value);
+    this.setInternalPage(value);
+  }
+
+  private setInternalPage(value: number): void {
+    const oldValue = this._page;
+    this._page = value;
+    this.requestUpdate("page", oldValue);
+  }
+
+  get pageSize(): number {
+    return this._pageSize;
+  }
+
+  set pageSize(value: number) {
+    this.pageSizeGuard.markExternal(value);
+    this.setInternalPageSize(value);
+  }
+
+  private setInternalPageSize(value: number): void {
+    const oldValue = this._pageSize;
+    this._pageSize = value;
+    this.requestUpdate("pageSize", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
     this.total = 0;
-    this.page = 1;
-    this.pageSize = 10;
+    this._page = 1;
+    this._pageSize = 10;
     this.pageSizes = [];
     this.size = "medium";
     this.disabled = false;
@@ -401,8 +461,10 @@ export class SuperPagination extends LitElement {
     if (!Number.isFinite(target) || target === this.currentPage) {
       return;
     }
-    this.page = target;
+    const controlledMutation = this.pageGuard.capture();
+    this.setInternalPage(target);
     this.emitChange(target, this.normalizedPageSize);
+    this.pageGuard.confirm(controlledMutation);
   }
 
   private handlePrev = (): void => {
@@ -431,9 +493,13 @@ export class SuperPagination extends LitElement {
     ) {
       return;
     }
-    this.pageSize = pageSize;
-    this.page = 1;
+    const pageMutation = this.pageGuard.capture();
+    const pageSizeMutation = this.pageSizeGuard.capture();
+    this.setInternalPageSize(pageSize);
+    this.setInternalPage(1);
     this.emitChange(1, pageSize);
+    this.pageGuard.confirm(pageMutation);
+    this.pageSizeGuard.confirm(pageSizeMutation);
   };
 
   private commitJumper(input: HTMLInputElement): void {
@@ -448,8 +514,10 @@ export class SuperPagination extends LitElement {
     const target = Math.min(this.pageCount, Math.max(1, parsed));
     input.value = String(target);
     if (target !== this.currentPage) {
-      this.page = target;
+      const controlledMutation = this.pageGuard.capture();
+      this.setInternalPage(target);
       this.emitChange(target, this.normalizedPageSize);
+      this.pageGuard.confirm(controlledMutation);
     }
   }
 
@@ -497,6 +565,12 @@ export class SuperPagination extends LitElement {
     event.preventDefault();
     buttons[nextIndex]?.focus();
   };
+
+  override disconnectedCallback(): void {
+    this.pageGuard.dispose();
+    this.pageSizeGuard.dispose();
+    super.disconnectedCallback();
+  }
 
   private renderPageEntry(entry: PageEntry) {
     if (entry === "ellipsis") {

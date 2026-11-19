@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Super Components contract harness - HTML</title>
+    <link rel="stylesheet" href="/packages/theme/tokens.css" />
+    <style>
+      :root {
+        color-scheme: light;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        padding: 24px;
+        background: var(--super-background-color, #fffef9);
+        color: var(--super-text-color-primary, #292524);
+        font-family: var(--super-font-family, system-ui, sans-serif);
+      }
+
+      #stage {
+        min-height: 120px;
+      }
+
+      #stage > * {
+        max-inline-size: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>HTML 跨框架契约测试</h1>
+      <div id="stage"></div>
+    </main>
+    <script type="module" src="/src/contract.ts"></script>
+  </body>
+</html>

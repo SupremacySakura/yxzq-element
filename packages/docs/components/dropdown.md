@@ -132,6 +132,12 @@ dropdown.items = [
 </super-dropdown>
 ```
 
+## 受控状态
+
+`open` 同时支持受控与非受控用法。HTML `open` attribute 只作为初始默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户点击触发元素、使用键盘、选择菜单项、点击外部或按 `Escape` 时，组件会先更新内部显示状态并派发 `super-dropdown-open-change`，随后在下一个动画帧确认父级是否写回。父级在事件中同步写入新值即接受；不写入时恢复最近一次外部提交状态。程序化写入不会派发用户事件。
+
 ## API
 
 ### Attributes / Properties
@@ -198,7 +204,7 @@ super-dropdown {
 
 - `items` 只支持一层菜单项，不提供子菜单、分组标题或复选状态。
 - 组件只派发选择意图，不执行动作、路由跳转或关闭确认；这些由消费者处理。
-- `open` 是受控状态属性；用户交互会更新它并派发 `super-dropdown-open-change`，程序化修改不会派发事件。应用需要严格受控时，应在事件中同步写回。
+- `open` 同时支持受控与非受控用法；用户交互会先更新并派发 `super-dropdown-open-change`，受控父级未在事件中写回时下一帧恢复最近一次外部提交值。程序化修改不会派发事件。
 - 触发元素由消费者提供，组件不为其添加 `tabindex`；请使用本身可聚焦的按钮或链接。
 
 <script setup>

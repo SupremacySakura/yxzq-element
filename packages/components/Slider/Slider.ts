@@ -2,6 +2,10 @@ import { css, html, LitElement, nothing } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
 import { styleMap } from "lit/directives/style-map.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_SLIDER_SIZES = ["large", "medium", "small"] as const;
 export const SUPER_SLIDER_VALIDATIONS = [
@@ -42,7 +46,12 @@ const sameValue = (left: SuperSliderValue, right: SuperSliderValue): boolean =>
 
 export class SuperSlider extends LitElement {
   static properties = {
-    value: { type: Number, reflect: true, converter: sliderValueConverter },
+    value: {
+      type: Number,
+      reflect: true,
+      converter: sliderValueConverter,
+      noAccessor: true,
+    },
     min: { type: Number, reflect: true },
     max: { type: Number, reflect: true },
     step: { type: Number, reflect: true },
@@ -57,7 +66,6 @@ export class SuperSlider extends LitElement {
     endLabel: { type: String, attribute: "end-label" },
   };
 
-  declare value: SuperSliderValue;
   declare min: number;
   declare max: number;
   declare step: number;
@@ -71,9 +79,42 @@ export class SuperSlider extends LitElement {
   declare startLabel: string;
   declare endLabel: string;
 
+  private _value: SuperSliderValue = 0;
+  private readonly controlledValueGuard =
+    createControlledValueGuard<SuperSliderValue>({
+      host: this,
+      getValue: () => this._value,
+      setValue: (value) => this.setInternalValue(value),
+      equals: sameValue,
+    });
+
+  get value(): SuperSliderValue {
+    return this._value;
+  }
+
+  set value(value: SuperSliderValue) {
+    this.controlledValueGuard.markExternal(value);
+    this.setInternalValue(value);
+  }
+
+  private setInternalValue(value: SuperSliderValue): void {
+    const oldValue = this._value;
+    this._value = value;
+    this.requestUpdate("value", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
-    this.value = 0;
     this.min = 0;
     this.max = 100;
     this.step = 1;
@@ -464,6 +505,11 @@ export class SuperSlider extends LitElement {
     this.inputElements()[0]?.blur();
   }
 
+  override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    super.disconnectedCallback();
+  }
+
   private syncInputs(): void {
     const inputs = this.inputElements();
     const values = this.range ? this.rangeValue : [this.singleValue];
@@ -493,9 +539,11 @@ export class SuperSlider extends LitElement {
       this.syncInputs();
       return;
     }
-    this.value = value;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalValue(value);
     this.emitChange(value);
     this.syncInputs();
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private valueFromInput(input: HTMLInputElement): number {

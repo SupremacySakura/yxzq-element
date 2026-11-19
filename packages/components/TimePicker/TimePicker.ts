@@ -6,6 +6,10 @@ import {
   type PropertyValues,
 } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_TIME_PICKER_SIZES = ["large", "medium", "small"] as const;
 export const SUPER_TIME_PICKER_VALIDATIONS = [
@@ -59,6 +63,19 @@ interface TimeParts {
 const TIME_PATTERN = /^([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/;
 const FORMAT_TOKEN_PATTERN = /HH|hh|mm|ss|H|h|A|a/g;
 
+const cloneTimePickerValue = (
+  value: SuperTimePickerValue,
+): SuperTimePickerValue => (Array.isArray(value) ? [...value] : value);
+
+const timePickerValuesEqual = (
+  left: SuperTimePickerValue,
+  right: SuperTimePickerValue,
+): boolean =>
+  Array.isArray(left) && Array.isArray(right)
+    ? left.length === right.length &&
+      left.every((item, index) => item === right[index])
+    : Object.is(left, right);
+
 const pad2 = (value: number): string => String(value).padStart(2, "0");
 
 const parseTime = (value: string): TimeParts | null => {
@@ -105,7 +122,7 @@ export class SuperTimePicker extends LitElement {
     validation: { type: String, reflect: true },
     disabled: { type: Boolean, reflect: true },
     clearable: { type: Boolean, reflect: true },
-    open: { type: Boolean, reflect: true },
+    open: { type: Boolean, reflect: true, noAccessor: true },
     name: { type: String, reflect: true },
     placeholder: { type: String },
     startPlaceholder: { type: String, attribute: "start-placeholder" },
@@ -130,7 +147,6 @@ export class SuperTimePicker extends LitElement {
   declare validation: SuperTimePickerValidation;
   declare disabled: boolean;
   declare clearable: boolean;
-  declare open: boolean;
   declare name: string;
   declare placeholder: string;
   declare startPlaceholder: string;
@@ -149,6 +165,20 @@ export class SuperTimePicker extends LitElement {
   declare shortcuts: SuperTimePickerShortcut[];
 
   private _value: SuperTimePickerValue = "";
+  private _open = false;
+  private readonly controlledValueGuard =
+    createControlledValueGuard<SuperTimePickerValue>({
+      host: this,
+      getValue: () => this._value,
+      setValue: (value) => this.setInternalValue(value),
+      clone: cloneTimePickerValue,
+      equals: timePickerValuesEqual,
+    });
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
 
   constructor() {
     super();
@@ -158,7 +188,6 @@ export class SuperTimePicker extends LitElement {
     this.validation = "none";
     this.disabled = false;
     this.clearable = false;
-    this.open = false;
     this.name = "";
     this.placeholder = "选择时间";
     this.startPlaceholder = "开始时间";
@@ -182,6 +211,7 @@ export class SuperTimePicker extends LitElement {
   }
 
   set value(value: SuperTimePickerValue) {
+    this.controlledValueGuard.markExternal(value);
     this.setInternalValue(value);
   }
 
@@ -190,6 +220,31 @@ export class SuperTimePicker extends LitElement {
     const oldValue = this._value;
     this._value = normalized;
     this.requestUpdate("value", oldValue);
+  }
+
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
   }
 
   private hasSeconds(): boolean {
@@ -688,6 +743,8 @@ export class SuperTimePicker extends LitElement {
   }
 
   override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    this.controlledOpenGuard.dispose();
     this.ownerDocument.removeEventListener(
       "pointerdown",
       this.handleDocumentPointerDown,
@@ -702,7 +759,7 @@ export class SuperTimePicker extends LitElement {
     }
 
     if (this.disabled && this.open) {
-      this.open = false;
+      this.setInternalOpen(false);
     }
   }
 
@@ -755,7 +812,8 @@ export class SuperTimePicker extends LitElement {
     if ((nextOpen && this.disabled) || this.open === nextOpen) {
       return;
     }
-    this.open = nextOpen;
+    const controlledMutation = this.controlledOpenGuard.capture();
+    this.setInternalOpen(nextOpen);
     this.dispatchEvent(
       new CustomEvent<SuperTimePickerOpenChangeDetail>(
         "super-time-picker-open-change",
@@ -766,6 +824,7 @@ export class SuperTimePicker extends LitElement {
         },
       ),
     );
+    this.controlledOpenGuard.confirm(controlledMutation);
     if (!nextOpen && reason !== "outside") {
       void this.updateComplete.then(() => this.triggerElement?.focus());
     }
@@ -775,12 +834,14 @@ export class SuperTimePicker extends LitElement {
     if (this.disabled || !this.hasValue()) {
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(this.range ? [] : "");
     this.emitClear(originalEvent);
     this.emitChange(originalEvent);
     if (closePanel) {
       this.setOpen(false, "clear", originalEvent);
     }
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private groupParts(index: number): TimeParts | null {
@@ -795,8 +856,10 @@ export class SuperTimePicker extends LitElement {
   }
 
   private commitSingle(parts: TimeParts, originalEvent: Event): void {
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(formatTime(parts, this.hasSeconds()));
     this.emitChange(originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private commitRange(
@@ -813,8 +876,10 @@ export class SuperTimePicker extends LitElement {
     if (next[0] !== "" && next[1] !== "" && next[0] > next[1]) {
       next = [next[1], next[0]];
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(next);
     this.emitChange(originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private pickUnit(
@@ -870,9 +935,11 @@ export class SuperTimePicker extends LitElement {
     if (isEmpty) {
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(normalized);
     this.emitChange(originalEvent);
     this.setOpen(false, "shortcut", originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private handleTriggerClick = (event: MouseEvent): void => {

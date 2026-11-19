@@ -6,6 +6,10 @@ import {
   type PropertyValues,
 } from "lit";
 import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
+import {
   createFloating,
   type FloatingController,
 } from "../internal/floating.js";
@@ -44,7 +48,7 @@ let popoverId = 0;
 
 export class SuperPopover extends LitElement {
   static properties = {
-    open: { type: Boolean, reflect: true },
+    open: { type: Boolean, reflect: true, noAccessor: true },
     placement: { type: String, reflect: true },
     trigger: { type: String, reflect: true },
     title: { type: String, reflect: true },
@@ -66,7 +70,6 @@ export class SuperPopover extends LitElement {
     size: { type: String, reflect: true },
   };
 
-  declare open: boolean;
   declare placement: SuperPopoverPlacement;
   declare trigger: SuperPopoverTrigger;
   declare title: string;
@@ -81,6 +84,12 @@ export class SuperPopover extends LitElement {
 
   private readonly popoverId = `super-popover-${++popoverId}`;
   private readonly titleId = `${this.popoverId}-title`;
+  private _open = false;
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
   private triggerElement: HTMLElement | null = null;
   private panelElement: HTMLElement | null = null;
   private floating: FloatingController | null = null;
@@ -95,9 +104,33 @@ export class SuperPopover extends LitElement {
       }
     | null = null;
 
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
-    this.open = false;
     this.placement = "bottom";
     this.trigger = "click";
     this.title = "";
@@ -342,8 +375,9 @@ export class SuperPopover extends LitElement {
       return;
     }
 
+    const controlledMutation = this.controlledOpenGuard.capture();
     this.focusPanelOnOpen = nextOpen && Boolean(options.focusPanel);
-    this.open = nextOpen;
+    this.setInternalOpen(nextOpen);
     this.dispatchEvent(
       new CustomEvent<SuperPopoverOpenChangeDetail>(
         "super-popover-open-change",
@@ -354,6 +388,7 @@ export class SuperPopover extends LitElement {
         },
       ),
     );
+    this.controlledOpenGuard.confirm(controlledMutation);
   }
 
   private focusTrigger(): void {
@@ -726,6 +761,7 @@ export class SuperPopover extends LitElement {
 
   override disconnectedCallback(): void {
     this.clearHoverCloseTimer();
+    this.controlledOpenGuard.dispose();
     this.deactivateOpenState();
     this.unbindTrigger();
     this.ownerDocument.removeEventListener(
@@ -744,7 +780,7 @@ export class SuperPopover extends LitElement {
   protected willUpdate(changedProperties: PropertyValues<this>): void {
     if (this.disabled && this.open) {
       this.clearHoverCloseTimer();
-      this.open = false;
+      this.setInternalOpen(false);
       this.focusPanelOnOpen = false;
     }
 
@@ -754,7 +790,7 @@ export class SuperPopover extends LitElement {
       this.open
     ) {
       this.clearHoverCloseTimer();
-      this.open = false;
+      this.setInternalOpen(false);
       this.focusPanelOnOpen = false;
     }
   }
