@@ -50,7 +50,7 @@ export class SuperBadge extends LitElement {
       --super-badge-offset: 4px;
       --super-badge-padding-inline: 5px;
       --super-badge-font-size: 12px;
-      --super-badge-color: var(--super-text-color-inverse, #ffffff);
+      --super-badge-color: #1f1915;
       --super-badge-background: var(--super-color-primary, #4b87f5);
       --super-badge-border-color: #174ea6;
       --super-badge-shadow-color: rgb(23 78 166 / 24%);

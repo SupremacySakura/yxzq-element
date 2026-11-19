@@ -58,6 +58,30 @@ describe("SuperTabs", () => {
     expect(element.getAttribute("close-label")).toBe("关闭此页");
   });
 
+  it("keeps an attribute-initialized active tab uncontrolled", async () => {
+    defineSuperTabs();
+    const element = document.createElement(SUPER_TABS_TAG);
+    element.setAttribute("active", "one");
+    element.items = [
+      { key: "one", label: "一" },
+      { key: "two", label: "二" },
+    ];
+    document.body.append(element);
+    await element.updateComplete;
+
+    const onChange = vi.fn();
+    document.body.addEventListener("super-tabs-change", onChange);
+    element.shadowRoot
+      ?.querySelector<HTMLButtonElement>('[data-tab-key="two"]')
+      ?.click();
+    await element.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
+
+    expect(element.active).toBe("two");
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
   it("renders built-in tabs from items with tablist semantics", async () => {
     const element = await mountTabs();
     element.items = [

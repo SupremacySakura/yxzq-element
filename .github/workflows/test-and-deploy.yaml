@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 
 permissions:
   contents: read
@@ -46,10 +47,8 @@ jobs:
   visual:
     name: Run visual regression
     runs-on: ubuntu-latest
-    # 基线在 macOS 生成;不同操作系统的字体渲染存在差异,因此该 job 仅作为
-    # 提示性检查,不阻塞构建。刷新基线时请在 CI 所用系统上执行
+    # Linux Chromium 基线随仓库维护;刷新时在 CI 所用系统上执行
     # `pnpm test:visual:update` 并提交对应平台的快照。
-    continue-on-error: true
 
     steps:
       - name: Checkout repo
@@ -81,6 +80,45 @@ jobs:
         with:
           name: visual-diff
           path: ./test-results
+          if-no-files-found: ignore
+          retention-days: 7
+
+  contract:
+    name: Run cross-framework contract tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.22.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run HTML, Vue and React contract tests
+        run: pnpm test:contract
+
+      - name: Upload contract report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contract-report
+          path: |
+            ./playwright-report/contract
+            ./test-results
           if-no-files-found: ignore
           retention-days: 7
 
@@ -123,6 +161,7 @@ jobs:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     permissions:
       contents: write
     steps:

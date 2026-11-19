@@ -347,7 +347,20 @@ describe("SuperUpload", () => {
 
     const secondText = makeFile("second.txt");
     chooseFiles(element, [secondText]);
-    expect(element.fileList).toEqual([text, secondText]);
+    expect(element.fileList).toEqual([secondText]);
+  });
+
+  it("appends selections in multiple mode", async () => {
+    const element = await mountUpload((upload) => {
+      upload.multiple = true;
+    });
+    const first = makeFile("first.txt");
+    const second = makeFile("second.txt");
+
+    chooseFiles(element, [first]);
+    chooseFiles(element, [second]);
+
+    expect(element.fileList).toEqual([first, second]);
   });
 
   it("supports MIME wildcards in accept", async () => {
@@ -368,6 +381,41 @@ describe("SuperUpload", () => {
 
     chooseFiles(element, [file]);
     chooseFiles(element, [file]);
+
+    expect(element.fileList).toEqual([file]);
+  });
+
+  it("restores a controlled fileList when the parent rejects a removal", async () => {
+    const first = makeFile("first.txt");
+    const second = makeFile("second.txt");
+    const element = await mountUpload((upload) => {
+      upload.fileList = [first, second];
+    });
+    const onRemove = vi.fn();
+    element.addEventListener("super-upload-remove", onRemove);
+
+    element.shadowRoot
+      ?.querySelector<HTMLButtonElement>('[part="remove-button"]')
+      ?.click();
+
+    expect(element.fileList).toEqual([second]);
+    expect(onRemove).toHaveBeenCalledTimes(1);
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
+
+    expect(element.fileList).toEqual([first, second]);
+    expect(
+      element.shadowRoot?.querySelectorAll('[part="file"]'),
+    ).toHaveLength(2);
+  });
+
+  it("keeps an uncontrolled selection after the rollback window", async () => {
+    const element = await mountUpload();
+    const file = makeFile("uncontrolled.txt");
+
+    chooseFiles(element, [file]);
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
 
     expect(element.fileList).toEqual([file]);
   });

@@ -422,4 +422,47 @@ describe("SuperAutocomplete", () => {
     expect(onChange).not.toHaveBeenCalled();
     expect(onOpenChange).not.toHaveBeenCalled();
   });
+
+  it("keeps an attribute-initialized value uncontrolled", async () => {
+    defineSuperAutocomplete();
+    const element = document.createElement(SUPER_AUTOCOMPLETE_TAG);
+    element.setAttribute("value", "北京");
+    element.items = ["北京", "上海"];
+    document.body.append(element);
+    await settle(element);
+
+    await typeValue(element, "上海");
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await settle(element);
+
+    expect(element.value).toBe("上海");
+  });
+
+  it("restores controlled value and open state when changes are rejected", async () => {
+    const element = await mountAutocomplete((autocomplete) => {
+      autocomplete.items = ["北京", "上海"];
+      autocomplete.value = "北京";
+      autocomplete.open = true;
+    });
+
+    await typeValue(element, "上海");
+    expect(element.value).toBe("上海");
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await settle(element);
+    expect(element.value).toBe("北京");
+
+    const input = getInput(element);
+    input?.dispatchEvent(
+      new KeyboardEvent("keydown", {
+        key: "Escape",
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      }),
+    );
+    expect(element.open).toBe(false);
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await settle(element);
+    expect(element.open).toBe(true);
+  });
 });

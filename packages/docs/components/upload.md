@@ -140,7 +140,7 @@ upload.addEventListener("super-upload-remove", (event) => {
 | 名称 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `accept` | `string` | 空字符串 | 原生 accept 规则，支持扩展名、MIME 和 `type/*` |
-| `multiple` | `boolean` | `false` | 允许选择多个文件 |
+| `multiple` | `boolean` | `false` | 为 `false` 时每次选择替换当前文件；为 `true` 时允许选择多个文件并追加到列表 |
 | `disabled` | `boolean` | `false` | 禁用选择、拖放与移除 |
 | `max-count` | `number` | 不限制 | 文件列表最大数量 |
 | `max-size` | `number` | 不限制 | 单文件最大字节数 |

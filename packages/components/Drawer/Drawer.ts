@@ -1,9 +1,11 @@
 import { css, html, LitElement, nothing, unsafeCSS } from "lit";
 import {
+  createControlledValueGuard,
   createFocusTrap,
   getFocusableElements,
   lockScroll,
   paperTexture,
+  runAttributeWrite,
   type FocusTrap,
   sketchyShadow,
 } from "@yxzq-element/utils";
@@ -46,7 +48,12 @@ let drawerId = 0;
 
 export class SuperDrawer extends LitElement {
   static properties = {
-    open: { type: Boolean, reflect: true, converter: booleanAttribute },
+    open: {
+      type: Boolean,
+      reflect: true,
+      converter: booleanAttribute,
+      noAccessor: true,
+    },
     title: { type: String, reflect: true },
     placement: { type: String, reflect: true },
     size: {
@@ -96,7 +103,6 @@ export class SuperDrawer extends LitElement {
     hasFooterSlot: { state: true },
   };
 
-  declare open: boolean;
   declare title: string;
   declare placement: SuperDrawerPlacement;
   declare size: string | number;
@@ -112,13 +118,43 @@ export class SuperDrawer extends LitElement {
   private readonly drawerId = `super-drawer-${++drawerId}`;
   private readonly titleId = `${this.drawerId}-title`;
   private readonly bodyId = `${this.drawerId}-body`;
+  private _open = false;
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
   private focusTrap: FocusTrap | null = null;
   private releaseScroll: (() => void) | null = null;
   private triggerElement: HTMLElement | null = null;
 
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
-    this.open = false;
     this.title = "";
     this.placement = "right";
     this.size = "medium";
@@ -531,14 +567,18 @@ export class SuperDrawer extends LitElement {
       return;
     }
 
-    dispatchModalClose({
+    const controlledMutation = this.controlledOpenGuard.capture();
+    const closed = dispatchModalClose({
       host: this,
       eventPrefix: "super-drawer",
       reason,
       close: () => {
-        this.open = false;
+        this.setInternalOpen(false);
       },
     });
+    if (closed) {
+      this.controlledOpenGuard.confirm(controlledMutation);
+    }
   }
 
   private handleConfirm = (): void => {
@@ -644,6 +684,7 @@ export class SuperDrawer extends LitElement {
 
   override disconnectedCallback(): void {
     this.releaseOpenState();
+    this.controlledOpenGuard.dispose();
     this.removeEventListener("keydown", this.handleDrawerKeydown);
     this.ownerDocument.removeEventListener(
       "keydown",

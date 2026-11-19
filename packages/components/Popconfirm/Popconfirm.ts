@@ -6,6 +6,10 @@ import {
   type PropertyValues,
 } from "lit";
 import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
+import {
   createFloating,
   type FloatingController,
 } from "../internal/floating.js";
@@ -54,7 +58,7 @@ let popconfirmId = 0;
 
 export class SuperPopconfirm extends LitElement {
   static properties = {
-    open: { type: Boolean, reflect: true },
+    open: { type: Boolean, reflect: true, noAccessor: true },
     title: { type: String, reflect: true },
     content: { type: String, reflect: true },
     placement: { type: String, reflect: true },
@@ -81,7 +85,6 @@ export class SuperPopconfirm extends LitElement {
     size: { type: String, reflect: true },
   };
 
-  declare open: boolean;
   declare title: string;
   declare content: string;
   declare placement: SuperPopconfirmPlacement;
@@ -98,6 +101,12 @@ export class SuperPopconfirm extends LitElement {
   private readonly panelId = `super-popconfirm-${++popconfirmId}`;
   private readonly titleId = `${this.panelId}-title`;
   private readonly contentId = `${this.panelId}-content`;
+  private _open = false;
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
   private triggerElement: HTMLElement | null = null;
   private panelElement: HTMLElement | null = null;
   private floating: FloatingController | null = null;
@@ -112,9 +121,33 @@ export class SuperPopconfirm extends LitElement {
       }
     | null = null;
 
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
-    this.open = false;
     this.title = "";
     this.content = "";
     this.placement = "top";
@@ -441,7 +474,8 @@ export class SuperPopconfirm extends LitElement {
       return;
     }
 
-    this.open = nextOpen;
+    const controlledMutation = this.controlledOpenGuard.capture();
+    this.setInternalOpen(nextOpen);
     this.dispatchEvent(
       new CustomEvent<SuperPopconfirmOpenChangeDetail>(
         "super-popconfirm-open-change",
@@ -452,6 +486,7 @@ export class SuperPopconfirm extends LitElement {
         },
       ),
     );
+    this.controlledOpenGuard.confirm(controlledMutation);
   }
 
   private focusTrigger(): void {
@@ -866,6 +901,7 @@ export class SuperPopconfirm extends LitElement {
 
   override disconnectedCallback(): void {
     this.clearHoverCloseTimer();
+    this.controlledOpenGuard.dispose();
     this.deactivateOpenState();
     this.unbindTrigger();
     this.ownerDocument.removeEventListener(
@@ -885,7 +921,7 @@ export class SuperPopconfirm extends LitElement {
     if (this.disabled && this.open) {
       this.clearHoverCloseTimer();
       this.returnFocusOnClose = false;
-      this.open = false;
+      this.setInternalOpen(false);
     }
   }
 

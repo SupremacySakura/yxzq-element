@@ -6,8 +6,10 @@ import {
   type PropertyValues,
 } from "lit";
 import {
+  createControlledValueGuard,
   createFocusTrap,
   lockScroll,
+  runAttributeWrite,
   type FocusTrap,
 } from "@yxzq-element/utils";
 import {
@@ -70,7 +72,7 @@ export class SuperTooltip extends LitElement {
     placement: { type: String, reflect: true },
     trigger: { type: String, reflect: true },
     disabled: { type: Boolean, reflect: true },
-    open: { type: Boolean, reflect: true },
+    open: { type: Boolean, reflect: true, noAccessor: true },
     delay: { type: Number, reflect: true },
     offset: { type: Number, reflect: true },
     maxWidth: { type: Number, attribute: "max-width", reflect: true },
@@ -83,7 +85,6 @@ export class SuperTooltip extends LitElement {
   declare placement: SuperTooltipPlacement;
   declare trigger: SuperTooltipTrigger;
   declare disabled: boolean;
-  declare open: boolean;
   declare delay: number;
   declare offset: number;
   declare maxWidth: number;
@@ -92,6 +93,12 @@ export class SuperTooltip extends LitElement {
   declare size: SuperTooltipSize;
 
   private readonly tooltipId = `super-tooltip-${++tooltipId}`;
+  private _open = false;
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
   private triggerElement: HTMLElement | null = null;
   private panelElement: HTMLElement | null = null;
   private describedElement: HTMLElement | null = null;
@@ -100,13 +107,37 @@ export class SuperTooltip extends LitElement {
   private releaseScroll: (() => void) | null = null;
   private focusTrap: FocusTrap | null = null;
 
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
     this.content = "";
     this.placement = "top";
     this.trigger = "hover";
     this.disabled = false;
-    this.open = false;
     this.delay = 120;
     this.offset = 8;
     this.maxWidth = 280;
@@ -314,7 +345,8 @@ export class SuperTooltip extends LitElement {
       return;
     }
 
-    this.open = nextOpen;
+    const controlledMutation = this.controlledOpenGuard.capture();
+    this.setInternalOpen(nextOpen);
     this.dispatchEvent(
       new CustomEvent<SuperTooltipOpenChangeDetail>(
         "super-tooltip-open-change",
@@ -325,6 +357,7 @@ export class SuperTooltip extends LitElement {
         },
       ),
     );
+    this.controlledOpenGuard.confirm(controlledMutation);
   }
 
   private focusTrigger(): void {
@@ -592,6 +625,7 @@ export class SuperTooltip extends LitElement {
 
   override disconnectedCallback(): void {
     this.clearCloseTimer();
+    this.controlledOpenGuard.dispose();
     this.deactivateOpenState();
     this.detachTriggerListeners();
     this.removeEventListener("focusin", this.handleFocusIn);
@@ -613,7 +647,7 @@ export class SuperTooltip extends LitElement {
   protected willUpdate(changedProperties: PropertyValues<this>): void {
     if (this.disabled && this.open) {
       this.clearCloseTimer();
-      this.open = false;
+      this.setInternalOpen(false);
     }
 
     if (
@@ -621,7 +655,7 @@ export class SuperTooltip extends LitElement {
       changedProperties.get("trigger") !== undefined
     ) {
       this.clearCloseTimer();
-      this.open = false;
+      this.setInternalOpen(false);
     }
   }
 

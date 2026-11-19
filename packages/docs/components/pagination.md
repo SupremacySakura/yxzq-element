@@ -168,6 +168,12 @@ pagination.pageSizes = [10, 20, 50];
 
 跳页输入使用 `type="number"`，按 `Enter` 提交。页码切换不会自动把焦点移动到列表或新页面，请在数据刷新后自行管理焦点。
 
+## 受控状态
+
+`page` 与 `pageSize` 同时支持受控与非受控用法。HTML attribute 初始化只作为非受控默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户切换页码、修改每页条数或跳页时，组件会先更新内部状态并派发 `super-pagination-change`，随后在下一个动画帧分别确认两个属性是否写回。父级同步写入新值即接受修改；未写入的属性恢复最近一次外部提交值。程序化写入不会派发用户事件。
+
 ## API
 
 ### Attributes / Properties

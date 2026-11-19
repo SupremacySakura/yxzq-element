@@ -134,6 +134,12 @@ steps.addEventListener("super-steps-change", (event) => {
 
 请为步骤条提供描述流程用途的 `aria-label`。标题应简短，补充信息放进 `description`，不要把关键状态只写在图标里。
 
+## 受控状态
+
+`active` 同时支持受控与非受控用法。HTML attribute 初始化只作为非受控默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户点击或键盘激活可点击步骤时，组件会先更新内部步骤并派发 `super-steps-change`，随后在下一个动画帧确认父级是否写回。父级同步写回新索引即接受切换；不写入时恢复最近一次外部提交值。程序化写入不会派发用户事件。
+
 ## API
 
 ### Attributes / Properties
@@ -182,8 +188,8 @@ super-steps {
   --super-steps-indicator-size: 30px;
   --super-steps-title-color: var(--super-text-color-primary);
   --super-steps-description-color: var(--super-text-color-secondary);
-  --super-steps-wait-color: var(--super-text-color-placeholder);
-  --super-steps-process-color: var(--super-color-primary);
+  --super-steps-wait-color: var(--super-text-color-secondary);
+  --super-steps-process-color: #245cbe;
   --super-steps-finish-color: var(--super-color-success);
   --super-steps-error-color: var(--super-color-danger);
   --super-steps-connector-color: var(--super-border-color-light);

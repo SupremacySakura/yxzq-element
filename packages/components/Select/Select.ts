@@ -7,6 +7,10 @@ import {
 } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_SELECT_SIZES = ["large", "medium", "small"] as const;
 export const SUPER_SELECT_VARIANTS = [
@@ -87,7 +91,7 @@ export class SuperSelect extends LitElement {
     readOnly: { type: Boolean, attribute: "readonly", reflect: true },
     required: { type: Boolean, reflect: true },
     loading: { type: Boolean, reflect: true },
-    open: { type: Boolean, reflect: true },
+    open: { type: Boolean, reflect: true, noAccessor: true },
     name: { type: String, reflect: true },
     size: { type: String, reflect: true },
     variant: { type: String, reflect: true },
@@ -114,7 +118,6 @@ export class SuperSelect extends LitElement {
   declare readOnly: boolean;
   declare required: boolean;
   declare loading: boolean;
-  declare open: boolean;
   declare name: string;
   declare size: SuperSelectSize;
   declare variant: SuperSelectVariant;
@@ -134,6 +137,7 @@ export class SuperSelect extends LitElement {
   private declare hasPrefix: boolean;
 
   private _value: SuperSelectValue = "";
+  private _open = false;
   private valueIsControlled = false;
   private optionObserver: MutationObserver | null = null;
   private optionIds = new WeakMap<HTMLOptionElement, string>();
@@ -143,6 +147,23 @@ export class SuperSelect extends LitElement {
   private selectedAttributeStates = new WeakMap<HTMLOptionElement, boolean>();
   private typeahead = "";
   private typeaheadTimer: number | undefined;
+  private readonly controlledValueGuard = createControlledValueGuard<
+    SuperSelectValue
+  >({
+    host: this,
+    getValue: () => this._value,
+    setValue: (value) => {
+      this.setInternalValue(value);
+      this.syncSourceSelection(this.options, this.value);
+    },
+    clone: (value) => (Array.isArray(value) ? [...value] : value),
+    equals: (left, right) => this.valueEqual(left, right),
+  });
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
 
   constructor() {
     super();
@@ -153,7 +174,6 @@ export class SuperSelect extends LitElement {
     this.readOnly = false;
     this.required = false;
     this.loading = false;
-    this.open = false;
     this.name = "";
     this.size = "medium";
     this.variant = "default";
@@ -179,6 +199,7 @@ export class SuperSelect extends LitElement {
 
   set value(value: SuperSelectValue) {
     this.valueIsControlled = true;
+    this.controlledValueGuard.markExternal(value);
     this.setInternalValue(value);
   }
 
@@ -186,6 +207,31 @@ export class SuperSelect extends LitElement {
     const oldValue = this._value;
     this._value = value;
     this.requestUpdate("value", oldValue);
+  }
+
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
   }
 
   static styles = css`
@@ -1092,6 +1138,8 @@ export class SuperSelect extends LitElement {
       this.typeaheadTimer = undefined;
     }
     this.typeahead = "";
+    this.controlledValueGuard.dispose();
+    this.controlledOpenGuard.dispose();
     super.disconnectedCallback();
   }
 
@@ -1109,7 +1157,7 @@ export class SuperSelect extends LitElement {
     }
 
     if (this.disabled && this.open) {
-      this.open = false;
+      this.setInternalOpen(false);
     }
 
     if (!this.open) {
@@ -1179,7 +1227,8 @@ export class SuperSelect extends LitElement {
     if (nextOpen) {
       this.syncOptions(false);
     }
-    this.open = nextOpen;
+    const controlledMutation = this.controlledOpenGuard.capture();
+    this.setInternalOpen(nextOpen);
     if (nextOpen) {
       this.realignActiveOption();
     } else {
@@ -1193,6 +1242,7 @@ export class SuperSelect extends LitElement {
         composed: true,
       }),
     );
+    this.controlledOpenGuard.confirm(controlledMutation);
     if (nextOpen) {
       void this.updateComplete.then(() => this.comboboxElement?.focus());
     }
@@ -1203,6 +1253,8 @@ export class SuperSelect extends LitElement {
       return;
     }
 
+    const controlledMutation = this.controlledValueGuard.capture();
+
     if (this.multiple) {
       const values = this.selectedValues;
       this.setInternalValue(values.includes(option.value)
@@ -1210,6 +1262,7 @@ export class SuperSelect extends LitElement {
         : [...values, option.value]);
       this.syncSourceSelection(this.options, this.value);
       this.emitChange(originalEvent);
+      this.controlledValueGuard.confirm(controlledMutation);
       return;
     }
 
@@ -1220,6 +1273,7 @@ export class SuperSelect extends LitElement {
       this.emitChange(originalEvent);
     }
     this.setOpen(false, "selection", originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private clearSelection(event: MouseEvent): void {
@@ -1240,6 +1294,7 @@ export class SuperSelect extends LitElement {
     if (this.valueEqual(this.value, nextValue)) {
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(nextValue);
     this.syncSourceSelection(this.options, this.value);
     this.dispatchEvent(
@@ -1250,6 +1305,7 @@ export class SuperSelect extends LitElement {
       }),
     );
     this.emitChange(event);
+    this.controlledValueGuard.confirm(controlledMutation);
     this.comboboxElement?.focus();
   }
 
@@ -1266,11 +1322,13 @@ export class SuperSelect extends LitElement {
     ) {
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(
       this.selectedValues.filter((item) => item !== value),
     );
     this.syncSourceSelection(this.options, this.value);
     this.emitChange(event);
+    this.controlledValueGuard.confirm(controlledMutation);
     this.comboboxElement?.focus();
   }
 

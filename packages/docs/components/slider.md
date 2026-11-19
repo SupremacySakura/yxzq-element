@@ -152,6 +152,12 @@ slider.addEventListener("super-slider-change", (event) => {
 
 组件为每个原生输入同步 `aria-valuemin`、`aria-valuemax`、`aria-valuenow` 和 `aria-orientation`。范围模式外层使用 `role="group"`，由 `aria-label` 命名。
 
+## 受控状态
+
+`value` 同时支持受控与非受控用法。HTML attribute 初始化只作为非受控默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户拖动或按键会先更新内部值并派发 `super-slider-change`，随后在下一个动画帧确认父级是否写回。父级在事件中同步写回新值即接受修改；不写入时组件恢复最近一次外部提交值。范围值必须通过 property 传入，程序化写入不会派发用户事件。
+
 ## API
 
 ### Attributes / Properties

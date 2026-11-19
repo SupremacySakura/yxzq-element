@@ -1,6 +1,10 @@
 import { css, html, LitElement, nothing } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_CHECKBOX_SIZES = ["large", "medium", "small"] as const;
 export const SUPER_CHECKBOX_VARIANTS = ["default", "card"] as const;
@@ -27,7 +31,7 @@ export interface SuperCheckboxChangeDetail {
 
 export class SuperCheckbox extends LitElement {
   static properties = {
-    checked: { type: Boolean, reflect: true },
+    checked: { type: Boolean, reflect: true, noAccessor: true },
     indeterminate: { type: Boolean, reflect: true },
     disabled: { type: Boolean, reflect: true },
     required: { type: Boolean, reflect: true },
@@ -40,7 +44,6 @@ export class SuperCheckbox extends LitElement {
     accessibleLabel: { type: String, attribute: "aria-label" },
   };
 
-  declare checked: boolean;
   declare indeterminate: boolean;
   declare disabled: boolean;
   declare required: boolean;
@@ -52,9 +55,40 @@ export class SuperCheckbox extends LitElement {
   declare helperText: string;
   declare accessibleLabel: string;
 
+  private _checked = false;
+  private readonly controlledValueGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._checked,
+    setValue: (value) => this.setInternalChecked(value),
+  });
+
+  get checked(): boolean {
+    return this._checked;
+  }
+
+  set checked(value: boolean) {
+    this.controlledValueGuard.markExternal(value);
+    this.setInternalChecked(value);
+  }
+
+  private setInternalChecked(value: boolean): void {
+    const oldValue = this._checked;
+    this._checked = value;
+    this.requestUpdate("checked", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
-    this.checked = false;
     this.indeterminate = false;
     this.disabled = false;
     this.required = false;
@@ -371,9 +405,11 @@ export class SuperCheckbox extends LitElement {
 
   private handleChange(event: Event): void {
     const input = event.currentTarget as HTMLInputElement;
-    this.checked = input.checked;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalChecked(input.checked);
     this.indeterminate = false;
     this.emitChange(event);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   override click(): void {
@@ -387,11 +423,13 @@ export class SuperCheckbox extends LitElement {
       return;
     }
 
-    this.checked = !this.checked;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalChecked(!this._checked);
     this.indeterminate = false;
     const originalEvent = new Event("change");
     super.click();
     this.emitChange(originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   override focus(options?: FocusOptions): void {
@@ -410,6 +448,11 @@ export class SuperCheckbox extends LitElement {
       return;
     }
     super.blur();
+  }
+
+  override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    super.disconnectedCallback();
   }
 
   protected render() {

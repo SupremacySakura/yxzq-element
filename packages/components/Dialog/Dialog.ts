@@ -1,9 +1,11 @@
 import { css, html, LitElement, nothing, unsafeCSS } from "lit";
 import {
+  createControlledValueGuard,
   createFocusTrap,
   getFocusableElements,
   lockScroll,
   paperTexture,
+  runAttributeWrite,
   type FocusTrap,
   sketchyShadow,
 } from "@yxzq-element/utils";
@@ -39,7 +41,12 @@ let dialogId = 0;
 
 export class SuperDialog extends LitElement {
   static properties = {
-    open: { type: Boolean, reflect: true, converter: booleanAttribute },
+    open: {
+      type: Boolean,
+      reflect: true,
+      converter: booleanAttribute,
+      noAccessor: true,
+    },
     title: { type: String, reflect: true },
     width: { type: String, reflect: true },
     size: { type: String, reflect: true },
@@ -77,7 +84,6 @@ export class SuperDialog extends LitElement {
     hasFooterSlot: { state: true },
   };
 
-  declare open: boolean;
   declare title: string;
   declare width: string;
   declare size: SuperDialogSize;
@@ -94,13 +100,43 @@ export class SuperDialog extends LitElement {
   private readonly dialogId = `super-dialog-${++dialogId}`;
   private readonly titleId = `${this.dialogId}-title`;
   private readonly bodyId = `${this.dialogId}-body`;
+  private _open = false;
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
   private focusTrap: FocusTrap | null = null;
   private releaseScroll: (() => void) | null = null;
   private triggerElement: HTMLElement | null = null;
 
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
-    this.open = false;
     this.title = "";
     this.width = "";
     this.size = "medium";
@@ -431,14 +467,18 @@ export class SuperDialog extends LitElement {
       return;
     }
 
-    dispatchModalClose({
+    const controlledMutation = this.controlledOpenGuard.capture();
+    const closed = dispatchModalClose({
       host: this,
       eventPrefix: "super-dialog",
       reason,
       close: () => {
-        this.open = false;
+        this.setInternalOpen(false);
       },
     });
+    if (closed) {
+      this.controlledOpenGuard.confirm(controlledMutation);
+    }
   }
 
   private handleConfirm = (): void => {
@@ -547,6 +587,7 @@ export class SuperDialog extends LitElement {
 
   override disconnectedCallback(): void {
     this.releaseOpenState();
+    this.controlledOpenGuard.dispose();
     this.removeEventListener("keydown", this.handleDialogKeydown);
     this.ownerDocument.removeEventListener(
       "keydown",

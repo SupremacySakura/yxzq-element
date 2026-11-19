@@ -13,6 +13,13 @@ const settle = async (element: SuperDatePicker): Promise<void> => {
   await element.updateComplete;
 };
 
+const waitForControlledRollback = async (
+  element: SuperDatePicker,
+): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  await settle(element);
+};
+
 const mountPicker = async (
   configure?: (element: SuperDatePicker) => void,
 ): Promise<SuperDatePicker> => {
@@ -450,6 +457,60 @@ describe("SuperDatePicker", () => {
     expect(getCell(element, "2026-07-24")?.getAttribute("aria-pressed")).toBe(
       "true",
     );
+  });
+
+  it("keeps an attribute-initialized value uncontrolled", async () => {
+    defineSuperDatePicker();
+    const element = document.createElement(SUPER_DATE_PICKER_TAG);
+    element.setAttribute("value", "2026-07-15");
+    document.body.append(element);
+    await settle(element);
+
+    await openPanel(element);
+    getCell(element, "2026-07-24")?.click();
+    await settle(element);
+    await waitForControlledRollback(element);
+
+    expect(element.value).toBe("2026-07-24");
+  });
+
+  it("restores an externally controlled value after a user selection", async () => {
+    const element = await mountPicker();
+    element.value = "2026-07-15";
+    await settle(element);
+
+    await openPanel(element);
+    getCell(element, "2026-07-24")?.click();
+    await settle(element);
+
+    expect(element.value).toBe("2026-07-24");
+
+    await waitForControlledRollback(element);
+
+    expect(element.value).toBe("2026-07-15");
+  });
+
+  it("restores a controlled range as a copied array", async () => {
+    const element = await mountPicker((picker) => {
+      picker.mode = "range";
+    });
+    const committed = ["2026-07-10", "2026-07-12"];
+    element.value = committed;
+    await settle(element);
+    committed[0] = "2025-01-01";
+
+    await openPanel(element);
+    getCell(element, "2026-07-20")?.click();
+    await settle(element);
+    getCell(element, "2026-07-08")?.click();
+    await settle(element);
+
+    expect(element.value).toEqual(["2026-07-08", "2026-07-20"]);
+
+    await waitForControlledRollback(element);
+
+    expect(element.value).toEqual(["2026-07-10", "2026-07-12"]);
+    expect(element.value).not.toBe(committed);
   });
 
   it("stays closed while disabled", async () => {

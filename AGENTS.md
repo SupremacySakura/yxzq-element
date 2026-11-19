@@ -124,11 +124,14 @@ pnpm typecheck
 pnpm test
 pnpm build
 pnpm docs:build
+pnpm test:contract
 ```
 
 The library build must succeed before framework examples or docs are built because those workspaces consume the generated package entry points.
 
 Unit tests must run directly against workspace source and must pass in a fresh clone before any `dist` directory exists. Keep Vitest source aliases in sync with any internal workspace package imported by tests; do not make `pnpm test` depend on `pnpm build:library` or residual build output.
+
+`pnpm test:contract` runs the manifest-driven HTML, Vue and React contract suite. Read `tests/contract/README.md` before adding a component or public event. `pnpm smoke:npm <version>` verifies the published tarball in an isolated temporary project.
 
 ## npm publishing
 

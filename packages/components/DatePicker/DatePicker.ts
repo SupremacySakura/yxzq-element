@@ -7,6 +7,10 @@ import {
   type TemplateResult,
 } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_DATE_PICKER_MODES = [
   "date",
@@ -77,6 +81,19 @@ const MIN_YEAR = 1;
 const MAX_YEAR = 9999;
 const LAST_DECADE_START = MAX_YEAR - 11;
 const DEFAULT_LOCALE = "zh-CN";
+
+const cloneDatePickerValue = (
+  value: SuperDatePickerValue,
+): SuperDatePickerValue => (Array.isArray(value) ? [...value] : value);
+
+const datePickerValuesEqual = (
+  left: SuperDatePickerValue,
+  right: SuperDatePickerValue,
+): boolean =>
+  Array.isArray(left) && Array.isArray(right)
+    ? left.length === right.length &&
+      left.every((item, index) => item === right[index])
+    : Object.is(left, right);
 
 const pad2 = (value: number): string => String(value).padStart(2, "0");
 const formatYearKey = (value: number): string =>
@@ -200,7 +217,7 @@ export class SuperDatePicker extends LitElement {
     validation: { type: String, reflect: true },
     disabled: { type: Boolean, reflect: true },
     clearable: { type: Boolean, reflect: true },
-    open: { type: Boolean, reflect: true },
+    open: { type: Boolean, reflect: true, noAccessor: true },
     name: { type: String, reflect: true },
     placeholder: { type: String },
     startPlaceholder: { type: String, attribute: "start-placeholder" },
@@ -231,7 +248,6 @@ export class SuperDatePicker extends LitElement {
   declare validation: SuperDatePickerValidation;
   declare disabled: boolean;
   declare clearable: boolean;
-  declare open: boolean;
   declare name: string;
   declare placeholder: string;
   declare startPlaceholder: string;
@@ -257,6 +273,20 @@ export class SuperDatePicker extends LitElement {
   private declare hoverDate: string | null;
 
   private _value: SuperDatePickerValue = "";
+  private _open = false;
+  private readonly controlledValueGuard =
+    createControlledValueGuard<SuperDatePickerValue>({
+      host: this,
+      getValue: () => this._value,
+      setValue: (value) => this.setInternalValue(value),
+      clone: cloneDatePickerValue,
+      equals: datePickerValuesEqual,
+    });
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
 
   constructor() {
     super();
@@ -265,7 +295,6 @@ export class SuperDatePicker extends LitElement {
     this.validation = "none";
     this.disabled = false;
     this.clearable = false;
-    this.open = false;
     this.name = "";
     this.placeholder = "选择日期";
     this.startPlaceholder = "开始日期";
@@ -297,6 +326,7 @@ export class SuperDatePicker extends LitElement {
   }
 
   set value(value: SuperDatePickerValue) {
+    this.controlledValueGuard.markExternal(value);
     this.setInternalValue(value);
   }
 
@@ -305,6 +335,31 @@ export class SuperDatePicker extends LitElement {
     const oldValue = this._value;
     this._value = normalized;
     this.requestUpdate("value", oldValue);
+  }
+
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
   }
 
   private normalizeValue(value: SuperDatePickerValue): SuperDatePickerValue {
@@ -915,6 +970,8 @@ export class SuperDatePicker extends LitElement {
   }
 
   override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    this.controlledOpenGuard.dispose();
     this.ownerDocument.removeEventListener(
       "pointerdown",
       this.handleDocumentPointerDown,
@@ -932,7 +989,7 @@ export class SuperDatePicker extends LitElement {
     }
 
     if (this.disabled && this.open) {
-      this.open = false;
+      this.setInternalOpen(false);
     }
   }
 
@@ -1097,7 +1154,8 @@ export class SuperDatePicker extends LitElement {
       this.pendingStart = null;
       this.hoverDate = null;
     }
-    this.open = nextOpen;
+    const controlledMutation = this.controlledOpenGuard.capture();
+    this.setInternalOpen(nextOpen);
     this.dispatchEvent(
       new CustomEvent<SuperDatePickerOpenChangeDetail>(
         "super-date-picker-open-change",
@@ -1108,6 +1166,7 @@ export class SuperDatePicker extends LitElement {
         },
       ),
     );
+    this.controlledOpenGuard.confirm(controlledMutation);
     if (!nextOpen && reason !== "outside") {
       void this.updateComplete.then(() => this.triggerElement?.focus());
     }
@@ -1117,6 +1176,7 @@ export class SuperDatePicker extends LitElement {
     if (this.disabled) {
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(this.mode === "range" ? [] : "");
     this.pendingStart = null;
     this.hoverDate = null;
@@ -1125,6 +1185,7 @@ export class SuperDatePicker extends LitElement {
     if (closePanel) {
       this.setOpen(false, "clear", originalEvent);
     }
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private pickDay(key: string, originalEvent: Event): void {
@@ -1141,32 +1202,40 @@ export class SuperDatePicker extends LitElement {
       const ordered = [this.pendingStart, key].sort();
       this.pendingStart = null;
       this.hoverDate = null;
+      const controlledMutation = this.controlledValueGuard.capture();
       this.setInternalValue(ordered);
       this.emitChange(originalEvent);
       this.setOpen(false, "select", originalEvent);
+      this.controlledValueGuard.confirm(controlledMutation);
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(key);
     this.emitChange(originalEvent);
     this.setOpen(false, "select", originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private pickMonth(key: string, originalEvent: Event): void {
     if (this.isKeyDisabled(key)) {
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(key);
     this.emitChange(originalEvent);
     this.setOpen(false, "select", originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private pickYear(key: string, originalEvent: Event): void {
     if (this.isKeyDisabled(key)) {
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(key);
     this.emitChange(originalEvent);
     this.setOpen(false, "select", originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private pickToday(originalEvent: Event): void {
@@ -1174,9 +1243,11 @@ export class SuperDatePicker extends LitElement {
     if (this.isKeyDisabled(key)) {
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(key);
     this.emitChange(originalEvent);
     this.setOpen(false, "today", originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private pickShortcut(
@@ -1196,9 +1267,11 @@ export class SuperDatePicker extends LitElement {
     if (isEmpty || normalizedValues.some((key) => this.isKeyDisabled(key))) {
       return;
     }
+    const controlledMutation = this.controlledValueGuard.capture();
     this.setInternalValue(normalized);
     this.emitChange(originalEvent);
     this.setOpen(false, "shortcut", originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private shiftView(monthDelta: number, yearDelta: number): void {

@@ -78,6 +78,53 @@ describe("SuperPagination", () => {
     expect(element.getAttribute("page-suffix-label")).toBe("页码");
   });
 
+  it("keeps an attribute-initialized page uncontrolled", async () => {
+    defineSuperPagination();
+    const element = document.createElement(SUPER_PAGINATION_TAG);
+    element.setAttribute("page", "2");
+    element.total = 120;
+    document.body.append(element);
+    await element.updateComplete;
+
+    const onChange = vi.fn();
+    document.body.addEventListener("super-pagination-change", onChange);
+    element.shadowRoot
+      ?.querySelector<HTMLButtonElement>('[data-page="3"]')
+      ?.click();
+    await element.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
+
+    expect(element.page).toBe(3);
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps an attribute-initialized page size uncontrolled", async () => {
+    defineSuperPagination();
+    const element = document.createElement(SUPER_PAGINATION_TAG);
+    element.setAttribute("page-size", "10");
+    element.total = 120;
+    element.pageSizes = [10, 20];
+    document.body.append(element);
+    await element.updateComplete;
+
+    const onChange = vi.fn();
+    document.body.addEventListener("super-pagination-change", onChange);
+    const select = element.shadowRoot?.querySelector<HTMLSelectElement>(
+      '[part="page-size-select"]',
+    );
+    if (select) {
+      select.value = "20";
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    await element.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
+
+    expect(element.pageSize).toBe(20);
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
   it("renders navigation semantics with a current page", async () => {
     const element = await mountPagination();
     element.total = 35;

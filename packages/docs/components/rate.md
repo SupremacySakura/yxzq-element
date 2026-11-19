@@ -108,6 +108,12 @@ rate.addEventListener("super-rate-change", (event) => {
 
 `readonly` 保留焦点与 ARIA 信息但拒绝修改；`disabled` 移除 Tab 停靠点并标记 `aria-disabled="true"`。
 
+## 受控状态
+
+`value` 同时支持受控与非受控用法。HTML attribute 初始化只作为非受控默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户点击或按键会先更新内部值并派发 `super-rate-change`，随后在下一个动画帧确认父级是否写回。父级在事件中同步写回新值即接受修改；不写入时组件恢复最近一次外部提交值。程序化写入不会派发用户事件。
+
 ## API
 
 ### Attributes / Properties

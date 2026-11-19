@@ -65,3 +65,21 @@ _避免使用_:用户事件、交互事件、自定义事件
 **Controlled / Uncontrolled**:
 非受控模式:组件内部维护 `value`,用户交互直接更新内部状态并触发事件。受控模式:用户交互先更新内部值并派发事件,消费者随后写回属性;组件始终以最后写入的 `value` 为准,因此消费者在事件中写回旧值即可拒绝本次修改。两者必须在所有 Form Control 组件中同时支持(ADR-0002)。`upload` 是例外:其 `value` 为派生只读视图,写入入口是 `fileList`。
 _避免使用_:受控组件、非受控组件、双向绑定
+
+**Controlled Commit / Rollback**:
+受控提交是消费者通过 property setter 写入并记录的值。用户交互先更新内部状态并派发事件;若一个 animation frame 内没有新的外部写入,组件恢复到最近一次受控提交值。初始 HTML attribute 只作为默认值,不建立受控提交(ADR-0012)。
+_避免使用_:双向绑定、value 回写、state sync
+
+### 测试与验收
+
+**Framework Parity**:
+同一个 `super-*` 标签在原生 HTML、Vue 与 React 三个真实 Vite 宿主中都能完成注册、挂载、property/attribute 传递、事件冒泡与键盘操作,且行为一致。由 `tests/contract` 的单一场景清单驱动(ADR-0011)。
+_避免使用_:跨框架兼容、三端测试
+
+**Contract Scenario**:
+`tests/contract/manifest.ts` 中描述一个组件最小挂载方式与公开事件归属的条目。清单是跨框架测试的唯一来源;组件新增或事件变化必须同步更新清单。
+_避免使用_:测试用例、fixture
+
+**Attribute Initialization**:
+通过 HTML attribute 提供的初始值。它建立非受控默认状态,不视为受控提交;后续用户交互按非受控语义保留。消费者若需要受控行为,应写入 property 并在事件中决定是否接受修改。
+_避免使用_:默认值、初始属性

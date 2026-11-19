@@ -11,10 +11,9 @@ pnpm test:visual:update   # 手绘风有意变更后刷新基线
 
 首次运行前需安装浏览器：`pnpm exec playwright install chromium`。
 
-快照文件名包含操作系统后缀（例如 `-chromium-darwin`）。CI 在 Linux 上运行时会查找
-`-chromium-linux` 快照；由于跨系统字体渲染存在差异，CI 中的视觉 job 目前是提示性的
-非阻塞检查。若要让 CI 真正卡住回归，请在 CI 所用系统上执行
-`pnpm test:visual:update` 并提交对应平台的基线。
+快照文件名包含操作系统后缀（例如 `-chromium-darwin` 与 `-chromium-linux`）。仓库同时维护
+Linux 与 macOS Chromium 基线：CI 使用 Linux 基线并阻塞视觉回归，macOS 基线供本地开发对比。
+在 CI 所用系统上刷新基线时执行 `pnpm test:visual:update`，并提交对应平台的快照。
 
 ## 约定
 

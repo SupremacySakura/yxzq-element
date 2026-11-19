@@ -228,6 +228,12 @@ super-table {
 - 选择控件是原生 checkbox，带 `aria-label`；全选与半选通过原生 `checked` / `indeterminate` 表达。
 - 排序表头内是原生 `button`，可用 `Tab` 聚焦并用 `Enter` / `Space` 触发；禁用时不可聚焦。
 
+## 受控状态
+
+`selectedKeys`、`sortKey` 与 `sortDirection` 是独立受控状态。HTML attribute 初始化只作为非受控默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户选择行、全选或切换排序时，组件会先更新内部状态并派发对应事件，随后在下一个动画帧逐项确认父级是否写回。父级同步写入新值即接受修改；未写回的状态恢复最近一次外部提交值。选择数组按元素比较并复制快照；程序化写入不会派发用户事件。
+
 ## API
 
 ### Attributes / Properties

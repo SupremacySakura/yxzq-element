@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": [
+    "tests/contract/**/*.ts",
+    "tests/types/**/*.ts",
+    "playwright.config.ts",
+    "playwright.contract.config.ts",
+    "vite.config.ts",
+    "vite.source-aliases.ts",
+    "vitest.config.ts"
+  ]
+}

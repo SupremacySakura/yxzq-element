@@ -46,6 +46,21 @@ describe("SuperCheckbox", () => {
     expect(element.getAttribute("size")).toBe("large");
   });
 
+  it("keeps an attribute-initialized checked state uncontrolled", async () => {
+    defineSuperCheckbox();
+    const element = document.createElement(SUPER_CHECKBOX_TAG);
+    element.setAttribute("checked", "");
+    document.body.append(element);
+    await element.updateComplete;
+
+    element.click();
+    await element.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
+
+    expect(element.checked).toBe(false);
+  });
+
   it("clears indeterminate state and emits a composed change event", async () => {
     const element = await mountCheckbox();
     const onChange = vi.fn();

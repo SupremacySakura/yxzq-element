@@ -135,6 +135,8 @@ export class SuperBreadcrumb extends LitElement {
     .current,
     .label {
       display: inline-flex;
+      box-sizing: border-box;
+      min-block-size: 24px;
       min-inline-size: 0;
       align-items: center;
       padding: 2px 4px;

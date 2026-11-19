@@ -1,6 +1,10 @@
 import { css, html, LitElement, nothing, type PropertyValues } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { live } from "lit/directives/live.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_RADIO_SIZES = ["large", "medium", "small"] as const;
 export const SUPER_RADIO_VARIANTS = ["default", "button", "card"] as const;
@@ -25,7 +29,7 @@ export interface SuperRadioChangeDetail {
 
 export class SuperRadio extends LitElement {
   static properties = {
-    checked: { type: Boolean, reflect: true },
+    checked: { type: Boolean, reflect: true, noAccessor: true },
     disabled: { type: Boolean, reflect: true },
     required: { type: Boolean, reflect: true },
     variant: { type: String, reflect: true },
@@ -37,7 +41,6 @@ export class SuperRadio extends LitElement {
     accessibleLabel: { type: String, attribute: "aria-label" },
   };
 
-  declare checked: boolean;
   declare disabled: boolean;
   declare required: boolean;
   declare variant: SuperRadioVariant;
@@ -48,11 +51,41 @@ export class SuperRadio extends LitElement {
   declare helperText: string;
   declare accessibleLabel: string;
 
+  private _checked = false;
+  private readonly controlledValueGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._checked,
+    setValue: (value) => this.setInternalChecked(value),
+  });
   private coordinationRoot: Document | ShadowRoot | null = null;
+
+  get checked(): boolean {
+    return this._checked;
+  }
+
+  set checked(value: boolean) {
+    this.controlledValueGuard.markExternal(value);
+    this.setInternalChecked(value);
+  }
+
+  private setInternalChecked(value: boolean): void {
+    const oldValue = this._checked;
+    this._checked = value;
+    this.requestUpdate("checked", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
 
   constructor() {
     super();
-    this.checked = false;
     this.disabled = false;
     this.required = false;
     this.variant = "default";
@@ -425,6 +458,7 @@ export class SuperRadio extends LitElement {
   override disconnectedCallback(): void {
     const previousRoot = this.coordinationRoot;
     this.coordinationRoot = null;
+    this.controlledValueGuard.dispose();
     super.disconnectedCallback();
 
     queueMicrotask(() => {
@@ -441,7 +475,7 @@ export class SuperRadio extends LitElement {
 
     this.groupMembers().forEach((radio) => {
       if (radio !== this && radio.checked) {
-        radio.checked = false;
+        radio.setInternalChecked(false);
       }
     });
   }
@@ -466,9 +500,20 @@ export class SuperRadio extends LitElement {
       return;
     }
 
-    this.checked = true;
+    const peerMutations = this.groupMembers()
+      .filter((radio) => radio !== this && radio.checked)
+      .map((radio) => ({
+        radio,
+        snapshot: radio.controlledValueGuard.capture(),
+      }));
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalChecked(true);
     this.uncheckGroupPeers();
     this.emitChange(originalEvent);
+    this.controlledValueGuard.confirm(controlledMutation);
+    peerMutations.forEach(({ radio, snapshot }) => {
+      radio.controlledValueGuard.confirm(snapshot);
+    });
   }
 
   private handleChange(event: Event): void {
@@ -531,14 +576,29 @@ export class SuperRadio extends LitElement {
     }
 
     const wasChecked = this.checked;
+    const peerMutations = wasChecked
+      ? []
+      : this.groupMembers()
+        .filter((radio) => radio !== this && radio.checked)
+        .map((radio) => ({
+          radio,
+          snapshot: radio.controlledValueGuard.capture(),
+        }));
+    const controlledMutation = wasChecked
+      ? null
+      : this.controlledValueGuard.capture();
     if (!wasChecked) {
-      this.checked = true;
+      this.setInternalChecked(true);
       this.uncheckGroupPeers();
     }
     const originalEvent = new Event("change");
     super.click();
     if (!wasChecked) {
       this.emitChange(originalEvent);
+      this.controlledValueGuard.confirm(controlledMutation);
+      peerMutations.forEach(({ radio, snapshot }) => {
+        radio.controlledValueGuard.confirm(snapshot);
+      });
     }
   }
 

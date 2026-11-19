@@ -141,6 +141,12 @@ autocomplete.filter = (item, query) =>
 - `Enter` 选中当前活动建议；`Escape` 关闭列表并保持输入焦点；`Tab` 关闭列表后继续离开。
 - 鼠标点击建议不会抢走输入框焦点，选择后焦点回到输入框。
 
+## 受控状态
+
+`value` 与 `open` 同时支持受控与非受控用法。HTML attribute 初始化只作为非受控默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户输入、清空、选择建议或开合列表时，组件会先更新内部状态并派发对应事件，然后在下一个动画帧分别确认父级是否写回 `value` 与 `open`。父级同步写入新值即接受；未写回的属性恢复最近一次外部提交值。程序化写入不会派发用户事件。
+
 ## API
 
 ### Attributes / Properties
@@ -216,7 +222,7 @@ super-autocomplete {
 
 ## 已知边界
 
-- `value` 是双向可观察属性：用户输入会立即派发 `super-autocomplete-input`，组件也会同步自身状态；应用如需持久化或校验，应在事件中写回。
+- `value` 与 `open` 同时支持受控与非受控用法：用户操作会立即派发事件并更新组件状态；受控父级未在事件中写回时，组件在下一帧恢复到最近一次外部提交值。
 - 建议项必须具有唯一且稳定的 `value`；组件不处理远程请求、分页、分组或虚拟滚动。
 - `filter` 是运行时 JavaScript 函数，无法通过 attribute 序列化。
 - 组件不是 form-associated Custom Element；`disabled`、`validation` 和 `value` 不参与原生 `FormData`、表单重置或外部约束校验。

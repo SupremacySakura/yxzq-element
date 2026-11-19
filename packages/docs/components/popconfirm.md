@@ -152,7 +152,9 @@ defineSuperPopconfirm();
 
 ## 受控、加载与禁用
 
-`open` 是受控状态。直接设置属性会更新显示，但不会派发 `super-popconfirm-open-change`；只有点击、悬停、键盘激活、外部指针按下或 `Escape` 等用户操作才会派发。确认事件可取消，适合先拦截操作、等待远端校验后再提交。
+`open` 同时支持受控与非受控用法。HTML `open` attribute 只作为初始默认值；通过 property 写入后进入受控模式，程序化修改不会派发 `super-popconfirm-open-change`。
+
+点击、悬停、键盘激活、外部指针按下或 `Escape` 等用户操作会先更新内部显示状态并派发 open-change，然后在下一个动画帧确认父级是否写回。父级在事件中同步写回新值即接受；不写入时恢复最近一次外部提交状态。确认事件可取消，适合先拦截操作、等待远端校验后再提交。
 
 ```html
 <super-popconfirm id="controlled-popconfirm" title="删除这条评论？">
@@ -273,7 +275,7 @@ super-popconfirm {
 
 ## 已知边界
 
-`super-popconfirm` 是受控显示状态组件，不会在用户确认后自行提交远端请求；应用应监听 `super-popconfirm-confirm` 并更新业务状态。触发元素必须是默认 Slot 中的第一个元素，组件会修改其 `aria-expanded`、`aria-haspopup` 和 `aria-controls`，断开连接时还原消费者原先写入的值。
+`super-popconfirm` 的 `open` 同时支持受控与非受控用法，但都不会在用户确认后自行提交远端请求；应用应监听 `super-popconfirm-confirm` 并更新业务状态。触发元素必须是默认 Slot 中的第一个元素，组件会修改其 `aria-expanded`、`aria-haspopup` 和 `aria-controls`，断开连接时还原消费者原先写入的值。
 
 确认框固定定位在组件 Shadow DOM 内，遇到祖先 `transform`、`filter` 或 `contain` 创建的包含块时，视觉位置可能受该包含块影响。组件不是表单关联元素，不参与 `FormData`、原生表单重置或约束验证。
 

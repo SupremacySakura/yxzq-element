@@ -64,6 +64,28 @@ describe("SuperSteps", () => {
     expect(element.getAttribute("aria-label")).toBe("发布流程");
   });
 
+  it("keeps an attribute-initialized active step uncontrolled", async () => {
+    defineSuperSteps();
+    const element = document.createElement(SUPER_STEPS_TAG);
+    element.setAttribute("active", "1");
+    element.items = stepItems();
+    element.clickable = true;
+    document.body.append(element);
+    await element.updateComplete;
+
+    const onChange = vi.fn();
+    document.body.addEventListener("super-steps-change", onChange);
+    element.shadowRoot
+      ?.querySelector<HTMLButtonElement>('button[data-step-index="2"]')
+      ?.click();
+    await element.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
+
+    expect(element.active).toBe(2);
+    expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
   it("renders an ordered list with per-step semantics and hidden connectors", async () => {
     const element = await mountSteps();
     element.items = stepItems();

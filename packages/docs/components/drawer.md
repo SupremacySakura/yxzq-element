@@ -5,7 +5,7 @@
 <div class="drawer-note">
   <span aria-hidden="true">✎</span>
   <strong>使用提示</strong>
-  <span><code>open</code> 是受控状态。用户操作只会发起关闭请求；需要阻止关闭时，监听 <code>super-drawer-before-close</code> 并调用 <code>preventDefault()</code>。</span>
+  <span><code>open</code> 同时支持受控与非受控用法。受控模式下，用户操作只会发起关闭请求；需要保留抽屉时，监听 <code>super-drawer-before-close</code> 并调用 <code>preventDefault()</code>，或在关闭事件中写回最新状态。</span>
 </div>
 
 ## 注册
@@ -183,6 +183,16 @@ drawer.addEventListener("super-drawer-before-close", (event) => {
 </super-drawer>
 ```
 
+## 受控状态
+
+`open` 同时支持受控与非受控用法。HTML `open` attribute 只作为初始默认值；通过 JavaScript property 写入后进入受控模式。
+
+用户点击关闭按钮、遮罩、按 `Escape` 或使用页脚动作时，组件会先完成 `before-close` 拦截与确认/取消通知，再请求关闭。若父级没有在关闭事件中把 `open` 同步写回 `false`，组件会在下一个动画帧恢复之前的打开状态，并重新启用焦点陷阱与滚动锁定。
+
+- 在 `super-drawer-close`（或未被拦截的 `super-drawer-before-close`）中写回 `open = false` 表示接受关闭。
+- 保持属性不变，或调用 `event.preventDefault()` 阻止 `before-close`，表示保留抽屉。
+- 初始 `open` attribute 驱动的非受控用法会直接关闭，不会回弹。
+
 ## 无障碍
 
 抽屉使用 `role="dialog"`、`aria-modal="true"`，标题关联到 `aria-labelledby`，正文关联到 `aria-describedby`。`header` Slot 会替换可见标题内容，但不会破坏标题关联；仅使用自定义标题时，也请同时提供清晰的 `title` 或可读文本。
@@ -275,7 +285,7 @@ super-drawer {
 
 `super-drawer` 不是 form-associated Custom Element，不参与外层 `FormData`、原生表单 reset 或外部 constraint validation。确认按钮不会自动提交表单；需要提交时，请监听 `super-drawer-confirm` 并调用业务逻辑。
 
-`open` 不会自动因用户操作变为 `false`，也不会自动回滚消费者的外部状态。模态层通过 `position: fixed` 渲染在组件 Shadow DOM 内；祖先元素若设置 `transform`、`filter` 或 `contain`，可能改变固定定位的包含块。多个抽屉或对话框同时打开时会累加滚动锁，但组件不负责管理彼此的层级顺序。
+`open` 会把用户关闭请求桥接给受控父级：父级未写回时下一帧恢复打开状态。模态层通过 `position: fixed` 渲染在组件 Shadow DOM 内；祖先元素若设置 `transform`、`filter` 或 `contain`，可能改变固定定位的包含块。多个抽屉或对话框同时打开时会累加滚动锁，但组件不负责管理彼此的层级顺序。
 
 <script setup>
 import { onMounted } from "vue";

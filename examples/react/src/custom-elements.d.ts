@@ -134,12 +134,28 @@ import type {
 type NumberLike = number | `${number}`;
 type CustomEventHandler<Detail> = (event: CustomEvent<Detail>) => void;
 
+type CamelCaseAttributeName<Name extends string> =
+  Name extends `${infer Head}-${infer Tail}`
+    ? `${Head}${Capitalize<CamelCaseAttributeName<Tail>>}`
+    : Name;
+
+type CamelCaseAttributeAliases<Attributes extends object> = {
+  [Name in keyof Attributes as Name extends string
+    ? Name extends "aria-label"
+      ? never
+      : Name extends `${string}-${string}`
+        ? CamelCaseAttributeName<Name>
+        : never
+    : never]?: Attributes[Name];
+};
+
 type CustomElementProps<
   ElementType extends HTMLElement,
   Attributes extends object,
   Events extends object = Record<never, never>,
 > = DetailedHTMLProps<HTMLAttributes<ElementType>, ElementType> &
   Attributes &
+  CamelCaseAttributeAliases<Attributes> &
   Events;
 
 type SuperButtonAttributes = {
@@ -149,6 +165,7 @@ type SuperButtonAttributes = {
   disabled?: SuperButton["disabled"];
   loading?: SuperButton["loading"];
   "loading-text"?: SuperButton["loadingText"];
+  accessibleLabel?: SuperButton["accessibleLabel"];
 };
 
 type SuperTagAttributes = {
@@ -187,6 +204,7 @@ type SuperCardAttributes = {
   hoverable?: SuperCard["hoverable"];
   clickable?: SuperCard["clickable"];
   "aria-label"?: SuperCard["accessibleLabel"];
+  accessibleLabel?: SuperCard["accessibleLabel"];
 };
 
 type SuperCardEvents = {
@@ -240,6 +258,7 @@ type SuperProgressAttributes = {
   indeterminate?: SuperProgress["indeterminate"];
   striped?: SuperProgress["striped"];
   "aria-label"?: SuperProgress["accessibleLabel"];
+  accessibleLabel?: SuperProgress["accessibleLabel"];
 };
 
 type SuperEmptyAttributes = {
@@ -270,6 +289,7 @@ type SuperSliderAttributes = {
   "show-tooltip"?: SuperSlider["showTooltip"];
   vertical?: SuperSlider["vertical"];
   "aria-label"?: SuperSlider["accessibleLabel"];
+  accessibleLabel?: SuperSlider["accessibleLabel"];
   "start-label"?: SuperSlider["startLabel"];
   "end-label"?: SuperSlider["endLabel"];
 };
@@ -288,6 +308,7 @@ type SuperRateAttributes = {
   validation?: SuperRate["validation"];
   clearable?: SuperRate["clearable"];
   "aria-label"?: SuperRate["accessibleLabel"];
+  accessibleLabel?: SuperRate["accessibleLabel"];
   "clear-label"?: SuperRate["clearLabel"];
 };
 
@@ -308,6 +329,8 @@ type SuperUploadAttributes = {
   "hint-text"?: SuperUpload["hintText"];
   "remove-label"?: SuperUpload["removeLabel"];
   "aria-label"?: SuperUpload["accessibleLabel"];
+  accessibleLabel?: SuperUpload["accessibleLabel"];
+  fileList?: SuperUpload["fileList"];
 };
 
 type SuperUploadEvents = {
@@ -325,6 +348,7 @@ type SuperTabsAttributes = {
   closable?: SuperTabs["closable"];
   "close-label"?: SuperTabs["closeLabel"];
   "aria-label"?: SuperTabs["accessibleLabel"];
+  accessibleLabel?: SuperTabs["accessibleLabel"];
   items?: SuperTabs["items"];
 };
 
@@ -338,6 +362,7 @@ type SuperBreadcrumbAttributes = {
   size?: SuperBreadcrumb["size"];
   "max-items"?: SuperBreadcrumb["maxItems"] | `${number}`;
   "aria-label"?: SuperBreadcrumb["accessibleLabel"];
+  accessibleLabel?: SuperBreadcrumb["accessibleLabel"];
   items?: SuperBreadcrumb["items"];
 };
 
@@ -352,6 +377,7 @@ type SuperPaginationAttributes = {
   "show-jumper"?: SuperPagination["showJumper"];
   simple?: SuperPagination["simple"];
   "aria-label"?: SuperPagination["accessibleLabel"];
+  accessibleLabel?: SuperPagination["accessibleLabel"];
   "prev-label"?: SuperPagination["prevLabel"];
   "next-label"?: SuperPagination["nextLabel"];
   "page-label"?: SuperPagination["pageLabel"];
@@ -533,6 +559,7 @@ type SuperAutocompleteAttributes = {
   "min-chars"?: SuperAutocomplete["minChars"] | `${number}`;
   filter?: SuperAutocomplete["filter"];
   "aria-label"?: SuperAutocomplete["accessibleLabel"];
+  accessibleLabel?: SuperAutocomplete["accessibleLabel"];
 };
 
 type SuperAutocompleteEvents = {
@@ -558,6 +585,7 @@ type SuperMenuAttributes = {
   collapsed?: SuperMenu["collapsed"];
   size?: SuperMenu["size"];
   "aria-label"?: SuperMenu["accessibleLabel"];
+  accessibleLabel?: SuperMenu["accessibleLabel"];
 };
 
 type SuperMenuEvents = {
@@ -573,6 +601,7 @@ type SuperStepsAttributes = {
   clickable?: SuperSteps["clickable"];
   size?: SuperSteps["size"];
   "aria-label"?: SuperSteps["accessibleLabel"];
+  accessibleLabel?: SuperSteps["accessibleLabel"];
 };
 
 type SuperStepsEvents = {
@@ -598,6 +627,7 @@ type SuperTableAttributes = {
   "select-row-label"?: SuperTable["selectRowLabel"];
   "loading-text"?: SuperTable["loadingText"];
   "aria-label"?: SuperTable["accessibleLabel"];
+  accessibleLabel?: SuperTable["accessibleLabel"];
 };
 
 type SuperTableEvents = {
@@ -612,20 +642,25 @@ type SuperInputAttributes = {
   validation?: SuperInput["validation"];
   placeholder?: SuperInput["placeholder"];
   "helper-text"?: SuperInput["helperText"];
+  accessibleLabel?: SuperInput["accessibleLabel"];
   disabled?: SuperInput["disabled"];
   readonly?: SuperInput["readOnly"];
+  readOnly?: SuperInput["readOnly"];
   required?: SuperInput["required"];
   clearable?: SuperInput["clearable"];
   revealable?: SuperInput["revealable"];
   multiline?: SuperInput["multiline"];
   "show-count"?: SuperInput["showCount"];
   maxlength?: SuperInput["maxLength"] | `${number}`;
+  maxLength?: SuperInput["maxLength"] | `${number}`;
   minlength?: SuperInput["minLength"] | `${number}`;
+  minLength?: SuperInput["minLength"] | `${number}`;
   min?: SuperInput["min"];
   max?: SuperInput["max"];
   step?: SuperInput["step"];
   rows?: NumberLike;
   inputmode?: SuperInput["inputMode"];
+  inputMode?: SuperInput["inputMode"];
   autocomplete?: SuperInput["autocomplete"];
   "clear-label"?: SuperInput["clearLabel"];
   "decrement-label"?: SuperInput["decrementLabel"];
@@ -667,6 +702,7 @@ type SuperSelectorAttributes<
   size?: ElementType["size"];
   validation?: ElementType["validation"];
   "helper-text"?: ElementType["helperText"];
+  accessibleLabel?: ElementType["accessibleLabel"];
 };
 
 type SuperCheckboxAttributes = SuperSelectorAttributes<SuperCheckbox> & {
@@ -701,6 +737,7 @@ type SuperSelectAttributes = {
   clearable?: SuperSelect["clearable"];
   disabled?: SuperSelect["disabled"];
   readonly?: SuperSelect["readOnly"];
+  readOnly?: SuperSelect["readOnly"];
   required?: SuperSelect["required"];
   loading?: SuperSelect["loading"];
   open?: SuperSelect["open"];
@@ -710,6 +747,7 @@ type SuperSelectAttributes = {
   validation?: SuperSelect["validation"];
   placeholder?: SuperSelect["placeholder"];
   "helper-text"?: SuperSelect["helperText"];
+  accessibleLabel?: SuperSelect["accessibleLabel"];
   "clear-label"?: SuperSelect["clearLabel"];
   "remove-label"?: SuperSelect["removeLabel"];
   "search-label"?: SuperSelect["searchLabel"];
@@ -744,6 +782,7 @@ type SuperDatePickerAttributes = {
   "first-day-of-week"?: SuperDatePicker["firstDayOfWeek"] | `${number}`;
   locale?: SuperDatePicker["locale"];
   "helper-text"?: SuperDatePicker["helperText"];
+  accessibleLabel?: SuperDatePicker["accessibleLabel"];
   "today-label"?: SuperDatePicker["todayLabel"];
   "clear-label"?: SuperDatePicker["clearLabel"];
   "prev-month-label"?: SuperDatePicker["prevMonthLabel"];
@@ -783,6 +822,7 @@ type SuperTimePickerAttributes = {
   "minute-step"?: SuperTimePicker["minuteStep"] | `${number}`;
   "second-step"?: SuperTimePicker["secondStep"] | `${number}`;
   "helper-text"?: SuperTimePicker["helperText"];
+  accessibleLabel?: SuperTimePicker["accessibleLabel"];
   "clear-label"?: SuperTimePicker["clearLabel"];
   "confirm-label"?: SuperTimePicker["confirmLabel"];
   "am-label"?: SuperTimePicker["amLabel"];

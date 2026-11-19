@@ -5,6 +5,10 @@ import {
   nothing,
   type PropertyValues,
 } from "lit";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 import { createFloating, type FloatingController } from "../internal/floating.js";
 
 export const SUPER_DROPDOWN_PLACEMENTS = [
@@ -63,7 +67,7 @@ interface DropdownTriggerAria {
 
 export class SuperDropdown extends LitElement {
   static properties = {
-    open: { type: Boolean, reflect: true },
+    open: { type: Boolean, reflect: true, noAccessor: true },
     items: { attribute: false },
     trigger: { type: String, reflect: true },
     placement: { type: String, reflect: true },
@@ -86,7 +90,6 @@ export class SuperDropdown extends LitElement {
     size: { type: String, reflect: true },
   };
 
-  declare open: boolean;
   declare items: SuperDropdownItem[];
   declare trigger: SuperDropdownTrigger;
   declare placement: SuperDropdownPlacement;
@@ -97,6 +100,12 @@ export class SuperDropdown extends LitElement {
   declare size: SuperDropdownSize;
 
   private readonly dropdownId = `super-dropdown-${++dropdownId}`;
+  private _open = false;
+  private readonly controlledOpenGuard = createControlledValueGuard<boolean>({
+    host: this,
+    getValue: () => this._open,
+    setValue: (value) => this.setInternalOpen(value),
+  });
   private triggerElement: HTMLElement | null = null;
   private menuElement: HTMLElement | null = null;
   private floating: FloatingController | null = null;
@@ -104,9 +113,33 @@ export class SuperDropdown extends LitElement {
   private pendingFocus: DropdownFocusTarget = "none";
   private triggerAria: DropdownTriggerAria | null = null;
 
+  get open(): boolean {
+    return this._open;
+  }
+
+  set open(value: boolean) {
+    this.controlledOpenGuard.markExternal(value);
+    this.setInternalOpen(value);
+  }
+
+  private setInternalOpen(value: boolean): void {
+    const oldValue = this._open;
+    this._open = value;
+    this.requestUpdate("open", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
+
   constructor() {
     super();
-    this.open = false;
     this.items = [];
     this.trigger = "click";
     this.placement = "bottom-start";
@@ -361,8 +394,9 @@ export class SuperDropdown extends LitElement {
       return;
     }
 
+    const controlledMutation = this.controlledOpenGuard.capture();
     this.pendingFocus = nextOpen ? focus : "none";
-    this.open = nextOpen;
+    this.setInternalOpen(nextOpen);
     this.dispatchEvent(
       new CustomEvent<SuperDropdownOpenChangeDetail>(
         "super-dropdown-open-change",
@@ -373,6 +407,7 @@ export class SuperDropdown extends LitElement {
         },
       ),
     );
+    this.controlledOpenGuard.confirm(controlledMutation);
 
     if (!nextOpen && focus === "trigger") {
       this.focusTrigger();
@@ -803,6 +838,7 @@ export class SuperDropdown extends LitElement {
 
   override disconnectedCallback(): void {
     this.clearHoverCloseTimer();
+    this.controlledOpenGuard.dispose();
     this.deactivateOpenState();
     this.unbindTrigger();
     this.removeEventListener("pointerenter", this.handlePointerEnter);
@@ -824,7 +860,7 @@ export class SuperDropdown extends LitElement {
 
   protected willUpdate(changedProperties: PropertyValues<this>): void {
     if (this.disabled && this.open) {
-      this.open = false;
+      this.setInternalOpen(false);
       this.pendingFocus = "none";
     }
 
@@ -833,7 +869,7 @@ export class SuperDropdown extends LitElement {
       changedProperties.get("trigger") !== undefined &&
       this.open
     ) {
-      this.open = false;
+      this.setInternalOpen(false);
       this.pendingFocus = "none";
     }
   }

@@ -225,6 +225,12 @@ function replaceOptions(select, items) {
 - 每个 `option` 的 `value` 必须非空并在同一选择器内唯一。空值会被忽略，重复值无法形成可靠的一一映射。
 - 程序化修改 `value` 不会派发用户事件。只有用户选择、移除标签或清空时才会触发 `super-select-change`。
 
+## 受控状态
+
+`value` 与 `open` 同时支持受控与非受控用法。通过 HTML `value` attribute 或原生 `selected` option 初始化时保持非受控；通过 property 写入 `element.value` 后进入受控模式，用户选择会先更新内部值并派发事件，若父级没有在下一帧前再次写入 property，组件恢复到最近一次外部提交值。多选数组会被复制比较，父级拒绝修改时恢复为提交时的数组副本。
+
+`open` 同样在 property 写入后进入受控模式。用户打开或关闭面板会派发 `super-select-open-change`；父级在事件中同步写回新状态即接受，不写入时下一帧恢复最近一次外部提交状态。初始 HTML `open` attribute 仍是非受控默认值。
+
 ```js
 const tags = document.querySelector("#tags");
 

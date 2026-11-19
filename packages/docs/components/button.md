@@ -197,7 +197,7 @@
 
 ```css
 super-button {
-  --super-button-background: #4b87f5;
+  --super-button-background: #245cbe;
   --super-button-color: #fff;
   --super-button-border-color: #174ea6;
   --super-button-shadow-color: #174ea6;

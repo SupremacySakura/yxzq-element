@@ -7,6 +7,10 @@ import {
   type TemplateResult,
 } from "lit";
 import { ifDefined } from "lit/directives/if-defined.js";
+import {
+  createControlledValueGuard,
+  runAttributeWrite,
+} from "@yxzq-element/utils";
 
 export const SUPER_MENU_ORIENTATIONS = ["horizontal", "vertical"] as const;
 export const SUPER_MENU_MODES = ["inline", "vertical", "popup"] as const;
@@ -47,7 +51,7 @@ let menuId = 0;
 export class SuperMenu extends LitElement {
   static properties = {
     items: { attribute: false },
-    active: { type: String, reflect: true },
+    active: { type: String, reflect: true, noAccessor: true },
     orientation: { type: String, reflect: true },
     mode: { type: String, reflect: true },
     collapsed: { type: Boolean, reflect: true },
@@ -60,7 +64,6 @@ export class SuperMenu extends LitElement {
   };
 
   declare items: SuperMenuItem[];
-  declare active: string;
   declare orientation: SuperMenuOrientation;
   declare mode: SuperMenuMode;
   declare collapsed: boolean;
@@ -70,11 +73,42 @@ export class SuperMenu extends LitElement {
   private readonly uid = `super-menu-${++menuId}`;
   private readonly openKeys = new Set<string>();
   private tabbableKey = "";
+  private _active = "";
+  private readonly controlledValueGuard = createControlledValueGuard<string>({
+    host: this,
+    getValue: () => this._active,
+    setValue: (value) => this.setInternalActive(value),
+  });
+
+  get active(): string {
+    return this._active;
+  }
+
+  set active(value: string) {
+    this.controlledValueGuard.markExternal(value);
+    this.setInternalActive(value);
+  }
+
+  private setInternalActive(value: string): void {
+    const oldValue = this._active;
+    this._active = value;
+    this.requestUpdate("active", oldValue);
+  }
+
+  override attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    runAttributeWrite(() =>
+      super.attributeChangedCallback(name, oldValue, newValue),
+    );
+  }
 
   constructor() {
     super();
     this.items = [];
-    this.active = "";
+    this._active = "";
     this.orientation = "vertical";
     this.mode = "inline";
     this.collapsed = false;
@@ -91,7 +125,7 @@ export class SuperMenu extends LitElement {
       --super-menu-item-gap: 8px;
       --super-menu-font-size: var(--super-font-size-base, 14px);
       --super-menu-color: var(--super-text-color-regular, #4a4441);
-      --super-menu-active-color: var(--super-color-primary-dark-2, #3272e8);
+      --super-menu-active-color: #245cbe;
       --super-menu-active-background: color-mix(
         in srgb,
         var(--super-color-primary, #4b87f5) 13%,
@@ -553,7 +587,8 @@ export class SuperMenu extends LitElement {
     if (item.disabled) {
       return;
     }
-    this.active = item.key;
+    const controlledMutation = this.controlledValueGuard.capture();
+    this.setInternalActive(item.key);
     this.dispatchEvent(
       new CustomEvent<SuperMenuSelectDetail>("super-menu-select", {
         detail: { key: item.key },
@@ -561,6 +596,7 @@ export class SuperMenu extends LitElement {
         composed: true,
       }),
     );
+    this.controlledValueGuard.confirm(controlledMutation);
   }
 
   private moveFocus(entry: MenuEntry, direction: 1 | -1): void {
@@ -724,6 +760,11 @@ export class SuperMenu extends LitElement {
       }
     }
   };
+
+  override disconnectedCallback(): void {
+    this.controlledValueGuard.dispose();
+    super.disconnectedCallback();
+  }
 
   protected willUpdate(changedProperties: PropertyValues<this>): void {
     if (changedProperties.has("collapsed") || changedProperties.has("mode")) {

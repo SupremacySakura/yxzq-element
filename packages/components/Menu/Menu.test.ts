@@ -86,6 +86,28 @@ describe("SuperMenu", () => {
     expect(element.getAttribute("aria-label")).toBe("站点导航");
   });
 
+  it("keeps an attribute-initialized active item uncontrolled", async () => {
+    defineSuperMenu();
+    const element = document.createElement(SUPER_MENU_TAG);
+    element.setAttribute("active", "home");
+    element.items = [
+      { key: "home", label: "首页" },
+      { key: "docs", label: "文档" },
+    ];
+    document.body.append(element);
+    await element.updateComplete;
+
+    const onSelect = vi.fn();
+    document.body.addEventListener("super-menu-select", onSelect);
+    itemButton(element, "docs")?.click();
+    await element.updateComplete;
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await element.updateComplete;
+
+    expect(element.active).toBe("docs");
+    expect(onSelect).toHaveBeenCalledTimes(1);
+  });
+
   it("renders nested menu and submenu lists with menu semantics", async () => {
     const element = await mountMenu();
     element.items = nestedItems();
