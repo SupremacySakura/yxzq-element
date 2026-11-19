@@ -32,6 +32,7 @@
 - 新增 ADR-0011(跨框架契约测试架构)与 ADR-0012(受控状态提交确认),并在术语表补充 Framework Parity、Contract Scenario、Controlled Commit / Rollback 与 Attribute Initialization。
 - 契约宿主新增 `count` 参数,并补充 36 个组件的双实例挂载、Shadow Root 内 id 唯一性与 axe WCAG 2.2 AA 回归,覆盖原生 HTML、Vue 与 React;契约页仅由测试服务器提供,不进入示例生产构建。
 - 组件文档补充值、导航状态与 10 个弹层组件的受控状态说明,并明确 `Message` / `Notification` 的瞬态语义与 `Upload` 的 `fileList` 写入入口。
+- 补齐 11 张 Linux Chromium 视觉基线,并将视觉回归 job 从非阻塞提示升级为阻塞门禁;macOS 基线继续用于本地对比。
 - 高风险交互测试适配 macOS WebKit 仅用 `Option+Tab` 遍历控件的平台行为;Linux CI 继续使用标准 `Tab`。Firefox 高风险矩阵可在 Linux CI 或可正常启动 Firefox 的主机执行,当前 macOS 开发机因浏览器启动与沙箱限制未能本地执行。
 - CI 新增 `pull_request` 触发与跨框架契约 job,失败时上传 Playwright 报告与 trace/screenshot;GitHub Pages 部署仍只发生在 `master` 推送。
 

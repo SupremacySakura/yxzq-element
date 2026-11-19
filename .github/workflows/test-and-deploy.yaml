@@ -47,10 +47,8 @@ jobs:
   visual:
     name: Run visual regression
     runs-on: ubuntu-latest
-    # 基线在 macOS 生成;不同操作系统的字体渲染存在差异,因此该 job 仅作为
-    # 提示性检查,不阻塞构建。刷新基线时请在 CI 所用系统上执行
+    # Linux Chromium 基线随仓库维护;刷新时在 CI 所用系统上执行
     # `pnpm test:visual:update` 并提交对应平台的快照。
-    continue-on-error: true
 
     steps:
       - name: Checkout repo
