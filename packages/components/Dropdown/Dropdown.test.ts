@@ -135,6 +135,22 @@ describe("SuperDropdown", () => {
     expect(event.composed).toBe(true);
   });
 
+  it("anchors the open menu to the slotted trigger", async () => {
+    const { element, trigger } = await mountDropdown((dropdown) => {
+      dropdown.items = items;
+    });
+    vi.spyOn(trigger, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(20, 30, 180, 40),
+    );
+
+    trigger.click();
+    await settle(element);
+
+    const menu = getMenu(element);
+    expect(menu?.style.position).toBe("fixed");
+    expect(menu?.style.minInlineSize).toBe("180px");
+  });
+
   it("moves focus with Arrow keys, Home and End while skipping disabled items", async () => {
     const { element, trigger } = await mountDropdown((dropdown) => {
       dropdown.items = items;
