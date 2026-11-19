@@ -421,6 +421,38 @@ test.describe("high-risk interactions", () => {
     ).toBe(true);
   });
 
+  test("@interaction dropdown positions its menu against the trigger", async ({
+    page,
+  }) => {
+    await open(page, "super-dropdown", {
+      properties: {
+        items: [
+          { key: "edit", label: "编辑" },
+          { key: "delete", label: "删除", danger: true },
+        ],
+      },
+      children: [{ tag: "button", children: ["更多操作"] }],
+    });
+
+    const trigger = page.getByRole("button", { name: "更多操作" });
+    await trigger.click();
+
+    const menu = page.getByRole("menu");
+    await expect(menu).toBeVisible();
+
+    const triggerBox = await trigger.boundingBox();
+    const menuBox = await menu.boundingBox();
+    expect(triggerBox).not.toBeNull();
+    expect(menuBox).not.toBeNull();
+    if (!triggerBox || !menuBox) return;
+
+    const gap = menuBox.y - (triggerBox.y + triggerBox.height);
+    expect(gap).toBeGreaterThanOrEqual(-2);
+    expect(gap).toBeLessThanOrEqual(16);
+    expect(menuBox.x - triggerBox.x).toBeGreaterThanOrEqual(-4);
+    expect(menuBox.x - triggerBox.x).toBeLessThanOrEqual(16);
+  });
+
   test("@interaction menu supports roving keyboard selection", async ({
     page,
   }) => {

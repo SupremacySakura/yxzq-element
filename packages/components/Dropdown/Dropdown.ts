@@ -875,6 +875,8 @@ export class SuperDropdown extends LitElement {
   }
 
   protected updated(changedProperties: PropertyValues<this>): void {
+    this.menuElement =
+      this.renderRoot.querySelector<HTMLElement>('[part="menu"]');
     this.syncTriggerAria();
     const openChanged = changedProperties.has("open");
 
